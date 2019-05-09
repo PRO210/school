@@ -1,0 +1,54 @@
+cd /opt/lampp/htdocs/laravel
+composer create-project --prefer-dist laravel/laravel school
+cd /opt/lampp/htdocs/laravel/school
+sudo scmod -R 755 storage/
+__________________________
+php artisan make:model Models\\Student\\StatusStudent -m 
+ 
+No caso de ser só a migration:
+php artisan make:migration create status_student
+
+PAra atualizar a pasta:
+composer dump-autoload
+
+php artisan migrate
+php artisan make:controller Students\\StudentController
+
+
+Atualizar uma migration:
+php artisan migration:refresh
+
+______________________________________________________________________________
+Enviar e Receber parametros pela URL:
+Route::get('/xxxx/{id}',function($id){
+    return "{$id}";
+});
+Enviar e Receber parametros pela URL ou com ou sem parametros:
+Route::get('/xxxx/{id?}',function($id=''){
+    return "{$id}";
+});
+OBS: middleware => 'auth' como parametro para especificar quem pode acessar tal rota;
+OBS: A rota manda para o controller ele se vira,kkk;
+_________________________________________________
+php artisan make:controller xxxx\\YyyyyUuuu --resource
+O resource serve para criar os controllers mais os métodos automaticamente
+
+Tag para imprimir javascript:
+{!!$codigo!!}
+Tag para imprimir php:
+{{$codigo}}
+______________________________________________________________________________
+Comentário no blade:
+{{--
+--}}
+
+Recuperar todos os dados do banco:
+$status_students = $status->all(); OBS: isso no controller;
+
+   return view('rota da view', compact('status_students '))
+
+______________________________________________________________________________
+php artisan make:controller Students\\testesController --resource
+
+
+

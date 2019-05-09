@@ -1,0 +1,87 @@
+ 
+
+
+
+
+
+//Atualizar o Laravel caso vc troque o nome de algum arquivo
+composer dump-autoload
+//Criar a Tabela do mysql
+php artisan migrate
+//Atualizar a Tabela mysql
+php artisan migrate:refresh
+//
+//
+Models  Models  Models  Models
+//Cria a Model:
+php artisan make:model Models\\Turmas\\Turma
+//Cria a Model mais a migration:
+php artisan make:model Models\\Turmas\\Turma -m
+//
+//
+https://laraveldaily.com/laravel-excel-export-formatting-and-styling-cells/
+//
+//
+Git:    Git:    Git:    Git:    Git:    Git:
+//
+git config --global user.name "Andre Freitas da Silva"
+git config --global user.email "proandre21@hotmail.com"
+git config --global color.ui true
+//
+mkdir EscolaGit
+cd EscolaGit
+git init
+git status
+
+git add "Seu Arquivo"
+git add . (Adiciona todos os Arquivos)
+
+git commit -m "Comitando o Código"
+git commit -m
+git commit -a -m (Comita todos os arquivos de uma vez)
+//
+git log
+git log -p (Mostra a difenrença entre os arquivos Antigo/Novo)
+git log -p -2 (Difenrença entre os arquivos os dois últimosAntigo/Novo)
+git log --stat (Resumo do que foi mudado)
+git log --pretty=onelline (Comites em Linhas)
+git log --pretty=format:"%h -%an, %ar : %s" (Comites em Linha pelo tempo)
+git log --since=2.days (dois dias atrás)
+//
+kate .gitignore     (Negar arquivos)
+//
+git reset HEAD (Voltar o arquivo )
+git reset HEAD~1 --soft (Removes os aquivos e deixa-os prontos para comitar)
+git reset HEAD~1 --hard(Reoves os arquivos e os comites)
+//
+git checkout "Digite o Hasch" (voltar o arquivo para versão anterior )
+git branch (Saber qual o branch que vc está)
+git checkout master
+git checkout -b (Criar Branch)
+//
+git merge "branch que vc quer adicionar"
+PArei na aula 12 ou 13
+//
+//
+ssh-keygen (gera chave)
+cd ~/.ssh/  
+cat id_rsa.pub
+//
+git remote add origin https://github.com/PRO210/Escola.git
+kate .git/config
+git push -u origin master (subir os arquivos)
+PRO210
+asdfg197346
+//
+git clone "url do repositorio"
+git branch -a (Branchs locais e remotos)
+git branch -b "endereço do branch remoto"
+git pull (atualiza todos os arquivos) (Deve ser usado no servidor)
+git push origin master (atualiza todos os arquivos) (Deve ser usado na máquina local)
+
+jobsontenorio.com.br
+jobso495
+arkham495
+git clone https://github.com/PRO210/Escola.git
+proandre21@hotmail.com
+asdfg197346
