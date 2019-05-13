@@ -1,26 +1,5 @@
- 
+cd /opt/lampp/htdocs/school
 
-
-
-
-
-//Atualizar o Laravel caso vc troque o nome de algum arquivo
-composer dump-autoload
-//Criar a Tabela do mysql
-php artisan migrate
-//Atualizar a Tabela mysql
-php artisan migrate:refresh
-//
-//
-Models  Models  Models  Models
-//Cria a Model:
-php artisan make:model Models\\Turmas\\Turma
-//Cria a Model mais a migration:
-php artisan make:model Models\\Turmas\\Turma -m
-//
-//
-https://laraveldaily.com/laravel-excel-export-formatting-and-styling-cells/
-//
 //
 Git:    Git:    Git:    Git:    Git:    Git:
 //

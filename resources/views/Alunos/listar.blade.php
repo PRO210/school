@@ -7,30 +7,22 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{{$title or 'Scholl 2019'}}</title>
 
-
-
-
         <script src="{{url('assets/js/jquery-1.12.4.js')}}" type="text/javascript"></script>           
         <script src="{{url('assets/js/jquery-3.1.1.min.js')}}" type="text/javascript"></script>
 
         <script src="{{url('assets/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>
         <script src="{{url('assets/js/dataTables.bootstrap.min.js')}}" type="text/javascript"></script>
 
-
         <link rel="stylesheet" href="{{url('assets/css/dataTables.bootstrap.min.css')}}" type="text/css">
         <script src="{{url('assets/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
         <link rel="stylesheet" href="{{url('assets/css/responsive.dataTables.min.css')}}">
-
-        <link rel="stylesheet" href="{{url('assets/css/bootstrap-theme.min.css')}}" type="text/css"> 
-        <link rel="stylesheet" href="{{url('assets/css/bootstrap-theme.min.css.map')}}" type="text/css"> 
-        <link rel="stylesheet" href="{{url('assets/css/bootstrap.min.css')}}" type="text/css" > 
-
-
+        <!--        <link rel="stylesheet" href="{{url('assets/css/bootstrap-theme.min.css')}}" type="text/css"> 
+                <link rel="stylesheet" href="{{url('assets/css/bootstrap-theme.min.css.map')}}" type="text/css"> 
+                <link rel="stylesheet" href="{{url('assets/css/bootstrap.min.css')}}" type="text/css" > -->
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">       
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-
 
         <style>
             tfoot input {width: 100%;padding: 3px;box-sizing: border-box;} 
@@ -73,11 +65,23 @@ $(document).ready(function () {
                             </th>                     
                             <th>NOME</th>
                             <th>TURMA</th>
-                            <th>INEP</th>
+                            <th>INEP</th>                           
                             <th>NASCIMENTO</th>
                             <th>MÃE</th>
-                            <th>PROF. MÃE</th>
+                            <th>PAI</th>     
+                            <th>MATRICULA DA CERTIDÃO</th>  
+                            <th>NIS</th>
                             <th>BOLSA FAMÍLIA</th>
+                            <th>ENDEREÇO</th>             
+                            <th>CIDADE</th>  
+                            <th>TRANSPORTE</th>  
+                            <th>FONE(S)</th> 
+                            <th>DECLARAÇÃO</th> 
+                            <th>TRANSFERÊNCIA</th> 
+                            <th>NECESSIDADES</th> 
+                            <th>OBSERVAÇÕES</th> 
+                            <th>STATUS</th> 
+
                         </tr>
                     </thead>
                     <tbody>
@@ -89,23 +93,35 @@ $(document).ready(function () {
                                 <div class="dropdown">
                                     &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
-                                        <li><a href='impressao.php?id={{$aluno->id}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
-                                        <li><a href='folha_re_matricula.php?id={{$aluno->id}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
-                                        <li><a href='declaracoes_bolsa_familia.php?id={{$aluno->id}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
-                                        <li><a href='{{route('alunos.edit',Crypt::encrypt($aluno->id))}}' target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
-                                        <li><a href='pesquisar_no_banco_unitario.php?id=" . base64_encode({{$aluno->id}}) . "' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
-                                        <li><a href='cadastrar_historico.php?id=" . base64_encode({{$aluno->id}}) . "' target='_blank' title='Histórico'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
+                                        <li><a href='impressao.php?id={{$aluno->ID}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
+                                        <li><a href='folha_re_matricula.php?id={{$aluno->ID}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
+                                        <li><a href='declaracoes_bolsa_familia.php?id={{$aluno->ID}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
+                                        <li><a href='{{route('alunos.edit',Crypt::encrypt($aluno->ID))}}' target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href='pesquisar_no_banco_unitario.php?id=" . base64_encode({{$aluno->ID}}) . "' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
+                                        <li><a href='cadastrar_historico.php?id=" . base64_encode({{$aluno->ID}}) . "' target='_blank' title='Histórico'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
                                     </ul>                              
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}'></span>
-                                    &nbsp;<span id = "nome">{{$aluno->nome}}</span>
+                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->ID}}'></span>
+                                    &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
                                 </div>                           
                             </td>
-                            <td>{{$aluno->id_turma}}</td>
-                            <td>{{$aluno->inep}}</td>                   
-                            <td>{{\Carbon\Carbon::parse($aluno->nascimento)->format('d/m/Y')}}</td>
-                            <td>{{$aluno->mae}}</td>
-                            <td>{{$aluno->prof_mae}}</td>
-                            <td>{{$aluno->bf}}</td>
+                            <td>{{$aluno->TURMA}}</td>
+                            <td>{{$aluno->INEP}}</td>                  
+                            <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
+                            <td>{{$aluno->MAE}}</td>
+                            <td>{{$aluno->PAI}}</td>
+                            <td>{{$aluno->MATRICULA_CERTIDAO}}</td>
+                            <td>{{$aluno->NIS}}</td>
+                            <td>{{$aluno->BOLSA_FAMILIA}}</td>
+                            <td>{{$aluno->ENDERECO}}</td>
+                            <td>{{$aluno->CIDADE}}</td>
+                            <td>{{$aluno->TRANSPORTE}}</td>
+                            <td>{{$aluno->FONE}} / {{ $aluno->FONE_II}}</td>
+                            <td>{{$aluno->DECLARACAO}}</td>
+                            <td>{{$aluno->TRANSFERENCIA}}</td>
+                            <td>{{$aluno->NECESSIDADES_ESPECIAIS}}</td>
+                            <td>{{$aluno->OBSERVACOES}}</td>
+                            <td>{{$aluno->STATUS}}</td>
+
                         </tr>
                         @endforeach
                     </tbody>
@@ -114,11 +130,22 @@ $(document).ready(function () {
                             <th></th>                
                             <th>NOME</th>
                             <th>TURMA</th>
-                            <th>INEP</th>
+                            <th>INEP</th>                         
                             <th>NASCIMENTO</th>
                             <th>MÃE</th>
-                            <th>PROF. MÃE</th>       
+                            <th>PAI</th> 
+                            <th>MATRICULA DA CERTIDÃO</th>  
+                            <th>NIS</th>
                             <th>BOLSA FAMÍLIA</th>             
+                            <th>ENDEREÇO</th>             
+                            <th>CIDADE</th>
+                            <th>TRANSPORTE</th>  
+                            <th>FONE(S)</th> 
+                            <th>DECLARAÇÃO</th> 
+                            <th>TRANSFERÊNCIA</th> 
+                            <th>NECESSIDADES</th> 
+                            <th>OBSERVAÇÕES</th> 
+                             <th>STATUS</th> 
                         </tr>
                     </tfoot>        
                 </table> 

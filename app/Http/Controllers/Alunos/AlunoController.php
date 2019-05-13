@@ -30,11 +30,13 @@ class AlunoController extends Controller {
         $this->aluno = $aluno;
     }
 
+    
     //
     public function index() {
         //
         $title = "ALUNOS";
         $alunos = $this->aluno->all();
+       
 
         return view('Alunos.listar', compact('title', 'alunos'));
     }
@@ -48,8 +50,11 @@ class AlunoController extends Controller {
      */
     public function create() {
         //Formulario que Cadastra o Aluno.OBS: Envia para o Store
+        $certidoes = ['NOVO', 'ANTIGO'];
+        $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
+        $sexos = ['FEMININO', 'MASCULINO'];
         $title = "Cadastrar Aluno";
-        return view('Alunos.create', compact('title'));
+        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos'));
     }
 
     //
@@ -69,7 +74,7 @@ class AlunoController extends Controller {
     }
 
     //
-    //Esse método Recupera o que veio de Create, mas diferente do anterior esse método Atualiza os dados existentes
+    //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
         // return'update';
         $form = $request->except(['_token']);
@@ -87,14 +92,15 @@ class AlunoController extends Controller {
 
     //    
     // Esse método envia para a Create para Cadastrar ou atualizar os dados.
-    //
     public function edit($id) {
 
-
+        $certidoes = ['NOVO', 'ANTIGO'];
+        $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
+        $sexos = ['FEMININO', 'MASCULINO'];
         $aluno = $this->aluno->find(Crypt::decrypt($id));
 
-        $title = "Editar o Cadastro de: {$aluno->nome} ";
-        return view('Alunos.create', compact('title', 'aluno'));
+        $title = "Editar o Cadastro de: {$aluno->NOME} ";
+        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos'));
     }
 
     //

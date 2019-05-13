@@ -4,23 +4,68 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAlunosTable extends Migration
-{
+class CreateAlunosTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('alunos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('inep');
-            $table->string('id_turma');
-            $table->string('nome');
-            $table->date('nascimento');
-            $table->string('mae');
-            $table->string('prof_mae')->nullable();           
+            $table->increments('ID');
+            $table->string('INEP')->nullable();
+            $table->integer('TURMA');
+            $table->integer('TURMA_II')->nullable();
+            $table->string('NOME');
+            $table->date('NASCIMENTO')->nullable();
+            $table->string('CERTIDAO_CIVIL')->nullable();
+            $table->string('MODELO_CERTIDAO')->nullable();
+            $table->string('MATRICULA_CERTIDAO')->nullable();
+            $table->string('DADOS_CERTIDAO')->nullable();
+            $table->string('NUMERO_RG')->nullable();
+            $table->string('ORGAO_EXPEDIDOR_RG')->nullable();
+            $table->date('EXPEDICAO_CERTIDAO')->nullable();
+            $table->string('NATURALIDADE')->nullable();
+            $table->string('ESTADO')->nullable();
+            $table->string('NACIONALIDADE')->nullable();
+            $table->string('SEXO')->nullable();
+            $table->string('NIS')->nullable();
+            $table->string('BOLSA_FAMILIA')->nullable();
+            $table->string('SUS')->nullable();
+            $table->string('NECESSIDADES_ESPECIAIS')->nullable();
+            $table->string('COR')->nullable();
+            $table->string('FONE')->nullable();
+            $table->string('FONE_II')->nullable();
+            $table->string('MAE')->nullable();
+            $table->string('PROF_MAE')->nullable();
+            $table->string('PAI')->nullable();
+            $table->string('PROF_PAI')->nullable();
+            $table->string('ENDERECO')->nullable();
+            $table->string('URBANO')->nullable();
+            $table->string('CIDADE')->nullable();
+            $table->string('CIDADE_ESTADO')->nullable();
+            $table->string('TRANSPORTE')->nullable();
+            $table->string('PONTO_ONIBUS')->nullable();
+            $table->string('MOTORISTA')->nullable();
+            $table->string('MOTORISTA_II')->nullable();
+            $table->date('MATRICULA')->nullable();
+            $table->date('MATRICULA_RENOVADA')->nullable();
+            $table->date('MATRICULA_VALIDA')->nullable();
+            $table->date('CENSO')->nullable();
+            $table->string('DECLARACAO')->nullable();
+            $table->date('DECLARACAO_DATA')->nullable();
+            $table->string('DECLARACAO_RESPONSAVEL')->nullable();
+            $table->string('TRANSFERENCIA')->nullable();
+            $table->date('TRANSFERENCIA_DATA')->nullable();
+            $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();
+            $table->string('STATUS')->nullable();
+            $table->string('STATUS_II')->nullable();
+            $table->string('OUVINTE')->nullable();
+            $table->string('EXCLUIDO')->nullable();
+            $table->string('EXCLUIDO_PASTA')->nullable();
+            $table->string('OBSERVACOES')->nullable();
+
             $table->timestamps();
         });
     }
@@ -30,8 +75,9 @@ class CreateAlunosTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('alunos');
     }
+
+    //
 }
