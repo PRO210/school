@@ -254,14 +254,21 @@ $(function () {
                             @endif                            
                         </select>
                     </div>
-
-
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-12"> 
+                    {!!Form::label('Cidade', 'Cidade',['class' => 'col-sm-2 control-label'])!!}
+                    <div class="col-sm-4">
+                        {!! Form:: text('CIDADE',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                    </div> 
+                    {!!Form::label('Estado', 'Estado',['class' => 'col-sm-2 control-label'])!!}
+                    <div class="col-sm-4">
+                        {!! Form:: text('CIDADE_ESTADO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                    </div> 
 
                 </div>
             </div>
-
-
-
             <!--Fim da Edição dos dados-->
             @else            
 
