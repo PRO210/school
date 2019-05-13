@@ -30,13 +30,12 @@ class AlunoController extends Controller {
         $this->aluno = $aluno;
     }
 
-    
     //
     public function index() {
         //
         $title = "ALUNOS";
         $alunos = $this->aluno->all();
-       
+
 
         return view('Alunos.listar', compact('title', 'alunos'));
     }
@@ -53,8 +52,10 @@ class AlunoController extends Controller {
         $certidoes = ['NOVO', 'ANTIGO'];
         $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
         $sexos = ['FEMININO', 'MASCULINO'];
+        $bolsas = ['NAO', 'SIM'];
+        $urbanos = ['NAO', 'SIM'];
         $title = "Cadastrar Aluno";
-        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos'));
+        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas','urbanos'));
     }
 
     //
@@ -97,10 +98,12 @@ class AlunoController extends Controller {
         $certidoes = ['NOVO', 'ANTIGO'];
         $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
         $sexos = ['FEMININO', 'MASCULINO'];
+        $bolsas = ['NAO', 'SIM'];
+        $urbanos = ['NAO', 'SIM'];
         $aluno = $this->aluno->find(Crypt::decrypt($id));
 
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
-        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos'));
+        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos','bolsas','urbanos'));
     }
 
     //

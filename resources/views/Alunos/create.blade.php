@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">       
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-        
+
         <script src="{{url('assets/js/jquery.min.js')}}" type="text/javascript"></script>
         <script src="{{url('assets/js/jquery.maskedinput.js')}}" type="text/javascript"></script>
     </head>
@@ -127,8 +127,9 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-12">
+                    <!--Edição dos dados-->
                     @if (isset($aluno))
-
+                    <!--Trata do tipo de certidão-->
                     @if($aluno->CERTIDAO_CIVIL == "RG")
                     {!!Form::label('Número do RG', 'Número do RG',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
@@ -148,58 +149,38 @@
                     {!!Form::label('Dados da Certidão', 'Dados da Certidão',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
                         {!! Form:: text('DADOS_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                    </div>
+                    </div>                  
                     @endif
-
+                    <!--Fim do tipo de certidão-->
                     @endif
 
                     {!!Form::label('Data de Expedição', 'Data de Expedição',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
                         {!! Form:: date('EXPEDICAO_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
                     </div>
-
-                    @else
-
-                    {!!Form::label('Matricula da Certidão', 'Matricula da Certidão',['class' => 'col-sm-2 control-label'])!!}
-                    <div class="col-sm-4">
-                        {!! Form:: text('MATRICULA_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                    </div>
-                    {!!Form::label('Dados da Certidão', 'Dados da Certidão',['class' => 'col-sm-2 control-label'])!!}
-                    <div class="col-sm-4">
-                        {!! Form:: text('DADOS_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                    </div>
-                    {!!Form::label('Data de Expedição', 'Data de Expedição',['class' => 'col-sm-2 control-label'])!!}
-                    <div class="col-sm-4">
-                        {!! Form:: date('EXPEDICAO_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
-                    </div>
-
-                    @endif
-
                 </div>
-            </div>
+            </div> 
             <div class="row">
                 <div class="form-group col-sm-12">
                     {!!Form::label('Naturalidade', 'Naturalidade',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
                         {!! Form:: text('NATURALIDADE',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                     </div>
-
                     {!!Form::label('Estado', 'Estado',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
                         {!! Form:: text('ESTADO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                     </div>                                       
                 </div>
             </div>
-            <script type="text/javascript" >
-$(function () {
-    $("#NIS").mask("999.9999.9999", {reverse: true});
-});
-            </script>
             <div class="row">
-                <div class="form-group col-sm-12">   
+                <div class="form-group col-sm-12">
+                    {!!Form::label('Nacionalidade', 'Nacionalidade',['class' => 'col-sm-2 control-label'])!!}
+                    <div class="col-sm-4">
+                        {!! Form:: text('NACIONALIDADE',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
+                    </div>
                     {!!Form::label('Sexo', 'Sexo',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
-                        <select name="SEXO" class="form-control" >
+                        <select name="SEXO" class="form-control" >                        
                             @if (isset($aluno))
                             @foreach($sexos as $sexo)
                             @if($sexo == "$aluno->SEXO")
@@ -212,55 +193,91 @@ $(function () {
                             @foreach($sexos as $sexo)
                             <option value="{{$sexo}}" selected="">{{$sexo}}</option>
                             @endforeach 
-                            @endif
+                            @endif                            
                         </select>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="form-group col-sm-12">   
+                <div class="form-group col-sm-12">  
+                    <script type="text/javascript" >
+$(function () {
+    $("#NIS").mask("999.9999.9999", {reverse: true});
+});
+                    </script>
                     {!!Form::label('Nis', 'Nis',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
-                        {!! Form:: text('NIS',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','id' => 'NIS'])!!}  
-                    </div>
-
-
-
-
-
-
-
-
-
-
+                        {!! Form:: text('NIS',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','id' => 'NIS'])!!} 
+                    </div>                     
+                    {!!Form::label('Bolsa Família', 'Bolsa Família',['class' => 'col-sm-2 control-label'])!!}
+                    <div class="col-sm-4">
+                        <select name="BOLSA_FAMILIA" class="form-control" >                        
+                            @if (isset($aluno))
+                            @foreach($bolsas as $bolsa)
+                            @if($bolsa == "$aluno->BOLSA_FAMILIA")
+                            <option value="{{$bolsa}}" selected="">{{$bolsa}}</option>                         
+                            @else
+                            <option value="{{$bolsa}}">{{$bolsa}}</option>
+                            @endif
+                            @endforeach  
+                            @else
+                            @foreach($bolsas as $bolsa)
+                            <option value="{{$bolsa}}" selected="">{{$bolsa}}</option>
+                            @endforeach 
+                            @endif                            
+                        </select>
+                    </div>       
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-sm-12">                
-                    {!!Form::label('Nome da Mãe', 'Nome da Mãe',['class' => 'col-sm-2 control-label'])!!}
+                <div class="form-group col-sm-12"> 
+                    {!!Form::label('ENDERECO', 'ENDERECO',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
-                        {!! Form:: text('MAE',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)'])!!}  
-                    </div>
-                    {!!Form::label('Profissão da Mãe', 'Profissão da Mãe',['class' => 'col-sm-2 control-label'])!!}
+                        {!! Form:: text('ENDERECO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                    </div> 
+                    {!!Form::label('Urbano', 'Urbano',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
-                        {!! Form:: text('PROF_MAE',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)'])!!}  
+                        <select name="URBANO" class="form-control" >                        
+                            @if (isset($aluno))
+                            @foreach($urbanos as $urbano)
+                            @if($urbano == "$aluno->URBANO")
+                            <option value="{{$urbano}}" selected="">{{$urbano}}</option>                         
+                            @else
+                            <option value="{{$urbano}}">{{$urbano}}</option>
+                            @endif
+                            @endforeach  
+                            @else
+                            @foreach($urbanos as $urbano)
+                            <option value="{{$urbano}}" selected="">{{$urbano}}</option>
+                            @endforeach 
+                            @endif                            
+                        </select>
                     </div>
+
+
 
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group col-sm-12">                
-                    {!!Form::label('Nome da Pai', 'Nome da Pai',['class' => 'col-sm-2 control-label'])!!}
-                    <div class="col-sm-4">
-                        {!! Form:: text('PAI',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)'])!!}  
-                    </div>
-                    {!!Form::label('Profissão da Pai', 'Profissão da Pai',['class' => 'col-sm-2 control-label'])!!}
-                    <div class="col-sm-4">
-                        {!! Form:: text('PROF_PAI',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)'])!!}  
-                    </div>
 
-                </div>
-            </div>
+
+
+            <!--Fim da Edição dos dados-->
+            @else            
+
+            <!--Modo Create-->
+
+            <!--            <div class="row">
+                            <div class="form-group col-sm-12">
+                                {!!Form::label('Data de Expedição', 'Data de Expedição',['class' => 'col-sm-2 control-label'])!!}
+                                <div class="col-sm-4">
+                                    {!! Form:: date('EXPEDICAO_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                                </div>  
+                            </div>
+                        </div>-->
+            @endif
+
+
             <div class="form-group col-sm-6">
                 {!! Form:: submit('Enviar',['class' => 'btn btn-primary'])!!}  
             </div>           
