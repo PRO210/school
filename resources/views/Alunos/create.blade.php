@@ -232,7 +232,7 @@ $(function () {
             </div>
             <div class="row">
                 <div class="form-group col-sm-12"> 
-                    {!!Form::label('ENDERECO', 'ENDERECO',['class' => 'col-sm-2 control-label'])!!}
+                    {!!Form::label('Endereço', 'Endereço',['class' => 'col-sm-2 control-label'])!!}
                     <div class="col-sm-4">
                         {!! Form:: text('ENDERECO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
                     </div> 
