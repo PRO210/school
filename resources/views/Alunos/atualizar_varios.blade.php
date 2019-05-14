@@ -43,7 +43,7 @@
                 <button id="btnMostrarEsconderBtnTransferir" class="btn btn-marron botoes" >Transferir</button>
             </p> <br>
         <form name="cadastrar" action="{{url('alunos/update/agora')}}" method="post" class="form-horizontal" > 
-                <input type="hidden" name="_token" value="{{csrf_token()}}">                  
+<!--                <input type="hidden" name="_token" value="{{csrf_token()}}">                  
                 <div id="divConteudoBtnTurmas" style="background-color: #cc7700; "><br>
                     <div class="form-group">
                         <label for="inputTurma" class="col-sm-3 control-label">Turmas</label>
@@ -60,7 +60,7 @@
                         </div>
                     </div><br>
                 </div> 
-                 <!-- Div Bolsa Família-->
+                  Div Bolsa Família
                  <div id="divBolsa_Familia">
                     <div  style=" background-color: #286090;"><br>
                         <div class="form-group" >
@@ -105,9 +105,9 @@
                                     &nbsp;<span id = "nome">{{$aluno->nome}}</span>
                                 </div>                           
                             </td>
-                            <td>{{$aluno->id_turma}}</td>
-                            <td>{{$aluno->inep}}</td>                   
-                            <td>{{\Carbon\Carbon::parse($aluno->nascimento)->format('d/m/Y')}}</td>
+                            <td>{{$aluno->TURMA}}</td>
+                            <td>{{$aluno->INEP}}</td>                   
+                            <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
                             <td>{{$aluno->mae}}</td>
                             <td>{{$aluno->bf}}</td>
                         </tr>
@@ -125,7 +125,7 @@
                     </tr>
                        </tfoot>        
                    </table> 
-                   <input type="hidden" name="_token" value="{{csrf_token()}}">                
+                   <input type="hidden" name="_token" value="{{csrf_token()}}">                -->
              </form>     
             </div>      
             <script type="text/javascript">

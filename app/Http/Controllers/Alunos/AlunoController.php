@@ -108,12 +108,12 @@ class AlunoController extends Controller {
 
     //
     //
-    public function updatebloco(Request $request) {
-
+    public function updatebloco(Request $request) {       
+       
         $this->exporter = $request;
 
         $bt = $request->botao;
-        // return('Vem da listagem de alunos');           
+        // return('Vem da listagem de alunos');       
         //
         if ($request->botao == "basica") {
 
