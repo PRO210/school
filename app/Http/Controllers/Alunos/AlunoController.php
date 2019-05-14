@@ -28,6 +28,7 @@ class AlunoController extends Controller {
     public function __construct(Aluno $aluno) {
         //
         $this->aluno = $aluno;
+        $this->transportes = $transportes = ['NAO', 'SIM'];
     }
 
     //
@@ -49,13 +50,16 @@ class AlunoController extends Controller {
      */
     public function create() {
         //Formulario que Cadastra o Aluno.OBS: Envia para o Store
-        $certidoes = ['NOVO', 'ANTIGO'];
+       $certidoes = ['NOVO', 'ANTIGO'];
         $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
         $sexos = ['FEMININO', 'MASCULINO'];
         $bolsas = ['NAO', 'SIM'];
         $urbanos = ['NAO', 'SIM'];
+        $transportes = ['NAO', 'SIM'];
+        $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
+        $declaracoes = ['NAO', 'SIM'];       
         $title = "Cadastrar Aluno";
-        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas','urbanos'));
+        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes','cores' ,'declaracoes'));
     }
 
     //
@@ -92,7 +96,7 @@ class AlunoController extends Controller {
     }
 
     //    
-    // Esse método envia para a Create para Cadastrar ou atualizar os dados.
+    // Esse método envia para a Create para atualizar os dados Exsitentes.
     public function edit($id) {
 
         $certidoes = ['NOVO', 'ANTIGO'];
@@ -100,10 +104,13 @@ class AlunoController extends Controller {
         $sexos = ['FEMININO', 'MASCULINO'];
         $bolsas = ['NAO', 'SIM'];
         $urbanos = ['NAO', 'SIM'];
+        $transportes = ['NAO', 'SIM'];
+        $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
+        $declaracoes = ['NAO', 'SIM'];
         $aluno = $this->aluno->find(Crypt::decrypt($id));
 
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
-        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos','bolsas','urbanos'));
+        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores','declaracoes'));
     }
 
     //
