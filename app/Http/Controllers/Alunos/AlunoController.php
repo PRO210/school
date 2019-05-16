@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Alunos;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Alunos\Aluno;
 use App\Http\Requests\AlunoFormRequest;
@@ -28,6 +29,7 @@ class AlunoController extends Controller {
     public function __construct(Aluno $aluno) {
         //
         $this->aluno = $aluno;
+        $this->transportes = $transportes = ['NAO', 'SIM'];
     }
 
     //
@@ -35,14 +37,9 @@ class AlunoController extends Controller {
         //
         $title = "ALUNOS";
         $alunos = $this->aluno->all();
-
-
         return view('Alunos.listar', compact('title', 'alunos'));
     }
-
-    //    
-
-    /**
+   /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -54,10 +51,14 @@ class AlunoController extends Controller {
         $sexos = ['FEMININO', 'MASCULINO'];
         $bolsas = ['NAO', 'SIM'];
         $urbanos = ['NAO', 'SIM'];
+        $transportes = ['NAO', 'SIM'];
+        $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
+        $declaracoes = ['SIM', 'NAO'];
+        $transferencias = ['SIM', 'NAO'];
+        $ouvintes = ['SIM', 'NAO'];
         $title = "Cadastrar Aluno";
-        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas','urbanos'));
+        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
-
     //
     //
     public function store(AlunoFormRequest $request) { //Esse método Recupera o que veio de Create Para Cadastrar Novatos
@@ -77,12 +78,12 @@ class AlunoController extends Controller {
     //
     //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
-        // return'update';
-        $form = $request->except(['_token']);
-
-        $aluno = $this->aluno->find($id);
-
+        
+        $form = $request->except(['_token','_method']);        
+        /* DB::enableQueryLog(); */
+        $aluno = $this->aluno->where('ID',$id);
         $update = $aluno->update($form);
+        /* dd(DB::getQueryLog()); */
         //Redireciona
         if ($update) {
             return redirect()->route('alunos.index');
@@ -90,9 +91,8 @@ class AlunoController extends Controller {
             return redirect()->route('alunos.create');
         }
     }
-
     //    
-    // Esse método envia para a Create para Cadastrar ou atualizar os dados.
+    // Esse método envia para a Create para atualizar os dados Exsitentes.
     public function edit($id) {
 
         $certidoes = ['NOVO', 'ANTIGO'];
@@ -100,16 +100,21 @@ class AlunoController extends Controller {
         $sexos = ['FEMININO', 'MASCULINO'];
         $bolsas = ['NAO', 'SIM'];
         $urbanos = ['NAO', 'SIM'];
-        $aluno = $this->aluno->find(Crypt::decrypt($id));
-
+        $transportes = ['NAO', 'SIM'];
+        $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
+        $declaracoes = ['SIM', 'NAO'];
+        $transferencias = ['SIM', 'NAO'];
+        $ouvintes = ['SIM', 'NAO'];
+//        $aluno = $this->aluno->find(Crypt::decrypt($id));
+        $aluno = $this->aluno->find($id);
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
-        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos','bolsas','urbanos'));
+        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
 
     //
     //
-    public function updatebloco(Request $request) {       
-       
+    public function updatebloco(Request $request) {
+
         $this->exporter = $request;
 
         $bt = $request->botao;
@@ -132,7 +137,7 @@ class AlunoController extends Controller {
             return Excel::download(new AlunosFiltradosExport($request->aluno_selecionado), 'Nome do Arquivo Filtrado.xlsx');
             //Fim do botão básica
         } elseif ($request->botao == "geral") {
-            
+            return 'Geral';
         } else {
             $title = "Atualizar Os Dados";
             // $forms = $request->except(['_token']);
@@ -147,12 +152,13 @@ class AlunoController extends Controller {
     //
     //     
     public function updateagora(Request $request) {
+      
         $backup = Aluno::whereIn("id", $request->aluno_selecionado)->get();
 
         if ($request->turma == "turma") {
             $up = \DB::table('alunos')
                     ->whereIn('id', $request->aluno_selecionado)
-                    ->update(['id_turma' => "$request->inputTurma"]);
+                    ->update(['TURMA' => "$request->inputTurma"]);
             //
             if ($up) {
                 return redirect()->route('alunos.index');
@@ -162,7 +168,7 @@ class AlunoController extends Controller {
         } elseif ($request->bf == "bf") {
             $up = \DB::table('alunos')
                     ->whereIn('id', $request->aluno_selecionado)
-                    ->update(['bf' => "$request->optradio"]);
+                    ->update(['BOLSA_FAMILIA' => "$request->optradio"]);
             //
             if ($up) {
                 return redirect()->route('alunos.index');

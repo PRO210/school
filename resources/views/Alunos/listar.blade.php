@@ -14,16 +14,12 @@
         <script src="{{url('assets/js/dataTables.bootstrap.min.js')}}" type="text/javascript"></script>
 
         <link rel="stylesheet" href="{{url('assets/css/dataTables.bootstrap.min.css')}}" type="text/css">
+        <link rel="stylesheet" href="{{url('css/bootstrap.min.css')}}" type="text/css">
         <script src="{{url('assets/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
+        <script src="{{url('js/bootstrap.min.js')}}" type="text/javascript"></script>
         <link rel="stylesheet" href="{{url('assets/css/responsive.dataTables.min.css')}}">
-      
-        <link href="../../../public/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">       
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 
+        
         <style>
             tfoot input {width: 100%;padding: 3px;box-sizing: border-box;} 
             .glyphicon-print{font-size: 16px !important;}
@@ -96,7 +92,7 @@ $(document).ready(function () {
                                         <li><a href='impressao.php?id={{$aluno->ID}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
                                         <li><a href='folha_re_matricula.php?id={{$aluno->ID}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
                                         <li><a href='declaracoes_bolsa_familia.php?id={{$aluno->ID}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
-                                        <li><a href='{{route('alunos.edit',Crypt::encrypt($aluno->ID))}}' target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href='{{route('alunos.edit',$aluno->ID)}}' target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
                                         <li><a href='pesquisar_no_banco_unitario.php?id=" . base64_encode({{$aluno->ID}}) . "' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                         <li><a href='cadastrar_historico.php?id=" . base64_encode({{$aluno->ID}}) . "' target='_blank' title='Histórico'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
                                     </ul>                              
@@ -145,7 +141,7 @@ $(document).ready(function () {
                             <th>TRANSFERÊNCIA</th> 
                             <th>NECESSIDADES</th> 
                             <th>OBSERVAÇÕES</th> 
-                             <th>STATUS</th> 
+                            <th>STATUS</th> 
                         </tr>
                     </tfoot>        
                 </table> 
@@ -172,7 +168,7 @@ $(document).ready(function () {
                         "lengthMenu": " _MENU_ <?php
 echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
- . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)'  value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
+ . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
 ;
 ?>
                                 ",                  

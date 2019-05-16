@@ -20,9 +20,6 @@ composer dump-autoload
 //Criar a Tabela do mysql NO PROJETO
 php artisan make:migration create_certidoes_table
 php artisan migrate (Criar a Tabela do mysql NO SERVIDOR)
-//Atualizar a Tabela mysql
-php artisan migrate:refresh
-
 php artisan migrate:refresh (Atualizar a Tabela mysql e limpa o Banco)
 //
 //
