@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Alunos\Aluno;
+use App\Models\Logs\Log;
 use App\Http\Requests\AlunoFormRequest;
 //
 use App\Exports;
@@ -23,13 +24,14 @@ class AlunoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     private $aluno;
+    private $log;
     private $exporter;
 
     //
-    public function __construct(Aluno $aluno) {
+    public function __construct(Aluno $aluno, Log $log) {
         //
         $this->aluno = $aluno;
-        $this->transportes = $transportes = ['NAO', 'SIM'];
+        $this->log = $log;
     }
 
     //
@@ -39,7 +41,8 @@ class AlunoController extends Controller {
         $alunos = $this->aluno->all();
         return view('Alunos.listar', compact('title', 'alunos'));
     }
-   /**
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -59,6 +62,7 @@ class AlunoController extends Controller {
         $title = "Cadastrar Aluno";
         return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
+
     //
     //
     public function store(AlunoFormRequest $request) { //Esse método Recupera o que veio de Create Para Cadastrar Novatos
@@ -66,7 +70,6 @@ class AlunoController extends Controller {
 
         //Insere os dados
         $insert = $this->aluno->create($form);
-
         //Redireciona
         if ($insert) {
             return redirect()->route('alunos.index');
@@ -78,19 +81,35 @@ class AlunoController extends Controller {
     //
     //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
-        
-        $form = $request->except(['_token','_method']);        
+        $backup = $this->aluno->find($id);
+        $form = $request->except(['_token', '_method']);
         /* DB::enableQueryLog(); */
-        $aluno = $this->aluno->where('ID',$id);
+        $aluno = $this->aluno->where('ID', $id);
         $update = $aluno->update($form);
+        $backup_update = $this->aluno->find($id);
+        $result = array_diff_assoc($backup_update->toArray(), $backup->toArray());
+        $campo = "";
+        //
+        foreach ($result as $nome_campo => $valor) {
+            // echo "$nome_campo = $valor <br>";
+            $campo .= "$nome_campo = De $backup[$nome_campo] para $valor / ";
+        }    
         /* dd(DB::getQueryLog()); */
         //Redireciona
         if ($update) {
+//          Faz o Log
+            $insert = $this->log->create([
+                'USUARIO' => 'ANDRÉ',
+                'TABELA' => 'ALUNOS',
+                'ALTERAR' => 'SIM',
+                'ACAO' => "$campo",
+            ]);
             return redirect()->route('alunos.index');
         } else {
             return redirect()->route('alunos.create');
         }
     }
+
     //    
     // Esse método envia para a Create para atualizar os dados Exsitentes.
     public function edit($id) {
@@ -116,7 +135,6 @@ class AlunoController extends Controller {
     public function updatebloco(Request $request) {
 
         $this->exporter = $request;
-
         $bt = $request->botao;
         // return('Vem da listagem de alunos');       
         //
@@ -152,7 +170,7 @@ class AlunoController extends Controller {
     //
     //     
     public function updateagora(Request $request) {
-      
+
         $backup = Aluno::whereIn("id", $request->aluno_selecionado)->get();
 
         if ($request->turma == "turma") {
