@@ -1,5 +1,6 @@
-cd /opt/lampp/htdocs/school
-
+cd /opt/lampp/htdocs/laravel/school
+//
+Ao adicionar repositótio copiar a pasta vendor e o arquivo .env
 //
 Git:    Git:    Git:    Git:    Git:    Git:
 //
