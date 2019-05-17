@@ -18,21 +18,21 @@ use Illuminate\Support\Facades\Crypt;
 
 class AlunoController extends Controller {
 
-    //
+//
     private $aluno;
     private $log;
     private $exporter;
 
-    //
+//
     public function __construct(Aluno $aluno, Log $log) {
-        //
+//
         $this->aluno = $aluno;
         $this->log = $log;
     }
 
-    //
+//
     public function index() {
-        //
+//
         $title = "ALUNOS";
         $alunos = $this->aluno->all();
         return view('Alunos.listar', compact('title', 'alunos'));
@@ -44,7 +44,7 @@ class AlunoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //Formulario que Cadastra o Aluno.OBS: Envia para o Store
+//Formulario que Cadastra o Aluno.OBS: Envia para o Store
         $certidoes = ['NOVO', 'ANTIGO'];
         $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
         $sexos = ['FEMININO', 'MASCULINO'];
@@ -59,14 +59,14 @@ class AlunoController extends Controller {
         return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
 
-    //
-    //
+//
+//
     public function store(AlunoFormRequest $request) { //Esse método Recupera o que veio de Create Para Cadastrar Novatos
         $form = $request->except(['_token']);
 
-        //Insere os dados
+//Insere os dados
         $insert = $this->aluno->create($form);
-        //Redireciona
+//Redireciona
         if ($insert) {
             return redirect()->route('alunos.index');
         } else {
@@ -74,8 +74,8 @@ class AlunoController extends Controller {
         }
     }
 
-    //
-    //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
+//
+//Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
         $backup = $this->aluno->find($id);
         $form = $request->except(['_token', '_method']);
@@ -85,11 +85,18 @@ class AlunoController extends Controller {
         $backup_update = $this->aluno->find($id);
         $result = array_diff_assoc($backup_update->toArray(), $backup->toArray());
         $campo = "";
-        //
+//
         foreach ($result as $nome_campo => $valor) {
-            // echo "$nome_campo = $valor <br>";
+// echo "$nome_campo = $valor <br>";
+            if ($backup[$nome_campo] == "") {
+                $backup[$nome_campo] = "Vazio";
+            }
+            if ($valor == "") {
+                $valor = "Vazio";
+            }
             $campo .= "$nome_campo = De $backup[$nome_campo] para $valor / ";
         }
+        $campo_final = "Alterou o(s) Campo(s) de " . $backup['NOME'] . " em : $campo";
         /* dd(DB::getQueryLog()); */
         //Redireciona
         if ($update) {
@@ -98,7 +105,7 @@ class AlunoController extends Controller {
                 'USUARIO' => 'ANDRÉ',
                 'TABELA' => 'ALUNOS',
                 'ALTERAR' => 'SIM',
-                'ACAO' => "$campo",
+                'ACAO' => "$campo_final",
             ]);
             return redirect()->route('alunos.index');
         } else {
@@ -162,7 +169,6 @@ class AlunoController extends Controller {
             return view('Alunos.atualizar_varios', compact('title', 'teste', 'marcar'));
         }
     }
-
     //
     //     
     public function updateagora(Request $request) {
@@ -191,13 +197,6 @@ class AlunoController extends Controller {
             }
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($i) {
         //
     }
@@ -212,7 +211,7 @@ class AlunoController extends Controller {
 
     public function log(Log $log) {
 
-      
+
         $title = "AÇÕES REALIZADAS";
         $logs = $this->log->all();
         return view('Alunos.listar_logs', compact('title', 'logs'));
@@ -225,5 +224,5 @@ class AlunoController extends Controller {
     }
 
     //
-    //
+//
 }

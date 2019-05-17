@@ -15,7 +15,6 @@
         <script src="{{url('assets/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
         <link rel="stylesheet" href="{{url('assets/css/responsive.dataTables.min.css')}}">
 
-
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">       
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 
@@ -349,7 +348,7 @@ $(function () {
                             <select name="TRANSFERENCIA" class="form-control" >                        
                                 @if (isset($aluno))
                                 @foreach($transferencias as $transferencia)
-                                @if($transferencias == "$aluno->TRANSFERENCIA")
+                                @if($transferencia == "$aluno->TRANSFERENCIA")
                                 <option value="{{$transferencia}}" selected="">{{$transferencia}}</option>                         
                                 @else
                                 <option value="{{$transferencia}}">{{$transferencia}}</option>
@@ -404,10 +403,10 @@ $(function () {
                     <div class="form-group col-sm-12">                        
                         {!!Form::label('Ouvinte', 'Ouvinte',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            <select name="TRANSFERENCIA" class="form-control" >                        
+                            <select name="OUVINTE" class="form-control" >                        
                                 @if (isset($aluno))
                                 @foreach($ouvintes as $ouvinte)
-                                @if($transferencias == "$aluno->TRANSFERENCIA")
+                                @if($ouvinte == "$aluno->OUVINTE")
                                 <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>                         
                                 @else
                                 <option value="{{$ouvinte}}">{{$ouvinte}}</option>
