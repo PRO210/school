@@ -24,14 +24,15 @@ class AlunoFormRequest extends FormRequest
     {
         return [
             'NOME' => 'required|min:3|max:255',
-           // 'TURMA' => 'required',
+            'TURMA' => 'required',
 
         ];
     }
     public function messages()
     {
         return [
-            'NOME.required' => 'O Campo Nome Precisa ser Preenchido'
+            'NOME.required' => 'O Campo Nome Precisa ser Preenchido',
+            'TURMA.required' => 'O Campo Turma Precisa ser Preenchido'
         ];
     }
 }

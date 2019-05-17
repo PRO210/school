@@ -18,11 +18,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class AlunoController extends Controller {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //
     private $aluno;
     private $log;
     private $exporter;
@@ -93,7 +89,7 @@ class AlunoController extends Controller {
         foreach ($result as $nome_campo => $valor) {
             // echo "$nome_campo = $valor <br>";
             $campo .= "$nome_campo = De $backup[$nome_campo] para $valor / ";
-        }    
+        }
         /* dd(DB::getQueryLog()); */
         //Redireciona
         if ($update) {
@@ -202,7 +198,7 @@ class AlunoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($i) {
         //
     }
 
@@ -213,9 +209,21 @@ class AlunoController extends Controller {
     //     $diff = $todosItens->diff($produto->itens);
     //     return response()->json($diff);
     // }
+
+    public function log(Log $log) {
+
+      
+        $title = "AÇÕES REALIZADAS";
+        $logs = $this->log->all();
+        return view('Alunos.listar_logs', compact('title', 'logs'));
+    }
+
+    //
     public function show($id) {
+        return 'show';
         //
     }
 
+    //
     //
 }

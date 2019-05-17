@@ -15,11 +15,12 @@
           <li class="active"><a href="#">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
-
+         
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alunos <span class="caret"></span></a>
             <ul class="dropdown-menu">
-            <li><a href="{{route ('alunos.index')}}">Listar</a></li>
+            <li><a href="{{route ('alunos.index')}}">Listar Todos os Alunos</a></li>           
+            <li><a href="alunos/mostrar/logs">Listar Logs</a></li>
               <li><a href="#">Another action</a></li>
               <li><a href="#">Something else here</a></li>
               <li role="separator" class="divider"></li>

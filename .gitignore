@@ -14,3 +14,5 @@ yarn-error.log
 /nbproject
 private.xml
 .gitignore
+/nbproject/private/private.xml
+nbproject/private/private.xml
