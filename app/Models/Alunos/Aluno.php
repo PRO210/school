@@ -16,4 +16,17 @@ class Aluno extends Model {
 //    protected $guarded = [
 //        'ID'
 //    ];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

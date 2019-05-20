@@ -14,16 +14,18 @@ class CreateAlunoTurmasTable extends Migration {
     public function up() {
         Schema::create('aluno_turmas', function (Blueprint $table) {
             $table->increments('id');
-
             $table->integer('turma_id')->unsigned();
             $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
-
             $table->integer('aluno_id')->unsigned();
             $table->foreign('aluno_id')->references('ID')->on('alunos')->onDelete('cascade');
-
+            $table->string('STATUS')->nullable();          
+            $table->string('OUVINTE')->nullable();
+            $table->string('EXCLUIDO')->nullable();
+            $table->string('EXCLUIDO_PASTA')->nullable();
             $table->timestamps();
         });
-    } 
+    }
+
     /**
      * Reverse the migrations.
      *

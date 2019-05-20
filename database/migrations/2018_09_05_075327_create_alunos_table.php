@@ -14,9 +14,7 @@ class CreateAlunosTable extends Migration {
     public function up() {
         Schema::create('alunos', function (Blueprint $table) {
             $table->increments('ID');
-            $table->string('INEP')->nullable();
-            $table->integer('TURMA');
-            $table->integer('TURMA_II')->nullable();
+            $table->string('INEP')->nullable();           
             $table->string('NOME');
             $table->date('NASCIMENTO')->nullable();
             $table->string('CERTIDAO_CIVIL')->nullable();
@@ -51,19 +49,13 @@ class CreateAlunosTable extends Migration {
             $table->string('MOTORISTA_II')->nullable();
             $table->date('MATRICULA')->nullable();
             $table->date('MATRICULA_RENOVADA')->nullable();
-            $table->date('MATRICULA_VALIDA')->nullable();
-            $table->date('CENSO')->nullable();
+            $table->date('MATRICULA_VALIDA')->nullable();          
             $table->string('DECLARACAO')->nullable();
             $table->date('DECLARACAO_DATA')->nullable();
             $table->string('DECLARACAO_RESPONSAVEL')->nullable();
             $table->string('TRANSFERENCIA')->nullable();
             $table->date('TRANSFERENCIA_DATA')->nullable();
-            $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();
-            $table->string('STATUS')->nullable();
-            $table->string('STATUS_II')->nullable();
-            $table->string('OUVINTE')->nullable();
-            $table->string('EXCLUIDO')->nullable();
-            $table->string('EXCLUIDO_PASTA')->nullable();
+            $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();           
             $table->string('OBSERVACOES')->nullable();
 
             $table->timestamps();

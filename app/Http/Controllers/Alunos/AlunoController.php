@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Alunos;
 
+//
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -17,6 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 //
 use Illuminate\Support\Facades\Crypt;
 
+//
 class AlunoController extends Controller {
 
 //
@@ -59,6 +61,7 @@ class AlunoController extends Controller {
         $transferencias = ['SIM', 'NAO'];
         $ouvintes = ['SIM', 'NAO'];
         $title = "Cadastrar Aluno";
+//        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
         return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
 
@@ -235,25 +238,16 @@ class AlunoController extends Controller {
 //        foreach ($alunos as $aluno) {
 //            echo "{$aluno->NOME} - ";
 //        }
-//        echo "<br>";
-//        echo "<br>";
-
-
-        $turmas = $this->turma->all()->toArray();
-       // dd($turmas);
-       print_r($turmas);
-
-//        foreach ($turmas as $turma) {
-//
-//            echo $turma->TURMA;
-//            echo "<br>";
-//
-//            $alunos = $turma->alunos;
-//            echo "<br>";
-//            echo "$alunos" . "<br>";
-//
-//            echo "{$alunos->NOME} - ";
-//        }
+        $turma = Turma::with('alunos', 'alunos_cursando')->get();
+        
+        foreach ($turma as $turma_unica) {
+            echo "{$turma_unica->TURMA} : ";
+            $alunos = $turma_unica->alunos;
+            foreach ($alunos as $aluno) {
+                echo "{$aluno->NOME} - ";
+            }
+            echo "<br><br>";
+        }
     }
 
 }

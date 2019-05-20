@@ -57,11 +57,13 @@
                                 <option value="2">INCOMPLETO NOVATO</option>
                             </select>
                             @endif
-                        </div>  
+                        </div>                          
                         {!!Form::label('Status', 'Status',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">                           
                             <select name="STATUS" class="form-control" >                        
-                                <option>INCOMPLETO EDIÇÂO</option>
+                                                 
+                                <option value=""></option>                          
+                              
                             </select>
                         </div> 
                     </div>
