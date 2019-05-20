@@ -3,10 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/laravel/school/app/Http/Controllers/Alunos/AlunoController.php</file>
-            <file>file:/C:/xampp/htdocs/laravel/school/resources/views/Alunos/create.blade.php</file>
-            <file>file:/C:/xampp/htdocs/laravel/school/database/migrations/2019_05_16_140252_create_logs_table.php</file>
-            <file>file:/C:/xampp/htdocs/laravel/school/Laravel-Comandos-2019</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/database/migrations/2019_04_29_093829_create_turmas_table.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/routes/web.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Models/Turmas/Turma.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/database/migrations/2018_09_05_075327_create_alunos_table.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Alunos/AlunoController.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Models/AlunosTurmas/AlunoTurma.php</file>
         </group>
     </open-files>
 </project-private>

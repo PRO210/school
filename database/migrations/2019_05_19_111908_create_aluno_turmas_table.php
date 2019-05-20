@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateAlunoTurmasTable extends Migration {
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up() {
+        Schema::create('aluno_turmas', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('turma_id')->unsigned();
+            $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
+
+            $table->integer('aluno_id')->unsigned();
+            $table->foreign('aluno_id')->references('ID')->on('alunos')->onDelete('cascade');
+
+            $table->timestamps();
+        });
+    } 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down() {
+        Schema::dropIfExists('aluno_turmas');
+    }
+
+}

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Alunos\Aluno;
+use App\Models\Turmas\Turma;
 use App\Models\Logs\Log;
 use App\Http\Requests\AlunoFormRequest;
 //
@@ -22,12 +23,14 @@ class AlunoController extends Controller {
     private $aluno;
     private $log;
     private $exporter;
+    private $turma;
 
 //
-    public function __construct(Aluno $aluno, Log $log) {
+    public function __construct(Aluno $aluno, Log $log, Turma $turma) {
 //
         $this->aluno = $aluno;
         $this->log = $log;
+        $this->turma = $turma;
     }
 
 //
@@ -87,7 +90,6 @@ class AlunoController extends Controller {
         $campo = "";
 //
         foreach ($result as $nome_campo => $valor) {
-// echo "$nome_campo = $valor <br>";
             if ($backup[$nome_campo] == "") {
                 $backup[$nome_campo] = "Vazio";
             }
@@ -169,11 +171,23 @@ class AlunoController extends Controller {
             return view('Alunos.atualizar_varios', compact('title', 'teste', 'marcar'));
         }
     }
+
     //
     //     
     public function updateagora(Request $request) {
 
-        $backup = Aluno::whereIn("id", $request->aluno_selecionado)->get();
+        $alunos = $this->aluno->find($request->aluno_selecionado);
+        $todos = "";
+        $todos_nomes = "";
+        foreach ($alunos->toArray() as $aluno) {
+//      Recuperar a turma pelo id e transformar em nome
+            $todos .= $aluno['NOME'] . '/' . $aluno['TURMA'] . ',';
+            $todos_nomes = substr($todos, 0, -1);
+        }
+        $backup = "Alterou a Turma do(as) aluno(as) $todos_nomes para ($request->inputTurma)";
+        echo "$backup";
+
+        exit();
 
         if ($request->turma == "turma") {
             $up = \DB::table('alunos')
@@ -181,6 +195,8 @@ class AlunoController extends Controller {
                     ->update(['TURMA' => "$request->inputTurma"]);
             //
             if ($up) {
+
+
                 return redirect()->route('alunos.index');
             } else {
                 return redirect()->route('alunos.atualizar_varios');
@@ -193,11 +209,12 @@ class AlunoController extends Controller {
             if ($up) {
                 return redirect()->route('alunos.index');
             } else {
-                return redirect()->route('alunos.atualizar_varios');
+                return redirect()->route('Alunos.atualizar_varios');
             }
         }
     }
-    public function destroy($i) {
+
+    public function destroy($id) {
         //
     }
 
@@ -208,21 +225,35 @@ class AlunoController extends Controller {
     //     $diff = $todosItens->diff($produto->itens);
     //     return response()->json($diff);
     // }
+    public function show() {
 
-    public function log(Log $log) {
-
-
-        $title = "AÇÕES REALIZADAS";
-        $logs = $this->log->all();
-        return view('Alunos.listar_logs', compact('title', 'logs'));
-    }
-
-    //
-    public function show($id) {
-        return 'show';
-        //
-    }
-
-    //
+//        $turma = Turma::where('id', '2 ')->get()->first;
+        //       echo "{$turma->TURMA} : ";
 //
+//        $alunos = $turma->alunos;
+//        
+//        foreach ($alunos as $aluno) {
+//            echo "{$aluno->NOME} - ";
+//        }
+//        echo "<br>";
+//        echo "<br>";
+
+
+        $turmas = $this->turma->all()->toArray();
+       // dd($turmas);
+       print_r($turmas);
+
+//        foreach ($turmas as $turma) {
+//
+//            echo $turma->TURMA;
+//            echo "<br>";
+//
+//            $alunos = $turma->alunos;
+//            echo "<br>";
+//            echo "$alunos" . "<br>";
+//
+//            echo "{$alunos->NOME} - ";
+//        }
+    }
+
 }
