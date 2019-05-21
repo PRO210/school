@@ -38,10 +38,8 @@ class AlunoController extends Controller {
 //
     public function index() {
 //
-        $title = "ALUNOS";
-        $alunos = $this->aluno->all();
-
-
+        $title = "TODOS OS ALUNOS";
+        $alunos = Aluno::with('turmas')->get();       
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
@@ -233,35 +231,17 @@ class AlunoController extends Controller {
 //            echo "{$turma_unica->TURMA} - ";
 //        }
 //        //dd($turma);
-//        dd($aluno);
-//        $turmas = Turma::with('alunos')->get();
-//
-//        foreach ($turmas as $turma) {
-//            echo "{$turma->TURMA} : ";           
-//
-//            $alunos = $turma->alunos()->get();
-//
-//            foreach ($alunos as $aluno) {
-//                echo "{$aluno->NOME} - ";
-//            }
-//            echo "<br>";
-//        } 
-//        echo "<br><br>";
-//        dd($turmas);
+//        dd($aluno);//        
 //         
         $alunos = Aluno::with('turmas')->get();
-       
+
         foreach ($alunos as $aluno) {
-            echo "{$aluno->NOME} : ";
-
+//            echo "{$aluno->NOME} -  ";          
             $turmas = $aluno->turmas;
-
             foreach ($turmas as $turma) {
-                echo "{$turma->TURMA} - ";
+                echo "{$aluno->NOME} - {$turma->TURMA}  ";
             }
-            echo "<br>";
         }
-         dd($alunos);
     }
 
 }

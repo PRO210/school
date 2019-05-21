@@ -13,7 +13,7 @@ class CreateAlunosTable extends Migration {
      */
     public function up() {
         Schema::create('alunos', function (Blueprint $table) {
-            $table->increments('ID');
+            $table->increments('id');
             $table->string('INEP')->nullable();           
             $table->string('NOME');
             $table->date('NASCIMENTO')->nullable();
@@ -57,7 +57,6 @@ class CreateAlunosTable extends Migration {
             $table->date('TRANSFERENCIA_DATA')->nullable();
             $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();           
             $table->string('OBSERVACOES')->nullable();
-
             $table->timestamps();
         });
     }

@@ -30,23 +30,17 @@
             </style>
             <script>
 $(document).ready(function () {
-    $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
+$(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
 });
             </script>
         </head>
-
         <body>
             @include('Menu.menu');
-
-
-            <h3 style="text-align:center; ">Alunos</h3>
-            <div class="container-fluid">       
-
+            <h3 style="text-align:center; ">Todos os Alunos</h3>
+            <div class="container-fluid">      
                 {{-- {{$impressao}}imprimir do php --}}
-                {{-- {!!$xss!!} imprimir do java --}}              
-
-                {!!Form::open(['url' => 'alunos/update/bloco','name' => 'form1'])!!}                          
-
+                {{-- {!!$xss!!} imprimir do java --}}             
+                {!!Form::open(['url' => 'alunos/update/bloco','name' => 'form1'])!!}                        
                 {{-- {!! Form::open(['route' => 'alunos.store','class' => 'form-control','name' => 'form1'])!!} --}}      
                 <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
                     <thead>
@@ -82,46 +76,32 @@ $(document).ready(function () {
 
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($alunos as $aluno)                    
-
-                        <tr>      
-                            <td></td>       
-                            <td>
-                                <div class="dropdown">
-                                    &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
-                                    <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
-                                        <li><a href='impressao.php?id={{$aluno->ID}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
-                                        <li><a href='folha_re_matricula.php?id={{$aluno->ID}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
-                                        <li><a href='declaracoes_bolsa_familia.php?id={{$aluno->ID}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
-                                        <li><a href='{{route('alunos.edit',$aluno->ID)}}' target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
-                                        <li><a href='pesquisar_no_banco_unitario.php?id=" . base64_encode({{$aluno->ID}}) . "' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
-                                        <li><a href='cadastrar_historico.php?id=" . base64_encode({{$aluno->ID}}) . "' target='_blank' title='Histórico'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
-                                    </ul>                              
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->ID}}'></span>
-                                    &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
-                                </div>                           
-                            </td>
-                            <td>{{$aluno->TURMA}}</td>
-                            <td>{{$aluno->INEP}}</td>                  
-                            <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
-                            <td>{{$aluno->MAE}}</td>
-                            <td>{{$aluno->PAI}}</td>
-                            <td>{{$aluno->MATRICULA_CERTIDAO}}</td>
-                            <td>{{$aluno->NIS}}</td>
-                            <td>{{$aluno->BOLSA_FAMILIA}}</td>
-                            <td>{{$aluno->ENDERECO}}</td>
-                            <td>{{$aluno->CIDADE}}</td>
-                            <td>{{$aluno->TRANSPORTE}}</td>
-                            <td>{{$aluno->FONE}} / {{ $aluno->FONE_II}}</td>
-                            <td>{{$aluno->DECLARACAO}}</td>
-                            <td>{{$aluno->TRANSFERENCIA}}</td>
-                            <td>{{$aluno->NECESSIDADES_ESPECIAIS}}</td>
-                            <td>{{$aluno->OBSERVACOES}}</td>
-                            <td>{{$aluno->STATUS}}</td>
-
-                        </tr>
+                    <tbody>                                   
+                        @foreach($alunos as $aluno)                       
+                            @foreach($aluno->turmas as $turma)
+                             {{$aluno->NOME}}:{{$aluno->NASCIMENTO}} -  {{$turma->TURMA}}<br><br>
+                            @endforeach
                         @endforeach
+                    <tr>      
+                        <td></td>       
+                        <td>
+                            <div class="dropdown">
+                                &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
+                                <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
+                                    <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
+                                    <li><a href='folha_re_matricula.php?id={{''}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
+                                    <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
+                                    <!--<li><a href='' target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>-->
+                                    <li><a href='pesquisar_no_banco_unitario.php?id=" . base64_encode({{''}}) . "' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
+                                    <li><a href='cadastrar_historico.php?id=" . base64_encode({{''}}) . "' target='_blank' title='Histórico'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
+                                </ul>                              
+                                &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{''}}'></span>
+                                &nbsp;<span id = "nome">{{''}}</span>
+                            </div>                           
+                        </td>                          
+                    </tr>
+
+
                     </tbody>
                     <tfoot>
                         <tr>      
@@ -153,107 +133,106 @@ $(document).ready(function () {
         </div>   
         <script>
             $(document).ready(function () {
-                // Setup - add a text input to each footer cell
-                $('#example tfoot th').each(function () {
-                    var title = $(this).text();
-                    $(this).html('<input type="text" placeholder="' + title + '" />');
-                });
-                //Data Table
-                var table = $('#example').DataTable({
-                    //
-                    "columnDefs": [{
-                            "targets": 0,
-                            "orderable": false
-                        }],
-                    "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
+            // Setup - add a text input to each footer cell
+            $('#example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="' + title + '" />');
+            });
+            //Data Table
+            var table = $('#example').DataTable({
+            //
+            "columnDefs": [{
+            "targets": 0,
+                    "orderable": false
+            }],
+                    "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, - 1], [8, 20, 30, 40, 50, 70, 100, "All"]],
                     "language": {
-                        "lengthMenu": " _MENU_ <?php
+                    "lengthMenu": " _MENU_ <?php
 echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
  . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
 ;
 ?>
-                                ",                  
-                                "zeroRecords": "Nenhum aluno encontrado",
-                        "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                        "infoEmpty": "Sem registros",
-                        "search": "Busca:",
-                        "infoFiltered": "(filtrado de _MAX_ total de alunos)",
-                        "paginate": {
+                            ",                  
+                            "zeroRecords": "Nenhum aluno encontrado",
+                            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                            "infoEmpty": "Sem registros",
+                            "search": "Busca:",
+                            "infoFiltered": "(filtrado de _MAX_ total de alunos)",
+                            "paginate": {
                             "first": "Primeira",
-                            "last": "Ultima",
-                            "next": "Proxima",
-                            "previous": "Anterior"
-                        },
-                        "aria": {
+                                    "last": "Ultima",
+                                    "next": "Proxima",
+                                    "previous": "Anterior"
+                            },
+                            "aria": {
                             "sortAscending": ": ative a ordenação cressente",
-                            "sortDescending": ": ative a ordenação decressente"
-                        }
+                                    "sortDescending": ": ative a ordenação decressente"
+                            }
 
                     },
                     responsive: true
-                });
-                // Apply the search
-                table.columns().every(function () {
-                    var that = this;
-                    $('input', this.footer()).on('keyup change', function () {
-                        if (that.search() !== this.value) {
-                            that
-                                    .search(this.value)
-                                    .draw();
-                        }
-                    });
-                });
-
+            });
+            // Apply the search
+            table.columns().every(function () {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function () {
+            if (that.search() !== this.value) {
+            that
+                    .search(this.value)
+                    .draw();
+            }
+            });
+            });
             });
         </script>    
-        <script type="text/javascript">
-            //Marcar ou Desmarcar todos os checkbox
-            $(document).ready(function () {
+        <script type="text/javas                cript">
+                //Marcar ou Desmarcar todos os c                heckbox
+                $(document).ready(functio                    n () {
 
-                $('.selecionar').click(function () {
-                    if (this.checked) {
-                        $('.checkbox').each(function () {
-                            this.checked = true;
-                        });
-                    } else {
-                        $('.checkbox').each(function () {
-                            this.checked = false;
-                        });
-                    }
+                $('.selecionar').click(functi                        on () {
+                if (this.che                            cked) {
+                $('.checkbox').each(functi                                on () {
+                this.checked                             = true;
+                });
+                }                            else {
+                $('.checkbox').each(functi                                on () {
+                this.checked =                            false;
+                });
+                }
                 });
 
-            });
-        </script>
-        <script type="text/javascript">
-            $('input[type=checkbox]').on('change', function () {
-                var total = $('input[type=checkbox]:checked').length;
-                if (total > 0) {
-                    //alert(total);
-                    $('#btEditBloc').removeAttr('disabled');
+                });
+            </script>
+            <script type="text/j                    avascript">
+                $('input[type=checkbox]').on('change', fu                        nction () {
+                var total = $('input[type=checkbox]:checke                        d').length;
+                if (t                            otal > 0) {
+                //al                            ert(total);
+                $('#btEditBloc').removeAttr('d                        isabled');
 
                 } else {
-                    $('#btEditBloc').attr('disabled', 'disabled');
+                $('#btEditBloc').attr('disabled', '                        disabled');
                 }
-            });
-        </script>
-        <script language="javascript">
-            function validaCheckbox() {
-                var frm = document.form1;
-                //Percorre os elementos do formulário
-                for (i = 0; i < frm.length; i++) {
-                    //Verifica se o elemento do formulário corresponde a um checkbox 
-                    if (frm.elements[i].type == "checkbox") {
-                        //Verifica se o checkbox foi selecionado
-                        if (frm.elements[i].checked) {
-                            // alert("Exite ao menos um checkbox selecionado!");
-                            return true;
-                        }
+                });
+            </script>
+                <script language="j                        avascript">
+                    function validaC                            heckbox() {
+                    var frm = docu                            ment.form1;
+                    //Percorre os elementos do                            formulário
+                    for (i = 0; i < frm.len                                gth; i++) {
+                    //Verifica se o elemento do formulário corresponde a u                                m checkbox 
+                    if (frm.elements[i].type == "c                                    heckbox") {
+                    //Verifica se o checkbox foi                                     selecionado
+                    if (frm.elements[i].checked) {
+                    // alert("Exite ao menos um checkbox sele                                        cionado!");
+                    r                                    eturn true;
                     }
-                }
-                alert("Nenhum Aluno foi selecionado!");
-                return false;
-            }
-        </script>    
-    </body>
-</html>
+                    }
+                    }
+                    alert("Nenhum Aluno foi sele                            cionado!");
+                    re                        turn false;
+                    }
+                            </                    script>    
+                            </body>
+                            </html>

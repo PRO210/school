@@ -17,7 +17,7 @@ class CreateAlunoTurmasTable extends Migration {
             $table->integer('turma_id')->unsigned();
             $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
             $table->integer('aluno_id')->unsigned();
-            $table->foreign('aluno_id')->references('ID')->on('alunos')->onDelete('cascade');
+            $table->foreign('aluno_id')->references('id')->on('alunos')->onDelete('cascade');
             $table->string('STATUS')->nullable();          
             $table->string('OUVINTE')->nullable();
             $table->string('EXCLUIDO')->nullable();
