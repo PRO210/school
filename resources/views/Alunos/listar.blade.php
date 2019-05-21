@@ -19,7 +19,7 @@
         <script src="{{url('js/bootstrap.min.js')}}" type="text/javascript"></script>
         <link rel="stylesheet" href="{{url('assets/css/responsive.dataTables.min.css')}}">
 
-        
+
         <style>
             tfoot input {width: 100%;padding: 3px;box-sizing: border-box;} 
             .glyphicon-print{font-size: 16px !important;}
@@ -37,6 +37,8 @@ $(document).ready(function () {
 
         <body>
             @include('Menu.menu');
+
+
             <h3 style="text-align:center; ">Alunos</h3>
             <div class="container-fluid">       
 

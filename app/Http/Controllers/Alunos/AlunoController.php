@@ -10,7 +10,7 @@ use App\Models\Alunos\Aluno;
 use App\Models\Turmas\Turma;
 use App\Models\Logs\Log;
 use App\Http\Requests\AlunoFormRequest;
-//
+// 
 use App\Exports;
 use App\Exports\AlunosFiltradosExport;
 use Maatwebsite\Excel\Exporter;
@@ -40,6 +40,8 @@ class AlunoController extends Controller {
 //
         $title = "ALUNOS";
         $alunos = $this->aluno->all();
+
+
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
@@ -50,18 +52,8 @@ class AlunoController extends Controller {
      */
     public function create() {
 //Formulario que Cadastra o Aluno.OBS: Envia para o Store
-        $certidoes = ['NOVO', 'ANTIGO'];
-        $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
-        $sexos = ['FEMININO', 'MASCULINO'];
-        $bolsas = ['NAO', 'SIM'];
-        $urbanos = ['NAO', 'SIM'];
-        $transportes = ['NAO', 'SIM'];
-        $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
-        $declaracoes = ['SIM', 'NAO'];
-        $transferencias = ['SIM', 'NAO'];
-        $ouvintes = ['SIM', 'NAO'];
+        include 'selects.php';
         $title = "Cadastrar Aluno";
-//        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
         return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
 
@@ -122,16 +114,7 @@ class AlunoController extends Controller {
     // Esse método envia para a Create para atualizar os dados Exsitentes.
     public function edit($id) {
 
-        $certidoes = ['NOVO', 'ANTIGO'];
-        $tiposcertidoes = ['RG', 'CASAMENTO', 'NASCIMENTO'];
-        $sexos = ['FEMININO', 'MASCULINO'];
-        $bolsas = ['NAO', 'SIM'];
-        $urbanos = ['NAO', 'SIM'];
-        $transportes = ['NAO', 'SIM'];
-        $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
-        $declaracoes = ['SIM', 'NAO'];
-        $transferencias = ['SIM', 'NAO'];
-        $ouvintes = ['SIM', 'NAO'];
+        include 'selects.php';
 //        $aluno = $this->aluno->find(Crypt::decrypt($id));
         $aluno = $this->aluno->find($id);
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
@@ -230,24 +213,55 @@ class AlunoController extends Controller {
     // }
     public function show() {
 
-//        $turma = Turma::where('id', '2 ')->get()->first;
-        //       echo "{$turma->TURMA} : ";
-//
+//        $turma = Turma::where('id', '1')->get()->first();
+//        echo "{$turma->TURMA} : ";
 //        $alunos = $turma->alunos;
-//        
 //        foreach ($alunos as $aluno) {
 //            echo "{$aluno->NOME} - ";
 //        }
-        $turma = Turma::with('alunos', 'alunos_cursando')->get();
-        
-        foreach ($turma as $turma_unica) {
-            echo "{$turma_unica->TURMA} : ";
-            $alunos = $turma_unica->alunos;
-            foreach ($alunos as $aluno) {
-                echo "{$aluno->NOME} - ";
+        //
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        //
+//        $aluno = Aluno::where('id', '1')->get()->first();
+//        echo "{$aluno->NOME} : ";
+//
+//        $turma = $aluno->turmas;
+//
+//        foreach ($turma as $turma_unica) {
+//            echo "{$turma_unica->TURMA} - ";
+//        }
+//        //dd($turma);
+//        dd($aluno);
+//        $turmas = Turma::with('alunos')->get();
+//
+//        foreach ($turmas as $turma) {
+//            echo "{$turma->TURMA} : ";           
+//
+//            $alunos = $turma->alunos()->get();
+//
+//            foreach ($alunos as $aluno) {
+//                echo "{$aluno->NOME} - ";
+//            }
+//            echo "<br>";
+//        } 
+//        echo "<br><br>";
+//        dd($turmas);
+//         
+        $alunos = Aluno::with('turmas')->get();
+       
+        foreach ($alunos as $aluno) {
+            echo "{$aluno->NOME} : ";
+
+            $turmas = $aluno->turmas;
+
+            foreach ($turmas as $turma) {
+                echo "{$turma->TURMA} - ";
             }
-            echo "<br><br>";
+            echo "<br>";
         }
+         dd($alunos);
     }
 
 }

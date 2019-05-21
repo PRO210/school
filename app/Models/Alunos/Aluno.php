@@ -2,9 +2,14 @@
 
 namespace App\Models\Alunos;
 
+use App\Models\Turmas\Turma;
 use Illuminate\Database\Eloquent\Model;
 
 class Aluno extends Model {
+
+    public function turmas() {
+        return $this->belongsToMany(Turma::Class, 'aluno_turmas');
+    }
 
     protected $fillable = ['INEP', 'TURMA', 'TURMA_II', 'NOME', 'NASCIMENTO', 'CERTIDAO_CIVIL', 'MODELO_CERTIDAO', 'MATRICULA_CERTIDAO', 'DADOS_CERTIDAO', 'NUMERO_RG', 'ORGAO_EXPEDIDOR_RG',
         'EXPEDICAO_CERTIDAO', 'NATURALIDADE', 'ESTADO', 'NACIONALIDADE', 'SEXO', 'NIS', 'BOLSA_FAMILIA', 'SUS', 'NECESSIDADES_ESPECIAIS', 'COR', 'FONE', 'FONE_II', 'MAE', 'PROF_MAE', 'PAI',
@@ -16,17 +21,4 @@ class Aluno extends Model {
 //    protected $guarded = [
 //        'ID'
 //    ];
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
