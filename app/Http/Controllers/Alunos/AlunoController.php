@@ -116,7 +116,7 @@ class AlunoController extends Controller {
         $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
         $turma = $this->turma->find($id_turma);
         $turmas = $this->turma->all();
-        $title = "Editar o Cadastro de: {$aluno->NOME} ";
+        $title = "Editar o Cadastro de: {$aluno->NOME} ";       
         return view('Alunos.create', compact('title', 'aluno', 'turma', 'turmas', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
     //

@@ -24,7 +24,6 @@
         <style>
             @media (max-width: 790px) {#FONE_II{margin-top: 12px}                                    
             </style>
-
         </head>
         <body>
             @include('Menu.menu');
@@ -48,22 +47,37 @@
                     <div class="form-group col-sm-12">                    
                         {!!Form::label('TURMA', 'Escolha a Turma',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            @if (isset($aluno))
-                            <select name="TURMA" class="form-control" >                        
-                                <option value="1">INCOMPLETO EDIÇÂO</option>
+                            <select name="TURMA" class="form-control" >
+                                @if (isset($aluno))
+
+                                @foreach($turmas as $turma_unica)
+                                
+                                    @if($turma_unica->id  == "$turma->id")
+                                    <option>{{$turma_unica->TURMA}}</option>
+                                    @else
+                                    
+                                    @endif
+                                <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
+                                @endforeach 
+                              
+
+
+
+                                @else
+                                @foreach($turmas as $turma_unica)                                  
+                                <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
+                                @endforeach 
+
+
+                                @endif
                             </select>
-                            @else
-                            <select name="TURMA" class="form-control" >                        
-                                <option value="2">INCOMPLETO NOVATO</option>
-                            </select>
-                            @endif
                         </div>                          
                         {!!Form::label('Status', 'Status',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">                           
                             <select name="STATUS" class="form-control" >                        
-                                                 
+
                                 <option value=""></option>                          
-                              
+
                             </select>
                         </div> 
                     </div>
