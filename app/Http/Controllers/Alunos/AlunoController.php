@@ -39,7 +39,7 @@ class AlunoController extends Controller {
     public function index() {
 //
         $title = "TODOS OS ALUNOS";
-        $alunos = Aluno::with('turmas')->get();       
+        $alunos = Aluno::with('turmas')->get();
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
@@ -109,16 +109,16 @@ class AlunoController extends Controller {
     }
 
     //    
-    // Esse método envia para a Create para atualizar os dados Exsitentes.
-    public function edit($id) {
-
+    // Esse método envia para a Create para atualizar os dados Exsitentes - Esse método envia para a Create para atualizar os dados Exsitentes.
+    //
+    public function editar($id, $id_turma) {
         include 'selects.php';
-//        $aluno = $this->aluno->find(Crypt::decrypt($id));
-        $aluno = $this->aluno->find($id);
+        $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+        $turma = $this->turma->find($id_turma);
+        $turmas = $this->turma->all();
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
-        return view('Alunos.create', compact('title', 'aluno', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
+        return view('Alunos.create', compact('title', 'aluno', 'turma', 'turmas', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
     }
-
     //
     //
     public function updatebloco(Request $request) {
@@ -231,16 +231,25 @@ class AlunoController extends Controller {
 //            echo "{$turma_unica->TURMA} - ";
 //        }
 //        //dd($turma);
-//        dd($aluno);//        
-//         
-        $alunos = Aluno::with('turmas')->get();
-
-        foreach ($alunos as $aluno) {
-//            echo "{$aluno->NOME} -  ";          
-            $turmas = $aluno->turmas;
-            foreach ($turmas as $turma) {
-                echo "{$aluno->NOME} - {$turma->TURMA}  ";
-            }
+//        dd($aluno);//   
+        
+               
+      
+        
+//        foreach ($alunos as $aluno) {
+////            echo "{$aluno->NOME} -  ";          
+//            $turmas = $aluno->turmas;
+//            foreach ($turmas as $turma) {
+//                echo "{$aluno->NOME} - {$turma->TURMA}  ";
+//            }
+//        }
+        $aluno_teste = Aluno::findOrfail(4);
+        $turma_teste = Turma::findOrfail(4);
+        $turma_teste->alunos()->detach($aluno_teste->id);
+        if($turma_teste){
+            return 'ok';
+        }else{
+            return 'erro';
         }
     }
 
