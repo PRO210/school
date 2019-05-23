@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Alunos\Aluno;
 use App\Models\Turmas\Turma;
+use App\Models\AlunosTurmas\AlunoTurma;
 use App\Models\Logs\Log;
 use App\Http\Requests\AlunoFormRequest;
 // 
@@ -26,13 +27,15 @@ class AlunoController extends Controller {
     private $log;
     private $exporter;
     private $turma;
+    private $alunoturma;
 
 //
-    public function __construct(Aluno $aluno, Log $log, Turma $turma) {
+    public function __construct(Aluno $aluno, Log $log, Turma $turma, AlunoTurma $alunoturma) {
 //
         $this->aluno = $aluno;
         $this->log = $log;
         $this->turma = $turma;
+        $this->alunoturma = $alunoturma;
     }
 
 //
@@ -52,13 +55,14 @@ class AlunoController extends Controller {
 //Formulario que Cadastra o Aluno.OBS: Envia para o Store
         include 'selects.php';
         $title = "Cadastrar Aluno";
-        return view('Alunos.create', compact('title', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
+        $turmas = $this->turma->all();
+        return view('Alunos.create', compact('title', 'turmas', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes', 'status'));
     }
 
 //
 //
     public function store(AlunoFormRequest $request) { //Esse método Recupera o que veio de Create Para Cadastrar Novatos
-        $form = $request->except(['_token']);
+        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
 
 //Insere os dados
         $insert = $this->aluno->create($form);
@@ -73,11 +77,16 @@ class AlunoController extends Controller {
 //
 //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
+        //
         $backup = $this->aluno->find($id);
-        $form = $request->except(['_token', '_method']);
+        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
         /* DB::enableQueryLog(); */
-        $aluno = $this->aluno->where('ID', $id);
+        $aluno = $this->aluno->where('id', $id);
         $update = $aluno->update($form);
+//   Atualizando a Tabela Pivot
+        $user = Aluno::find($id);
+        $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'STATUS' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
+
         $backup_update = $this->aluno->find($id);
         $result = array_diff_assoc($backup_update->toArray(), $backup->toArray());
         $campo = "";
@@ -114,11 +123,13 @@ class AlunoController extends Controller {
     public function editar($id, $id_turma) {
         include 'selects.php';
         $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->first();
         $turma = $this->turma->find($id_turma);
         $turmas = $this->turma->all();
-        $title = "Editar o Cadastro de: {$aluno->NOME} ";       
-        return view('Alunos.create', compact('title', 'aluno', 'turma', 'turmas', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
+        $title = "Editar o Cadastro de: {$aluno->NOME} ";
+        return view('Alunos.create', compact('title', 'aluno', 'turma', 'turmas', 'aluno_turma', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes', 'status'));
     }
+
     //
     //
     public function updatebloco(Request $request) {
@@ -232,10 +243,6 @@ class AlunoController extends Controller {
 //        }
 //        //dd($turma);
 //        dd($aluno);//   
-        
-               
-      
-        
 //        foreach ($alunos as $aluno) {
 ////            echo "{$aluno->NOME} -  ";          
 //            $turmas = $aluno->turmas;
@@ -243,12 +250,19 @@ class AlunoController extends Controller {
 //                echo "{$aluno->NOME} - {$turma->TURMA}  ";
 //            }
 //        }
-        $aluno_teste = Aluno::findOrfail(4);
-        $turma_teste = Turma::findOrfail(4);
-        $turma_teste->alunos()->detach($aluno_teste->id);
-        if($turma_teste){
+//       Deletando da Tabela Pivot
+//        $aluno_pivot = Aluno::findOrfail($id);
+//        $turma_atual = Turma::findOrfail($request->TURMA_ATUAL);
+//        $turma_atual->alunos()->detach($aluno_pivot->id);
+////        Inserindo da Tabela Pivot
+//        $turma_nova = Turma::findOrfail($request->TURMA);
+//        $turma_nova->alunos()->attach($aluno_pivot->id);
+
+
+
+        if ($user) {
             return 'ok';
-        }else{
+        } else {
             return 'erro';
         }
     }

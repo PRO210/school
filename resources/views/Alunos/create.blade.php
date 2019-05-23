@@ -39,45 +39,58 @@
                 @endif
                 {{-- // --}}
                 @if (isset($aluno))
-                {!! Form::model($aluno,['route' => ['alunos.update',$aluno->ID],'class' => 'form-horizontal','name' => 'form1','method'=> 'put'])!!}
+                {!! Form::model($aluno,['route' => ['alunos.update',$aluno->id],'class' => 'form-horizontal','name' => 'form1','method'=> 'put'])!!}
                 @else
                 {!! Form::open(['route' => 'alunos.store','class' => 'form-horizontal','name' => 'form1'])!!}          
                 @endif
                 <div class="row">
                     <div class="form-group col-sm-12">                    
                         {!!Form::label('TURMA', 'Escolha a Turma',['class' => 'col-sm-2 control-label'])!!}
+                        {!! Form::hidden('TURMA_ATUAL', "$turma->id") !!}
                         <div class="col-sm-4">
                             <select name="TURMA" class="form-control" >
                                 @if (isset($aluno))
 
                                 @foreach($turmas as $turma_unica)
-                                
-                                    @if($turma_unica->id  == "$turma->id")
-                                    <option>{{$turma_unica->TURMA}}</option>
-                                    @else
-                                    
-                                    @endif
+
+                                @if($turma->id  == "$turma_unica->id")
+                                <option value="{{$turma_unica->id}}" selected="">{{$turma_unica->TURMA}} {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>
+                                @else                                                               
                                 <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
-                                @endforeach 
-                              
-
-
+                                @endif
+                                @endforeach  
 
                                 @else
+
                                 @foreach($turmas as $turma_unica)                                  
                                 <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
                                 @endforeach 
-
 
                                 @endif
                             </select>
                         </div>                          
                         {!!Form::label('Status', 'Status',['class' => 'col-sm-2 control-label'])!!}
-                        <div class="col-sm-4">                           
-                            <select name="STATUS" class="form-control" >                        
+                        <div class="col-sm-4"> 
+                           
+                            <select name="STATUS" class="form-control" > 
+                                @if (isset($aluno))
 
-                                <option value=""></option>                          
+                                @foreach($status as $status_unico) 
 
+                                @if($aluno_turma->STATUS == "$status_unico")
+                                <option value="{{$status_unico}}" selected="">{{$status_unico}}</option> 
+                                @else                               
+                                <option value="{{$status_unico}}">{{$status_unico}}</option>   
+                                @endif
+                                @endforeach 
+
+
+                                @else 
+                                @foreach($status as $status_unico)                                   
+                                <option value="{{$status_unico}}">{{$status_unico}}</option>                          
+                                @endforeach 
+
+                                @endif                                                        
                             </select>
                         </div> 
                     </div>
@@ -422,7 +435,7 @@ $(function () {
                             <select name="OUVINTE" class="form-control" >                        
                                 @if (isset($aluno))
                                 @foreach($ouvintes as $ouvinte)
-                                @if($ouvinte == "$aluno->OUVINTE")
+                                @if($ouvinte == "$aluno_turma->OUVINTE")
                                 <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>                         
                                 @else
                                 <option value="{{$ouvinte}}">{{$ouvinte}}</option>

@@ -10,3 +10,4 @@ $cores = ['INDÍGENA', 'AMARELA', 'MORENA', 'PARDA', 'BRANCA'];
 $declaracoes = ['SIM', 'NAO'];
 $transferencias = ['SIM', 'NAO'];
 $ouvintes = ['SIM', 'NAO'];
+$status = ['CURSANDO', 'ADMITIDO_DEPOIS','DESISTENTE','TRANSFERIDO','APROVADO','REPROVADO'];
