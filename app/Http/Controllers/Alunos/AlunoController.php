@@ -83,10 +83,27 @@ class AlunoController extends Controller {
         /* DB::enableQueryLog(); */
         $aluno = $this->aluno->where('id', $id);
         $update = $aluno->update($form);
-//   Atualizando a Tabela Pivot
+//      Backup da Tabel da Pivot
+        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();
+//      Atualizando a Tabela Pivot
         $user = Aluno::find($id);
         $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'STATUS' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
-
+//      Update da Tabel da Pivot
+        $aluno_turma_update = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA)->get()->first();
+        //
+        $result_pivot = array_diff_assoc($aluno_turma_update->toArray(), $aluno_turma_backup->toArray());
+        $pivot = "";
+//
+        foreach ($result_pivot as $campo_pivot => $valor) {
+            
+            if ($campo_pivot == "turma_id") {
+                $campo_pivot = "TURMA";
+            }
+            $pivot .= "$campo_pivot = De $aluno_turma_backup[$campo_pivot] para $valor / ";
+        }
+        echo "$pivot";
+        exit();
+        //
         $backup_update = $this->aluno->find($id);
         $result = array_diff_assoc($backup_update->toArray(), $backup->toArray());
         $campo = "";
@@ -257,7 +274,6 @@ class AlunoController extends Controller {
 ////        Inserindo da Tabela Pivot
 //        $turma_nova = Turma::findOrfail($request->TURMA);
 //        $turma_nova->alunos()->attach($aluno_pivot->id);
-
 
 
         if ($user) {
