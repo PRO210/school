@@ -20,7 +20,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alunos <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route ('alunos.index')}}">Listar os Alunos</a></li>           
-                        <li><a href="{{url('alunos/logs')}}">Listar Ações Passadas</a></li>
+                        <li><a href="{{url('alunos/logs')}}"> Ações Passadas</a></li>
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>

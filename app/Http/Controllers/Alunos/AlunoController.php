@@ -60,14 +60,27 @@ class AlunoController extends Controller {
     }
 
 //
-//
-    public function store(AlunoFormRequest $request) { //Esse método Recupera o que veio de Create Para Cadastrar Novatos
+//  Esse método Recupera o que veio de Create Para Cadastrar Novatos
+    public function store(AlunoFormRequest $request) {
         $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
 
-//Insere os dados
+//      Insere os dados
         $insert = $this->aluno->create($form);
-//Redireciona
+//      Inserindo da Tabela Pivot
+        $turma_nova = Turma::findOrfail($request->TURMA);
+        $turma_nova->alunos()->attach($insert->id);
+//      Recupera o Nome da Turma
+        $turmas = $this->turma->find($request->TURMA);
+        $campo_final = "Cadastrou" . " $request->NOME" . " na Turma: " . " $turmas->TURMA " . " $turmas->UNICO";
+//      Redireciona
         if ($insert) {
+//          Faz o Log
+            $insert = $this->log->create([
+                'USUARIO' => 'ANDRÉ',
+                'TABELA' => 'ALUNOS',
+                'CADASTRAR' => 'SIM',
+                'ACAO' => "$campo_final",
+            ]);
             return redirect()->route('alunos.index');
         } else {
             return redirect()->route('alunos.create');
@@ -93,16 +106,28 @@ class AlunoController extends Controller {
         //
         $result_pivot = array_diff_assoc($aluno_turma_update->toArray(), $aluno_turma_backup->toArray());
         $pivot = "";
-//
+        $X = "";
+//      Recuperar o Nomes das Turmas
+        $nome_turma_atual = $this->turma->find($request->TURMA_ATUAL);
+        $nome_turma = $this->turma->find($request->TURMA);
+
         foreach ($result_pivot as $campo_pivot => $valor) {
-            
+
             if ($campo_pivot == "turma_id") {
-                $campo_pivot = "TURMA";
+                $campo_pivot = "TURMA = ";
+                $valor = " $nome_turma->TURMA " . " $nome_turma->UNICO ";
+                $X = "De" . " $nome_turma_atual->TURMA " . " $nome_turma->UNICO " . " para";
+                //
+            } elseif ($campo_pivot == "updated_at") {
+                $campo_pivot = "";
+                $valor = "";
+                $X = "";
+                //
+            } else {
+                $X = "De $aluno_turma_backup[$campo_pivot] para";
             }
-            $pivot .= "$campo_pivot = De $aluno_turma_backup[$campo_pivot] para $valor / ";
+            $pivot .= "$campo_pivot $X $valor / ";
         }
-        echo "$pivot";
-        exit();
         //
         $backup_update = $this->aluno->find($id);
         $result = array_diff_assoc($backup_update->toArray(), $backup->toArray());
@@ -117,7 +142,7 @@ class AlunoController extends Controller {
             }
             $campo .= "$nome_campo = De $backup[$nome_campo] para $valor / ";
         }
-        $campo_final = "Alterou o(s) Campo(s) de " . $backup['NOME'] . " em : $campo";
+        $campo_final = "Alterou o(s) Campo(s) de " . $backup['NOME'] . " em : $pivot  $campo ";
         /* dd(DB::getQueryLog()); */
         //Redireciona
         if ($update) {

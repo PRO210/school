@@ -40,15 +40,15 @@
                 {{-- // --}}
                 @if (isset($aluno))
                 {!! Form::model($aluno,['route' => ['alunos.update',$aluno->id],'class' => 'form-horizontal','name' => 'form1','method'=> 'put'])!!}
+                {!! Form::hidden('TURMA_ATUAL', "$turma->id") !!}
                 @else
                 {!! Form::open(['route' => 'alunos.store','class' => 'form-horizontal','name' => 'form1'])!!}          
                 @endif
                 <div class="row">
                     <div class="form-group col-sm-12">                    
                         {!!Form::label('TURMA', 'Escolha a Turma',['class' => 'col-sm-2 control-label'])!!}
-                        {!! Form::hidden('TURMA_ATUAL', "$turma->id") !!}
                         <div class="col-sm-4">
-                            <select name="TURMA" class="form-control" >
+                            <select name="TURMA" class="form-control" required="">
                                 @if (isset($aluno))
 
                                 @foreach($turmas as $turma_unica)
@@ -71,7 +71,7 @@
                         </div>                          
                         {!!Form::label('Status', 'Status',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4"> 
-                           
+
                             <select name="STATUS" class="form-control" > 
                                 @if (isset($aluno))
 
@@ -80,7 +80,7 @@
                                 @if($aluno_turma->STATUS == "$status_unico")
                                 <option value="{{$status_unico}}" selected="">{{$status_unico}}</option> 
                                 @else                               
-                                <option value="{{$status_unico}}">{{$status_unico}}</option>   
+                                <option value="{{$status_unico}}" >{{$status_unico}}</option>   
                                 @endif
                                 @endforeach 
 
@@ -99,7 +99,7 @@
                     <div class="form-group col-sm-12">
                         {!!Form::label('Nome do Aluno(a)', 'Nome do Aluno(a)',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            {!! Form:: text('NOME',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
+                            {!! Form:: text('NOME',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','required'])!!}  
                         </div>
                         {!!Form::label('Nascimento', 'Nascimento',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
@@ -246,7 +246,7 @@ $(function () {
                     <div class="form-group col-sm-12"> 
                         {!!Form::label('Endereço', 'Endereço',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            {!! Form:: text('ENDERECO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                            {!! Form:: text('ENDERECO',null,['class' => 'form-control', 'placeholder' =>'','onkeyup' => 'maiuscula(this)' ])!!}  
                         </div> 
                         {!!Form::label('Urbano', 'Urbano',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
@@ -272,11 +272,11 @@ $(function () {
                     <div class="form-group col-sm-12"> 
                         {!!Form::label('Cidade', 'Cidade',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            {!! Form:: text('CIDADE',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                            {!! Form:: text('CIDADE',null,['class' => 'form-control', 'placeholder' =>'','onkeyup' => 'maiuscula(this)' ])!!}  
                         </div> 
                         {!!Form::label('Estado', 'Estado',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            {!! Form:: text('CIDADE_ESTADO',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                            {!! Form:: text('CIDADE_ESTADO',null,['class' => 'form-control', 'placeholder' =>'','onkeyup' => 'maiuscula(this)' ])!!}  
                         </div> 
                     </div>
                 </div>
@@ -396,11 +396,11 @@ $(function () {
                     <div class="form-group col-sm-12">
                         {!!Form::label('Responsável pela Declaração', 'Responsável pela Declaração',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            {!! Form:: text('DECLARACAO_RESPONSAVEL',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                            {!! Form:: text('DECLARACAO_RESPONSAVEL',null,['class' => 'form-control', 'placeholder' =>'','onkeyup' => 'maiuscula(this)' ])!!}  
                         </div>                      
                         {!!Form::label('Responsável pela Transferência', 'Responsável pela Transferência',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
-                            {!! Form:: text('TRANSFERENCIA_RESPONSAVEL',null,['class' => 'form-control', 'placeholder' =>'' ])!!}  
+                            {!! Form:: text('TRANSFERENCIA_RESPONSAVEL',null,['class' => 'form-control', 'placeholder' =>'','onkeyup' => 'maiuscula(this)' ])!!}  
                         </div>                       
                     </div>
                 </div>            
@@ -455,9 +455,9 @@ $(function () {
                         {!!Form::label('Observações', '',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-10">
                             @if (isset($aluno))
-                            {!!Form:: textarea('OBSERVACOES', "{$aluno->OBSERVACOES}",['class' => 'col-sm-2 form-control','rows'=>'4'])!!}
+                            {!!Form:: textarea('OBSERVACOES', "{$aluno->OBSERVACOES}",['class' => 'col-sm-2 form-control','rows'=>'4','onkeyup' => 'maiuscula(this)'])!!}
                             @else
-                            {!!Form:: textarea('OBSERVACOES', null,['class' => 'col-sm-2 form-control','rows'=>'4'])!!}
+                            {!!Form:: textarea('OBSERVACOES', null,['class' => 'col-sm-2 form-control','rows'=>'4','onkeyup' => 'maiuscula(this)'])!!}
                             @endif
                         </div>
                     </div>

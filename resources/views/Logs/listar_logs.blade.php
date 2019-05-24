@@ -73,7 +73,7 @@ $(document).ready(function () {
                             <td>{{$log->ALTERAR}}</td>                  
                             <td>{{$log->EXCLUIR}}</td>                  
                             <td>{{\Carbon\Carbon::parse($log->NASCIMENTO)->format('d/m/Y h:i')}}</td>                           
-                            <td>{{$log->ACAO}}</td>
+                            <td style="white-space: normal">{{$log->ACAO}}</td>
                         </tr>
                         @endforeach
                     </tbody>
