@@ -209,41 +209,43 @@ class AlunoController extends Controller {
         } elseif ($request->botao == "geral") {
             return 'Geral';
         } else {
-            $title = "Atualizar Os Dados";
+            $title = "ATUALIZAR VÁRIOS ";
             // $forms = $request->except(['_token']);
 //              dd(Aluno::whereIn("id",$request->aluno_selecionado)->toSql());
-
-            $teste = Aluno::whereIn("id", $request->aluno_selecionado)->get();
+            $teste = Aluno::with('turmas')->whereIn('id', $request->aluno_selecionado)->get();
             $marcar = "";
             return view('Alunos.atualizar_varios', compact('title', 'teste', 'marcar'));
         }
     }
 
     //
-    //     
+    //   Recebe os Dados do updatebloco   Recebe os Dados do updatebloco 
     public function updateagora(Request $request) {
-
+        // dd($request);       
         $alunos = $this->aluno->find($request->aluno_selecionado);
         $todos = "";
         $todos_nomes = "";
         foreach ($alunos->toArray() as $aluno) {
 //      Recuperar a turma pelo id e transformar em nome
-            $todos .= $aluno['NOME'] . '/' . $aluno['TURMA'] . ',';
+            $todos .= $aluno['NOME'] . ',';
             $todos_nomes = substr($todos, 0, -1);
         }
         $backup = "Alterou a Turma do(as) aluno(as) $todos_nomes para ($request->inputTurma)";
-        echo "$backup";
-
-        exit();
 
         if ($request->turma == "turma") {
-            $up = \DB::table('alunos')
-                    ->whereIn('id', $request->aluno_selecionado)
-                    ->update(['TURMA' => "$request->inputTurma"]);
+//           Limpando os vinculos  da Tabela Pivot        
+            $aluno_turma_delete = $this->alunoturma->whereIn('aluno_id', $request->aluno_selecionado)->delete();
+//          Fazendo o Update
+            foreach ($request->aluno_selecionado as $aluno) {
+                $aluno_pivot = Aluno::findOrfail($aluno);
+                $turma_atual = Turma::findOrfail($request->inputTurma);
+                $turma_atual->alunos()->attach($aluno_pivot->id, array('updated_at' => NOW()));
+            }
+//            $up = \DB::table('alunos')
+//                    ->whereIn('id', $request->aluno_selecionado)
+//                    ->update(['TURMA' => "$request->inputTurma"]);
             //
-            if ($up) {
-
-
+            if ($turma_atual) {
                 return redirect()->route('alunos.index');
             } else {
                 return redirect()->route('alunos.atualizar_varios');
@@ -326,13 +328,6 @@ class AlunoController extends Controller {
 //
 //        //
 //        dd($aluno);
-
-        if ($turma_atual) {
-            return 'ok';
-            dd($turma_atual);
-        } else {
-            return 'erro';
-        }
     }
 
     public function showturma($id) {

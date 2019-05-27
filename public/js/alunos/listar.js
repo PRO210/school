@@ -1,6 +1,5 @@
 //Marcar ou Desmarcar todos os checkbox
 $(document).ready(function () {
-
     $('.selecionar').click(function () {
         if (this.checked) {
             $('.checkbox').each(function () {
@@ -12,21 +11,16 @@ $(document).ready(function () {
             });
         }
     });
-
 });
-
-
 $('input[type=checkbox]').on('change', function () {
     var total = $('input[type=checkbox]:checked').length;
     if (total > 0) {
-        //alert(total);
+//alert(total);
         $('#btEditBloc').removeAttr('disabled');
-
     } else {
         $('#btEditBloc').attr('disabled', 'disabled');
     }
 });
-
 function validaCheckbox() {
     var frm = document.form1;
     //Percorre os elementos do formulário
@@ -43,4 +37,3 @@ function validaCheckbox() {
     alert("Nenhum Aluno foi selecionado!");
     return false;
 }
-   
