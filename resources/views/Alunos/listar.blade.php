@@ -5,21 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{{$title or 'Scholl 2019'}}</title>
-
-        <script src="{{url('assets/js/jquery-1.12.4.js')}}" type="text/javascript"></script>           
-        <script src="{{url('assets/js/jquery-3.1.1.min.js')}}" type="text/javascript"></script>
-
-        <script src="{{url('assets/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>
-        <script src="{{url('assets/js/dataTables.bootstrap.min.js')}}" type="text/javascript"></script>
-
-        <link rel="stylesheet" href="{{url('assets/css/dataTables.bootstrap.min.css')}}" type="text/css">
-        <link rel="stylesheet" href="{{url('css/bootstrap.min.css')}}" type="text/css">
-        <script src="{{url('assets/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
-        <script src="{{url('js/bootstrap.min.js')}}" type="text/javascript"></script>
-        <link rel="stylesheet" href="{{url('assets/css/responsive.dataTables.min.css')}}">
-
-
+        <title>{{$title or 'Scholl 2019'}}</title>       
         <style>
             tfoot input {width: 100%;padding: 3px;box-sizing: border-box;} 
             .glyphicon-print{font-size: 16px !important;}
@@ -29,17 +15,19 @@
             @media (max-width: 720px) {#nome{white-space: normal;}
             </style>
             <script>
-$(document).ready(function () {
-    $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
-});
+                $(document).ready(function () {
+                    $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
+                });
             </script>
         </head>
         <body>
+            @include('Alunos.alunos_css');
             @include('Menu.menu');
             <h3 style="text-align:center; ">Todos os Alunos</h3>
             <div class="container-fluid">      
                 {{-- {{$impressao}}imprimir do php --}}
-                {{-- {!!$xss!!} imprimir do java --}}             
+                {{-- {!!$xss!!} imprimir do java --}}          
+
                 {!!Form::open(['url' => 'alunos/update/bloco','name' => 'form1'])!!}                        
                 {{-- {!! Form::open(['route' => 'alunos.store','class' => 'form-control','name' => 'form1'])!!} --}}      
                 <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
@@ -73,13 +61,12 @@ $(document).ready(function () {
                             <th>NECESSIDADES</th> 
                             <th>OBSERVAÇÕES</th> 
                             <th>STATUS</th> 
-
                         </tr>
                     </thead>
                     <tbody>                                   
                         @foreach($alunos as $aluno)                       
                         @foreach($aluno->turmas as $turma)  
-                                               <tr>     
+                        <tr>     
                             <td></td>       
                             <td>
                                 <div class="dropdown">
@@ -89,6 +76,7 @@ $(document).ready(function () {
                                         <li><a href='folha_re_matricula.php?id={{''}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
                                         <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
                                         <li><a href="{{route('edição',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href="{{route('edição/turma',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>
                                         <li><a href='pesquisar_no_banco_unitario.php?id=" . base64_encode({{''}}) . "' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                         <li><a href='cadastrar_historico.php?id=" . base64_encode({{''}}) . "' target='_blank' title='Histórico'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
                                     </ul>                              
@@ -112,7 +100,7 @@ $(document).ready(function () {
                             <td>{{$aluno->TRANSFERENCIA}}</td>
                             <td>{{$aluno->NECESSIDADES_ESPECIAIS}}</td>
                             <td>{{$aluno->OBSERVACOES}}</td>
-                            <td>{{$aluno->STATUS}}</td>                        
+                            <td>{{$turma->pivot->STATUS}}</td>                        
                         </tr>
                         @endforeach
                         @endforeach
@@ -141,65 +129,64 @@ $(document).ready(function () {
                         </tr>
                     </tfoot>        
                 </table> 
-                {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">                
-            </form> --}}
-            {!! Form:: close()!!}        
-        </div>   
-        <script>
-            $(document).ready(function () {
-                // Setup - add a text input to each footer cell
-                $('#example tfoot th').each(function () {
-                    var title = $(this).text();
-                    $(this).html('<input type="text" placeholder="' + title + '" />');
-                });
-                //Data Table
-                var table = $('#example').DataTable({
-                    //
-                    "columnDefs": [{
-                            "targets": 0,
-                            "orderable": false
-                        }],
-                    "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
-                    "language": {
-                        "lengthMenu": " _MENU_ <?php
+                {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}
+                {!! Form:: close()!!}        
+            </div>   
+            <script>
+                $(document).ready(function () {
+                    // Setup - add a text input to each footer cell
+                    $('#example tfoot th').each(function () {
+                        var title = $(this).text();
+                        $(this).html('<input type="text" placeholder="' + title + '" />');
+                    });
+                    //Data Table
+                    var table = $('#example').DataTable({
+                        //
+                        "columnDefs": [{
+                                "targets": 0,
+                                "orderable": false
+                            }],
+                        "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
+                        "language": {
+                            "lengthMenu": " _MENU_ <?php
 echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
  . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
 ;
 ?>
-                                ",                  
-                                "zeroRecords": "Nenhum aluno encontrado",
-                        "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                        "infoEmpty": "Sem registros",
-                        "search": "Busca:",
-                        "infoFiltered": "(filtrado de _MAX_ total de alunos)",
-                        "paginate": {
-                            "first": "Primeira",
-                            "last": "Ultima",
-                            "next": "Proxima",
-                            "previous": "Anterior"
-                        },
-                        "aria": {
-                            "sortAscending": ": ative a ordenação cressente",
-                            "sortDescending": ": ative a ordenação decressente"
-                        }
+                                    ",                  
+                                    "zeroRecords": "Nenhum aluno encontrado",
+                            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                            "infoEmpty": "Sem registros",
+                            "search": "Busca:",
+                            "infoFiltered": "(filtrado de _MAX_ total de alunos)",
+                            "paginate": {
+                                "first": "Primeira",
+                                "last": "Ultima",
+                                "next": "Proxima",
+                                "previous": "Anterior"
+                            },
+                            "aria": {
+                                "sortAscending": ": ative a ordenação cressente",
+                                "sortDescending": ": ative a ordenação decressente"
+                            }
 
-                    },
-                    responsive: true
-                });
-                // Apply the search
-                table.columns().every(function () {
-                    var that = this;
-                    $('input', this.footer()).on('keyup change', function () {
-                        if (that.search() !== this.value) {
-                            that
-                                    .search(this.value)
-                                    .draw();
-                        }
+                        },
+                        responsive: true
+                    });
+                    // Apply the search
+                    table.columns().every(function () {
+                        var that = this;
+                        $('input', this.footer()).on('keyup change', function () {
+                            if (that.search() !== this.value) {
+                                that
+                                        .search(this.value)
+                                        .draw();
+                            }
+                        });
                     });
                 });
-            });
-        </script>
-        <script src="{{url('js/alunos/listar.js')}}" type="text/javascript"></script>
-    </body>
-</html>
+            </script>
+            <script src="{{url('js/alunos/listar.js')}}" type="text/javascript"></script>
+        </body>
+    </html>

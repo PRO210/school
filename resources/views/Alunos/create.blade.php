@@ -68,31 +68,23 @@
 
                                 @endif
                             </select>
-                        </div>                          
+                        </div>                 
+                        @if (isset($aluno))
                         {!!Form::label('Status', 'Status',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4"> 
-
-                            <select name="STATUS" class="form-control" > 
-                                @if (isset($aluno))
-
-                                @foreach($status as $status_unico) 
-
+                            <select name="STATUS" class="form-control" >                             
+                                @foreach($status as $status_unico)
                                 @if($aluno_turma->STATUS == "$status_unico")
                                 <option value="{{$status_unico}}" selected="">{{$status_unico}}</option> 
                                 @else                               
                                 <option value="{{$status_unico}}" >{{$status_unico}}</option>   
                                 @endif
-                                @endforeach 
-
-
-                                @else 
-                                @foreach($status as $status_unico)                                   
-                                <option value="{{$status_unico}}">{{$status_unico}}</option>                          
-                                @endforeach 
-
-                                @endif                                                        
-                            </select>
+                                @endforeach                                                                                      
+                            </select>                          
                         </div> 
+                        @else 
+                        
+                        @endif  
                     </div>
                 </div> 
                 <div class="row">
@@ -443,7 +435,7 @@ $(function () {
                                 @endforeach  
                                 @else
                                 @foreach($ouvintes as $ouvinte)
-                                <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>
+                                <option value="{{$ouvinte}}" >{{$ouvinte}}</option>
                                 @endforeach 
                                 @endif                            
                             </select>

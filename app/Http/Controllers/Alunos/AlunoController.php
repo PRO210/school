@@ -67,8 +67,16 @@ class AlunoController extends Controller {
 //      Insere os dados
         $insert = $this->aluno->create($form);
 //      Inserindo da Tabela Pivot
+        $data_censo = "2019-05-30";
+        $data = date('Y-m-d');
+//
+        if ($data <= $data_censo) {
+            $status = "CURSANDO";
+        } else {
+            $status = "ADMITIDO_DEPOIS";
+        }
         $turma_nova = Turma::findOrfail($request->TURMA);
-        $turma_nova->alunos()->attach($insert->id);
+        $turma_nova->alunos()->attach($insert->id, array('STATUS' => "$status", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
 //      Recupera o Nome da Turma
         $turmas = $this->turma->find($request->TURMA);
         $campo_final = "Cadastrou" . " $request->NOME" . " na Turma: " . " $turmas->TURMA " . " $turmas->UNICO";
@@ -157,6 +165,7 @@ class AlunoController extends Controller {
         } else {
             return redirect()->route('alunos.create');
         }
+        //
     }
 
     //    
@@ -164,7 +173,8 @@ class AlunoController extends Controller {
     //
     public function editar($id, $id_turma) {
         include 'selects.php';
-        $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+//        $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+        $aluno = $this->aluno->find(Crypt::decrypt($id));
         $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->first();
         $turma = $this->turma->find($id_turma);
         $turmas = $this->turma->all();
@@ -201,7 +211,7 @@ class AlunoController extends Controller {
         } else {
             $title = "Atualizar Os Dados";
             // $forms = $request->except(['_token']);
-            //  dd(Aluno::whereIn("id",$request->aluno_selecionado)->toSql());
+//              dd(Aluno::whereIn("id",$request->aluno_selecionado)->toSql());
 
             $teste = Aluno::whereIn("id", $request->aluno_selecionado)->get();
             $marcar = "";
@@ -285,26 +295,115 @@ class AlunoController extends Controller {
 //        }
 //        //dd($turma);
 //        dd($aluno);//   
+//        
+//         Deletando da Tabela Pivot
+//        $aluno_pivot = Aluno::findOrfail(1);
+//        
+//        $turma_atual = Turma::findOrfail(1);
+//        
+//        $turma_atual->alunos()->detach($aluno_pivot->id);
+//        
+////        Inserindo da Tabela Pivot
+//        $aluno_pivot = Aluno::findOrfail(1);
+//        $turma_atual = Turma::findOrfail(1);
+//        $turma_atual->alunos()->attach($aluno_pivot->id);
+//        
+//        $tp = "";
+//        $alunos = Aluno::with('turmas')->get();
 //        foreach ($alunos as $aluno) {
-////            echo "{$aluno->NOME} -  ";          
-//            $turmas = $aluno->turmas;
-//            foreach ($turmas as $turma) {
-//                echo "{$aluno->NOME} - {$turma->TURMA}  ";
+////            echo "{$aluno->NOME}";
+//            echo "<br>";
+//
+//            foreach ($aluno->turmas as $turma) {
+//
+//                echo "{$aluno->NOME} - {$turma->TURMA} - {$turma->pivot->STATUS} - {$turma->pivot->OUVINTE}";
+//
+//                echo "<br>";
 //            }
 //        }
-//       Deletando da Tabela Pivot
-//        $aluno_pivot = Aluno::findOrfail($id);
-//        $turma_atual = Turma::findOrfail($request->TURMA_ATUAL);
-//        $turma_atual->alunos()->detach($aluno_pivot->id);
-////        Inserindo da Tabela Pivot
-//        $turma_nova = Turma::findOrfail($request->TURMA);
-//        $turma_nova->alunos()->attach($aluno_pivot->id);
+//        echo "<br>";
+//        echo "<br>";
+//
+//        //
+//        dd($aluno);
 
-
-        if ($user) {
+        if ($turma_atual) {
             return 'ok';
+            dd($turma_atual);
         } else {
             return 'erro';
+        }
+    }
+
+    public function showturma($id) {
+        include 'selects.php';
+        $arrayTurmas[] = "";
+        $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+        $nome = $aluno->NOME;
+        foreach ($aluno->turmas as $turma_backup) {
+            array_push($arrayTurmas, $turma_backup->id);
+        }
+        array_shift($arrayTurmas);
+        $turmas_base = DB::table('turmas')->whereNotIn('id', $arrayTurmas)->get();
+        $title = "EDIÇAO DE TURMAS";
+        return view('Alunos.inserir_retirar_turma', compact('title', 'aluno', 'nome', 'turmas_base', 'ouvintes'));
+    }
+
+    //
+    //
+    public function updateturma(Request $request) {
+        //
+        $form = $request->except(['_token', '_method']);
+        $aluno = Aluno::with('turmas')->where('id', $request->id)->get()->first();
+        $campo = "";
+        foreach ($aluno->Turmas as $turma) {
+            $status = $turma->pivot->STATUS;
+            $ouvinte = $turma->pivot->OUVINTE;
+            $campo .= "$turma->TURMA " . "$turma->UNICO " . ',' . 'Status:' . " $status " . ',' . 'Ouvinte:' . " $ouvinte" . '/ ';
+        }
+        /* DB::enableQueryLog(); */
+//      Backup da Tabel da Pivot
+        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $request->id)->get()->first();
+//        
+//      Limpando os vinculos  da Tabela Pivot        
+        $aluno_turma_delete = $this->alunoturma->where('aluno_id', $request->id)->delete();
+//
+//     Inserindo da Tabela Pivot       
+        $data_censo = "2019-05-30";
+        $data = date('Y-m-d');
+//
+        if ($data <= $data_censo) {
+            $status = "CURSANDO";
+        } else {
+            $status = "ADMITIDO_DEPOIS";
+        }
+//
+        foreach ($request->turma_selecionada as $turma) {
+            $aluno_pivot = Aluno::findOrfail($request->id);
+            $turma_atual = Turma::findOrfail($turma);
+            $turma_atual->alunos()->attach($aluno_pivot->id, array('STATUS' => "$status", 'OUVINTE' => "$request->OUVINTE_2", 'updated_at' => NOW()));
+        }
+        $campo_2 = "";
+        $aluno_2 = Aluno::with('turmas')->where('id', $request->id)->get()->first();
+        foreach ($aluno_2->Turmas as $turma) {
+            $status = $turma->pivot->STATUS;
+            $ouvinte = $turma->pivot->OUVINTE;
+            $campo_2 .= "$turma->TURMA " . "$turma->UNICO " . ',' . 'Status:' . " $status " . ',' . 'Ouvinte:' . " $ouvinte" . '/ ';
+        }
+        $campo_final = "Desvinculou " . $aluno->NOME . " da(s)  Turma(s): $campo e Vinculou a(s) Turma(s) $campo_2 ";
+        /* dd(DB::getQueryLog()); */
+//         Faz o Log
+        $insert = $this->log->create([
+            'USUARIO' => 'ANDRÉ',
+            'TABELA' => 'ALUNOS',
+            'ALTERAR' => 'SIM',
+            'ACAO' => "$campo_final",
+        ]);
+        //Redireciona
+        if ($insert) {
+            return redirect()->route('alunos.index');
+        } else {
+            return redirect()->route('alunos.create');
         }
     }
 
