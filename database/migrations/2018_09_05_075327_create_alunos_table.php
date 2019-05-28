@@ -48,8 +48,7 @@ class CreateAlunosTable extends Migration {
             $table->string('MOTORISTA')->nullable();
             $table->string('MOTORISTA_II')->nullable();
             $table->date('MATRICULA')->nullable();
-            $table->date('MATRICULA_RENOVADA')->nullable();
-            $table->date('MATRICULA_VALIDA')->nullable();          
+            $table->date('MATRICULA_RENOVADA')->nullable();                  
             $table->string('DECLARACAO')->nullable();
             $table->date('DECLARACAO_DATA')->nullable();
             $table->string('DECLARACAO_RESPONSAVEL')->nullable();

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -84,7 +83,7 @@
                                     &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
                                 </div>                           
                             </td>  
-                            <td>{{$turma->TURMA}}</td>
+                            <td>{{$turma->TURMA}} {{$turma->UNICO}}</td>
                             <td>{{$aluno->INEP}}</td>                  
                             <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
                             <td>{{$aluno->MAE}}</td>

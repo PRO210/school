@@ -29,5 +29,6 @@ php artisan make:model Models\\Turmas\\Turma
 php artisan make:model Models\\Turmas\\Turma -m
 php artisan make:model Models\\Logs\\Log -m
 php artisan make:model Models\\AlunosTurmas\\AlunoTurma -m (OBS: A migration vai para o plural automático daí na model do relacionamento citar a tabela manualmente por injeção. EX:return $this->belongsToMany(Aluno::class,'aluno_turmas'))
+php artisan make:model Models\\Escola\\Escola -m
 
 

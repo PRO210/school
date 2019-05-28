@@ -1,5 +1,7 @@
 <?php
 
+//
+
 namespace App\Http\Controllers\Alunos;
 
 //
@@ -10,6 +12,7 @@ use App\Models\Alunos\Aluno;
 use App\Models\Turmas\Turma;
 use App\Models\AlunosTurmas\AlunoTurma;
 use App\Models\Logs\Log;
+use App\Models\Escola\Escola;
 use App\Http\Requests\AlunoFormRequest;
 // 
 use App\Exports;
@@ -30,10 +33,11 @@ class AlunoController extends Controller {
     private $alunoturma;
 
 //
-    public function __construct(Aluno $aluno, Log $log, Turma $turma, AlunoTurma $alunoturma) {
+    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma) {
 //
         $this->aluno = $aluno;
         $this->log = $log;
+        $this->escola = $escola;
         $this->turma = $turma;
         $this->alunoturma = $alunoturma;
     }
@@ -62,19 +66,18 @@ class AlunoController extends Controller {
 //
 //  Esse método Recupera o que veio de Create Para Cadastrar Novatos
     public function store(AlunoFormRequest $request) {
-        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
-
+        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL','DATA_CENSO']);
 //      Insere os dados
         $insert = $this->aluno->create($form);
-//      Inserindo da Tabela Pivot
-        $data_censo = "2019-05-30";
+//      Recuperando a Data do Censo       
         $data = date('Y-m-d');
-//
-        if ($data <= $data_censo) {
+        $escola = $this->escola->find(1);        
+        if ($data <= $escola->DATA_CENSO) {
             $status = "CURSANDO";
         } else {
             $status = "ADMITIDO_DEPOIS";
         }
+//      Inserindo da Tabela Pivot//      
         $turma_nova = Turma::findOrfail($request->TURMA);
         $turma_nova->alunos()->attach($insert->id, array('STATUS' => "$status", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
 //      Recupera o Nome da Turma
@@ -98,15 +101,15 @@ class AlunoController extends Controller {
 //
 //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
-        //
+        //dd($request);
         $backup = $this->aluno->find($id);
         $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
         /* DB::enableQueryLog(); */
         $aluno = $this->aluno->where('id', $id);
         $update = $aluno->update($form);
 //      Backup da Tabel da Pivot
-        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();
-//      Atualizando a Tabela Pivot
+        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();    
+      //  Atualizando a Tabela Pivot
         $user = Aluno::find($id);
         $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'STATUS' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
 //      Update da Tabel da Pivot
@@ -187,8 +190,8 @@ class AlunoController extends Controller {
     public function updatebloco(Request $request) {
 
         $this->exporter = $request;
-        $bt = $request->botao;    
-      
+        $bt = $request->botao;
+
         // return('Vem da listagem de alunos');       
         //
         if ($request->botao == "geral") {

@@ -154,11 +154,11 @@
                         <div class="form-group col-sm-12">
                             {!!Form::label('Matricula da Certidão', 'Matricula da Certidão',['class' => 'col-sm-2 control-label'])!!}
                             <div class="col-sm-4">
-                                {!! Form:: text('MATRICULA_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','required'])!!}  
+                                {!! Form:: text('MATRICULA_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                             </div>
                             {!!Form::label('Dados da Certidão', 'Dados da Certidão',['class' => 'col-sm-2 control-label'])!!}
                             <div class="col-sm-4">
-                                {!! Form:: text('DADOS_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','required'])!!}  
+                                {!! Form:: text('DADOS_CERTIDAO',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                             </div>                        
                         </div>
                     </div>                
@@ -166,11 +166,11 @@
                         <div class="form-group col-sm-12">
                             {!!Form::label('Número do RG', 'Número do RG',['class' => 'col-sm-2 control-label'])!!}
                             <div class="col-sm-4">
-                                {!! Form:: text('NUMERO_RG',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','required'])!!}  
+                                {!! Form:: text('NUMERO_RG',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                             </div>
                             {!!Form::label('Orgão Expedidor', 'Orgão Expedidor',['class' => 'col-sm-2 control-label'])!!}
                             <div class="col-sm-4">
-                                {!! Form:: text('ORGAO_EXPEDIDOR_RG',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','required'])!!}  
+                                {!! Form:: text('ORGAO_EXPEDIDOR_RG',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                             </div>                        
                         </div>
                     </div>                
