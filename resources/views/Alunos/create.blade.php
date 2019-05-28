@@ -48,7 +48,7 @@
 
                                     @else
 
-                                    @foreach($turmas as $turma_unica)                                  
+                                    @foreach($turmas as $turma_unica) 
                                     <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
                                     @endforeach 
 

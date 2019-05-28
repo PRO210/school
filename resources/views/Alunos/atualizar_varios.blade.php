@@ -22,24 +22,25 @@
                 @include('Menu.menu');
                 <div class="container-fluid">  
                     <h3 style=" text-align: center; margin-top: -6px !important">Escolha Um dos Botões para Atualizar</h3> 
-                    <div class="row">
-                        <div class=" col-sm-2"> <button id="btnMostrarEsconderBtnTurmas" class="btn btn-warning botoes btn-block ">Mostrar Turmas</button></div>
-                        <div class=" col-sm-2">  <button id="btnMostrarEsconderBtnBolsa" class="btn btn-primary botoes btn-block" >Bolsa Família</button></div>
-                        <div class=" col-sm-2">  <button id="btnMostrarEsconderBtnTransporte" class="btn btn-success botoes btn-block" >Transporte</button></div>
-                        <div class=" col-sm-2">   <button id="btnMostrarEsconderBtnCoringa" class="btn btn-info botoes btn-block" >Outros</button></div>
-                        <div class=" col-sm-2">   <button id='btnMostrarEsconderBtnTurmaExtra' class='btn btn-danger botoes btn-block'>Turmas Extra</button></div>
-                        <div class=" col-sm-2">    <button id="btnMostrarEsconderBtnTransferir" class="btn btn-marron botoes btn-block" >Transferir</button></div>
-                    </div>
-                    <br>
-                    <form name="cadastrar" action="{{url('alunos/update/agora')}}" method="post" class="form-horizontal btn-block" > 
-                        <input type="hidden" name="_token" value="{{csrf_token()}}">                  
-                        <div id="divConteudoBtnTurmas" style="background-color: #cc7700; "><br>
+                        <div class="row">
+                            <div class=" col-sm-2"> <button id="btnMostrarEsconderBtnTurmas" class="btn btn-warning botoes btn-block ">Mostrar Turmas</button></div>
+                            <div class=" col-sm-2">  <button id="btnMostrarEsconderBtnBolsa" class="btn btn-primary botoes btn-block" >Bolsa Família</button></div>
+                            <div class=" col-sm-2">  <button id="btnMostrarEsconderBtnTransporte" class="btn btn-success botoes btn-block" >Transporte</button></div>
+                            <div class=" col-sm-2">   <button id="btnMostrarEsconderBtnCoringa" class="btn btn-info botoes btn-block" >Outros</button></div>
+                            <div class=" col-sm-2">   <button id='btnMostrarEsconderBtnTurmaExtra' class='btn btn-danger botoes btn-block'>Turmas Extra</button></div>
+                            <div class=" col-sm-2">    <button id="btnMostrarEsconderBtnTransferir" class="btn btn-marron botoes btn-block" >Transferir</button></div>
+                        </div>
+                        <br>
+                        <form name="cadastrar" action="{{url('alunos/update/agora')}}" method="post" class="form-horizontal btn-block" > 
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">                  
+                            <div id="divConteudoBtnTurmas" style="background-color: #cc7700; "><br>
                             <div class="form-group">
                                 <label for="inputTurma" class="col-sm-3 control-label">Turmas</label>
                                 <div class="col-sm-5" >
-                                    <select class="form-control" name="inputTurma" id="inputTurma" >
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
+                                    <select class="form-control" name="inputTurma" id="inputTurma" >                                                             
+                                        @foreach($turmas as $turma)  
+                                        <option value="{{$turma->id}}">{{$turma->TURMA }} {{$turma->UNICO }} ({{$turma->TURNO }})</option>
+                                        @endforeach                                                                        
                                     </select>
                                 </div>
                             </div>  
@@ -77,7 +78,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($teste as $aluno)  
-                                      @foreach($aluno->turmas as $turma)  
+                                    @foreach($aluno->turmas as $turma)  
                                     <tr>      
                                         <td></td>       
                                 <div class="dropdown">
@@ -87,7 +88,7 @@
                                     </td>
                                 </div>                           
 
-                              <td>{{$turma->TURMA}}</td>
+                                <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}})</td>
                                 <td>{{$aluno->INEP}}</td>                   
                                 <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
                                 <td>{{$aluno->MAE}}</td>

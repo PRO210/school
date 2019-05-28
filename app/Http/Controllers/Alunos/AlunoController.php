@@ -213,8 +213,9 @@ class AlunoController extends Controller {
             // $forms = $request->except(['_token']);
 //              dd(Aluno::whereIn("id",$request->aluno_selecionado)->toSql());
             $teste = Aluno::with('turmas')->whereIn('id', $request->aluno_selecionado)->get();
+            $turmas = Turma::all();
             $marcar = "";
-            return view('Alunos.atualizar_varios', compact('title', 'teste', 'marcar'));
+            return view('Alunos.atualizar_varios', compact('title', 'teste', 'marcar', 'turmas'));
         }
     }
 
@@ -223,6 +224,7 @@ class AlunoController extends Controller {
     public function updateagora(Request $request) {
         // dd($request);       
         $alunos = $this->aluno->find($request->aluno_selecionado);
+        $turma = $this->turma->find($request->inputTurma);
         $todos = "";
         $todos_nomes = "";
         foreach ($alunos->toArray() as $aluno) {
@@ -230,7 +232,7 @@ class AlunoController extends Controller {
             $todos .= $aluno['NOME'] . ',';
             $todos_nomes = substr($todos, 0, -1);
         }
-        $backup = "Alterou a Turma do(as) aluno(as) $todos_nomes para ($request->inputTurma)";
+        $campo_final = "Alterou a Turma do(as) aluno(as) $todos_nomes para:  $turma->TURMA $turma->UNICO";
 
         if ($request->turma == "turma") {
 //           Limpando os vinculos  da Tabela Pivot        
@@ -246,6 +248,13 @@ class AlunoController extends Controller {
 //                    ->update(['TURMA' => "$request->inputTurma"]);
             //
             if ($turma_atual) {
+//                Faz o Log
+                $insert = $this->log->create([
+                    'USUARIO' => 'ANDRÉ',
+                    'TABELA' => 'ALUNOS',
+                    'ALTERAR' => 'SIM',
+                    'ACAO' => "$campo_final",
+                ]);
                 return redirect()->route('alunos.index');
             } else {
                 return redirect()->route('alunos.atualizar_varios');
