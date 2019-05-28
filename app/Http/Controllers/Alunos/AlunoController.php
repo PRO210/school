@@ -187,10 +187,11 @@ class AlunoController extends Controller {
     public function updatebloco(Request $request) {
 
         $this->exporter = $request;
-        $bt = $request->botao;
+        $bt = $request->botao;    
+      
         // return('Vem da listagem de alunos');       
         //
-        if ($request->botao == "basica") {
+        if ($request->botao == "geral") {
 
 //            $opcao = [
 //                'Id',
@@ -206,7 +207,7 @@ class AlunoController extends Controller {
             //return Excel::download(new AlunosFiltradosExport($request->aluno_selecionado, $opcao), 'Nome do Arquivo Filtrado.xlsx');
             return Excel::download(new AlunosFiltradosExport($request->aluno_selecionado), 'Nome do Arquivo Filtrado.xlsx');
             //Fim do botão básica
-        } elseif ($request->botao == "geral") {
+        } elseif ($request->botao == "basica") {
             return 'Geral';
         } else {
             $title = "ATUALIZAR VÁRIOS ";
