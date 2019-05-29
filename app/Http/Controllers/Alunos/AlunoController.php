@@ -1,10 +1,7 @@
 <?php
 
-//
-
 namespace App\Http\Controllers\Alunos;
 
-//
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -66,12 +63,12 @@ class AlunoController extends Controller {
 //
 //  Esse método Recupera o que veio de Create Para Cadastrar Novatos
     public function store(AlunoFormRequest $request) {
-        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL','DATA_CENSO']);
+        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL', 'DATA_CENSO']);
 //      Insere os dados
         $insert = $this->aluno->create($form);
 //      Recuperando a Data do Censo       
         $data = date('Y-m-d');
-        $escola = $this->escola->find(1);        
+        $escola = $this->escola->find(1);
         if ($data <= $escola->DATA_CENSO) {
             $status = "CURSANDO";
         } else {
@@ -108,8 +105,8 @@ class AlunoController extends Controller {
         $aluno = $this->aluno->where('id', $id);
         $update = $aluno->update($form);
 //      Backup da Tabel da Pivot
-        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();    
-      //  Atualizando a Tabela Pivot
+        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();
+        //  Atualizando a Tabela Pivot
         $user = Aluno::find($id);
         $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'STATUS' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
 //      Update da Tabel da Pivot
@@ -360,7 +357,7 @@ class AlunoController extends Controller {
     //
     //
     public function updateturma(Request $request) {
-        //
+//       
         $form = $request->except(['_token', '_method']);
         $aluno = Aluno::with('turmas')->where('id', $request->id)->get()->first();
         $campo = "";
@@ -372,25 +369,34 @@ class AlunoController extends Controller {
         /* DB::enableQueryLog(); */
 //      Backup da Tabel da Pivot
         $aluno_turma_backup = $this->alunoturma->where('aluno_id', $request->id)->get()->first();
-//        
 //      Limpando os vinculos  da Tabela Pivot        
         $aluno_turma_delete = $this->alunoturma->where('aluno_id', $request->id)->delete();
-//
-//     Inserindo da Tabela Pivot       
-        $data_censo = "2019-05-30";
+//      Recuperando a Data do Censo       
         $data = date('Y-m-d');
-//
-        if ($data <= $data_censo) {
+        $escola = $this->escola->find(1);
+        if ($data <= $escola->DATA_CENSO) {
             $status = "CURSANDO";
         } else {
             $status = "ADMITIDO_DEPOIS";
         }
-//
-        foreach ($request->turma_selecionada as $turma) {
-            $aluno_pivot = Aluno::findOrfail($request->id);
-            $turma_atual = Turma::findOrfail($turma);
-            $turma_atual->alunos()->attach($aluno_pivot->id, array('STATUS' => "$status", 'OUVINTE' => "$request->OUVINTE_2", 'updated_at' => NOW()));
+//      Inserindo da Tabela Pivot
+//        DB::enableQueryLog();    
+        if (isset($request->turma_selecionada)) {
+            foreach ($request->turma_selecionada as $turma) {
+                $aluno_pivot = Aluno::findOrfail($request->id);
+                $turma_atual = Turma::findOrfail($turma);
+                $turma_atual->alunos()->attach($aluno_pivot->id, array('TURMA_ANO' => "$turma_atual->ANO", 'STATUS' => "$status", 'OUVINTE' => "$request->OUVINTE_UM", 'updated_at' => NOW()));
+            }
         }
+//      Inserindo da Tabela Pivot da turmas novas// 
+        if (isset($request->turma_selecionada_2)) {
+            foreach ($request->turma_selecionada_2 as $turma) {
+                $aluno_pivot = Aluno::findOrfail($request->id);
+                $turma_atual = Turma::findOrfail($turma);
+                $turma_atual->alunos()->attach($aluno_pivot->id, array('TURMA_ANO' => "$turma_atual->ANO", 'STATUS' => "$status", 'OUVINTE' => "$request->OUVINTE_DOIS", 'updated_at' => NOW()));
+            }
+        }
+//       
         $campo_2 = "";
         $aluno_2 = Aluno::with('turmas')->where('id', $request->id)->get()->first();
         foreach ($aluno_2->Turmas as $turma) {

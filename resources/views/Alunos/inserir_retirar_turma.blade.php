@@ -53,7 +53,7 @@
                             <td>{{$turma->TURMA_EXTRA}}</td>
                             <td>{{$turma->pivot->STATUS}}</td>    
                             <td>
-                                <select name="OUVINTE" class="form-control" >                       
+                                <select name="OUVINTE_UM" class="form-control" >                       
                                     @foreach($ouvintes as $ouvinte)
                                     @if($turma->pivot->OUVINTE == "$ouvinte")
                                     <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>                         
@@ -71,7 +71,19 @@
                         @endforeach
                     </tbody>
                 </table> 
-                <!--//-->
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        <div class="col-sm-4">                            
+                            <a href="javascript:history.back()" class="btn btn-primary btn-block">Voltar Para a Página Anterior</a>
+                        </div> 
+                        <div class="col-sm-4">
+                            <button type="submit" value="Enviar" class="btn btn-success btn-block" onclick="return confirmar()" >Salvar as Alterações</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="reset" class="btn btn-danger btn-block">Deixar Tudo com Original</button>
+                        </div>
+                    </div>
+                </div>
                 <!--Turmas Cadastradas no Sistema-->
                 <h3 style="text-align:center; ">Turmas Cadastradas no Sistema </h3>
                 <table  id = "example_II" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
@@ -101,13 +113,13 @@
                             <td></td>
                             <td>
                                 <div class="dropdown">
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='turma_selecionada[]' class = 'checkbox' value='{{$turma->id}}' ></span>
+                                    &nbsp;&nbsp;<span><input type='checkbox' name='turma_selecionada_2[]' class = 'checkbox' value='{{$turma->id}}' ></span>
                                     &nbsp;<span id = "nome">{{$turma->TURMA}}</span>
                                 </div>
                             </td>
                             <td>{{$turma->TURMA_EXTRA}}</td>                          
                             <td>
-                                <select name="OUVINTE_2" class="form-control" > 
+                                <select name="OUVINTE_DOIS" class="form-control" > 
                                     @foreach($ouvintes as $ouvinte)
                                     <option value="{{$ouvinte}}" >{{$ouvinte}}</option>
                                     @endforeach 
@@ -121,87 +133,74 @@
                         </tr>
                         @endforeach
                     </tbody>
-                </table> 
-                <div class="row">
-                    <div class="form-group col-sm-12">
-                        <div class="col-sm-4">                            
-                            <a href="javascript:history.back()" class="btn btn-primary btn-block">Voltar Para a Página Anterior</a>
-                        </div> 
-                        <div class="col-sm-4">
-                            <button type="submit" value="Enviar" class="btn btn-success btn-block" onclick="return confirmar()" >Salvar as Alterações</button>
-                        </div>
-                        <div class="col-sm-4">
-                            <button type="reset" class="btn btn-danger btn-block">Deixar Tudo com Original</button>
-                        </div>
-                    </div>
-                </div>
+                </table>                 
             </div>
-            {!! Form:: close()!!}   
-            <script>
-                $(document).ready(function () {
-                    //Data Table
-                    var table = $('#example').DataTable({
-                        //
-                        "columnDefs": [{
-                                "targets": 0,
-                                "orderable": false
-                            }],
-                        "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
-                        "language": {
-                            "lengthMenu": " _MENU_",
-                            "zeroRecords": "Nenhum aluno encontrado",
-                            "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                            "infoEmpty": "Sem registros",
-                            "search": "Busca:",
-                            "infoFiltered": "(filtrado de _MAX_ total de Turmas)",
-                            "paginate": {
-                                "first": "Primeira",
-                                "last": "Ultima",
-                                "next": "Proxima",
-                                "previous": "Anterior"
-                            },
-                            "aria": {
-                                "sortAscending": ": ative a ordenação cressente",
-                                "sortDescending": ": ative a ordenação decressente"
-                            }
-
+        </form>
+        <script>
+            $(document).ready(function () {
+                //Data Table
+                var table = $('#example').DataTable({
+                    //
+                    "columnDefs": [{
+                            "targets": 0,
+                            "orderable": false
+                        }],
+                    "lengthMenu": [[5, 10, 20, 30, 40, 50, 70, 100, -1], [5, 10, 20, 30, 40, 50, 70, 100, "All"]],
+                    "language": {
+                        "lengthMenu": " _MENU_",
+                        "zeroRecords": "Nenhum aluno encontrado",
+                        "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                        "infoEmpty": "Sem registros",
+                        "search": "Busca:",
+                        "infoFiltered": "(filtrado de _MAX_ total de Turmas)",
+                        "paginate": {
+                            "first": "Primeira",
+                            "last": "Ultima",
+                            "next": "Proxima",
+                            "previous": "Anterior"
                         },
-                        responsive: true
-                    });
-                });
-            </script>
-            <script>
-                $(document).ready(function () {
-                    //Data Table
-                    var table = $('#example_II').DataTable({
-                        //
-                        "columnDefs": [{
-                                "targets": 0,
-                                "orderable": false
-                            }],
-                        "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
-                        "language": {
-                            "lengthMenu": " _MENU_",
-                            "zeroRecords": "Nenhum aluno encontrado",
-                            "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                            "infoEmpty": "Sem registros",
-                            "search": "Busca:",
-                            "infoFiltered": "(filtrado de _MAX_ total de Turmas)",
-                            "paginate": {
-                                "first": "Primeira",
-                                "last": "Ultima",
-                                "next": "Proxima",
-                                "previous": "Anterior"
-                            },
-                            "aria": {
-                                "sortAscending": ": ative a ordenação cressente",
-                                "sortDescending": ": ative a ordenação decressente"
-                            }
+                        "aria": {
+                            "sortAscending": ": ative a ordenação cressente",
+                            "sortDescending": ": ative a ordenação decressente"
+                        }
 
-                        },
-                        responsive: true
-                    });
+                    },
+                    responsive: true
                 });
-            </script>
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                //Data Table
+                var table = $('#example_II').DataTable({
+                    //
+                    "columnDefs": [{
+                            "targets": 0,
+                            "orderable": false
+                        }],
+                    "lengthMenu": [[5, 10, 20, 30, 40, 50, 70, 100, -1], [5, 10, 20, 30, 40, 50, 70, 100, "All"]],
+                    "language": {
+                        "lengthMenu": " _MENU_",
+                        "zeroRecords": "Nenhum aluno encontrado",
+                        "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                        "infoEmpty": "Sem registros",
+                        "search": "Busca:",
+                        "infoFiltered": "(filtrado de _MAX_ total de Turmas)",
+                        "paginate": {
+                            "first": "Primeira",
+                            "last": "Ultima",
+                            "next": "Proxima",
+                            "previous": "Anterior"
+                        },
+                        "aria": {
+                            "sortAscending": ": ative a ordenação cressente",
+                            "sortDescending": ": ative a ordenação decressente"
+                        }
+
+                    },
+                    responsive: true
+                });
+            });
+        </script>
     </body>
 </html>
