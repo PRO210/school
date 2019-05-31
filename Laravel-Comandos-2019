@@ -4,6 +4,7 @@ sudo apt-get purge --auto-remove nodejs
 cd /opt/lampp/htdocs/school
 
 composer create-project --prefer-dist laravel/laravel school
+composer create-project --prefer-dist laravel/laravel policie
 sudo chmod -R 755 storage ou
 sudo chmod -R 777 storage ou
 
@@ -13,6 +14,7 @@ php artisan key:generate (Chave de segurança)
 php artisan make:controller Alunos\\AlunoController
 php artisan make:controller Logs\\LogController
 php artisan make:controller Turmas\\TurmaController --resource
+php artisan make:controller Boletos\\BoletoController --resource
 //
 composer dump-autoload(Atualizar o Laravel caso vc troque o nome de algum arquivo)
 //
