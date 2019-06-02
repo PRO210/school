@@ -173,7 +173,7 @@ class AlunoController extends Controller {
     //
     public function editar($id, $id_turma) {
         include 'selects.php';
-//        $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+//      $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
         $aluno = $this->aluno->find(Crypt::decrypt($id));
         $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->first();
         $turma = $this->turma->find($id_turma);
@@ -419,6 +419,20 @@ class AlunoController extends Controller {
         } else {
             return redirect()->route('alunos.create');
         }
+    }
+
+    //
+    //Página Link para Históricos e transferências 
+    public function historico($id, $id_turma) {
+
+        include 'selects.php';
+        $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
+        foreach ($aluno->turmas as $turma) {
+            $turma_atual = "($turma->TURMA)";
+        }        
+        $turmas = $this->turma->all();
+        $title = "Históricos/Transferências";
+        return view('Alunos.cadastrar_historico_transferencia', compact('title', 'aluno', 'turmas','turma_atual','status','anos'));
     }
 
 }
