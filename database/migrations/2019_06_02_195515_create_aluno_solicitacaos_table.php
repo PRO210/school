@@ -16,9 +16,13 @@ class CreateAlunoSolicitacaosTable extends Migration {
             $table->increments('id');
             $table->integer('turma_id')->unsigned();
             $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
+
             $table->integer('aluno_id')->unsigned();
             $table->foreign('aluno_id')->references('id')->on('alunos')->onDelete('cascade');
-            $table->string('ALUNO_STATUS');
+
+            $table->integer('status_id')->unsigned();
+            $table->foreign('status_id')->references('id')->on('aluno_classificacaos');
+
             $table->string('SOLICITANTE');
             $table->string('TURMA_ANO');
             $table->date('DATA_SOLICITACAO');

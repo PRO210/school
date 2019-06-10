@@ -4,11 +4,10 @@ sudo apt-get purge --auto-remove nodejs
 cd /opt/lampp/htdocs/school
 
 composer create-project --prefer-dist laravel/laravel school
-composer create-project --prefer-dist laravel/laravel policie
 sudo chmod -R 755 storage ou
 sudo chmod -R 777 storage ou
 
-
+//
 php artisan key:generate (Chave de segurança)
 //
 php artisan make:controller Alunos\\AlunoController
@@ -16,21 +15,24 @@ php artisan make:controller Alunos\\SolicitacaoController --resource
 php artisan make:controller Logs\\LogController
 php artisan make:controller Turmas\\TurmaController --resource
 //
-composer dump-autoload(Atualizar o Laravel caso vc troque o nome de algum arquivo)
+composer dump-autoload (Atualizar o Laravel caso vc troque o nome de algum arquivo)
 //
 //Criar a Tabela do mysql NO PROJETO
-php artisan make:migration create_certidoes_table
+php artisan migrate:reset
+php artisan make:migration create_aluno_status_table
 php artisan migrate (Criar a Tabela do mysql NO SERVIDOR)
 php artisan migrate:refresh (Atualizar a Tabela mysql e limpa o Banco)
+php artisan migrate:refresh --step=1 (Número limitado de tabelas para o refresh)
 //
 //
 Models  Models  Models  Models
 //Cria a Model:
 php artisan make:model Models\\Turmas\\Turma
+php artisan make:model Models\\Alunos\\AlunoClassificacao -m
 //Cria a Model mais a migration:
 php artisan make:model Models\\Turmas\\Turma -m
 php artisan make:model Models\\Logs\\Log -m
 php artisan make:model Models\\AlunosTurmas\\AlunoTurma -m (OBS: A migration vai para o plural automático daí na model do relacionamento citar a tabela manualmente por injeção. EX:return $this->belongsToMany(Aluno::class,'aluno_turmas'))
 php artisan make:model Models\\Escola\\Escola -m
-php artisan make:model Models\\AlunosSolicitacoes\\AlunoSolicitacao -m
+php artisan make:model Models\\Alunos\\AlunoSolicitacao -m
 

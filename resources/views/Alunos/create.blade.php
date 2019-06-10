@@ -7,8 +7,8 @@
         <title>{{$title or 'Gestão de Alunos'}}</title>      
         <style>
             @media (max-width: 790px) {#FONE_II{margin-top: 12px};                                    
-                                       @media (max-width: 790px) {#bt_voltar{margin-top: 12px};                                    
-                                       </style>
+            @media (max-width: 790px) {#bt_voltar{margin-top: 12px};                                    
+        </style>
             </head>
             <body>
                 @include('Alunos.alunos_css');
@@ -27,6 +27,7 @@
                     @if (isset($aluno))
                     {!! Form::model($aluno,['route' => ['alunos.update',$aluno->id],'class' => 'form-horizontal','name' => 'form1','method'=> 'put'])!!}
                     {!! Form::hidden('TURMA_ATUAL', "$turma->id") !!}
+                    {!! Form::hidden('STATUS_ATUAL', "$aluno_turma->aluno_classificacao_id") !!}
                     @else
                     {!! Form::open(['route' => 'alunos.store','class' => 'form-horizontal','name' => 'form1'])!!}          
                     @endif
@@ -60,10 +61,10 @@
                             <div class="col-sm-4"> 
                                 <select name="STATUS" class="form-control" >                             
                                     @foreach($status as $status_unico)
-                                    @if($aluno_turma->STATUS == "$status_unico")
-                                    <option value="{{$status_unico}}" selected="">{{$status_unico}}</option> 
+                                    @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")
+                                    <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option> 
                                     @else                               
-                                    <option value="{{$status_unico}}" >{{$status_unico}}</option>   
+                                    <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
                                     @endif
                                     @endforeach                                                                                      
                                 </select>                          

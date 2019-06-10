@@ -1,3 +1,5 @@
+
+
 <script src="{{url('assets/js/jquery-1.12.4.js')}}" type="text/javascript"></script>           
 <script src="{{url('assets/js/jquery-3.1.1.min.js')}}" type="text/javascript"></script>
 <script src="{{url('assets/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>

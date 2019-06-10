@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Alunos\Aluno;
+use App\Models\Alunos\AlunoClassificacao;
 use App\Models\Turmas\Turma;
 use App\Models\AlunosTurmas\AlunoTurma;
 use App\Models\Logs\Log;
@@ -28,11 +29,13 @@ class AlunoController extends Controller {
     private $exporter;
     private $turma;
     private $alunoturma;
+    private $alunoClassificacao;
 
 //
-    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma) {
+    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma, AlunoClassificacao $alunoclassificacao) {
 //
         $this->aluno = $aluno;
+        $this->alunoClassificacao = $alunoclassificacao;
         $this->log = $log;
         $this->escola = $escola;
         $this->turma = $turma;
@@ -41,9 +44,26 @@ class AlunoController extends Controller {
 
 //
     public function index() {
-//
+        $alunos = DB::table('alunos')
+                ->join('aluno_turmas', 'alunos.id', '=', 'aluno_turmas.aluno_id')
+                ->join('turmas', 'turmas.id', '=', 'aluno_turmas.turma_id')
+                ->join('aluno_classificacaos', 'aluno_classificacaos.id', '=', 'aluno_turmas.aluno_classificacao_id')
+                ->select('alunos.*', 'turmas.*', 'aluno_classificacaos.*', 'aluno_turmas.*')
+                ->get();
+//dd($alunos);
         $title = "TODOS OS ALUNOS";
-        $alunos = Aluno::with('turmas')->get();
+        ////       
+//        $alunos = Aluno::with(['classificacaos'])->get(); //   
+      
+        // dd($alunos);
+
+//        foreach ($alunos as $aluno) {
+//            echo "<br>";
+//            echo "$aluno->NOME id: $aluno->aluno_id Turma: $aluno->TURMA id_turma: $aluno->turma_id / ";
+//        }
+//        
+//        
+//        dd($alunos);
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
@@ -98,9 +118,13 @@ class AlunoController extends Controller {
 //
 //Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
-        //dd($request);
+        // dd($request);
+//      Recuperar o Nome do Status Atual
+        $status_antigo_id = $this->alunoClassificacao->find($request->STATUS_ATUAL);
+        $status_antigo_nome = $status_antigo_id->STATUS;
+        //
         $backup = $this->aluno->find($id);
-        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
+        $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'STATUS_ATUAL', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL']);
         /* DB::enableQueryLog(); */
         $aluno = $this->aluno->where('id', $id);
         $update = $aluno->update($form);
@@ -108,7 +132,7 @@ class AlunoController extends Controller {
         $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();
         //  Atualizando a Tabela Pivot
         $user = Aluno::find($id);
-        $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'STATUS' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
+        $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'aluno_classificacao_id' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
 //      Update da Tabel da Pivot
         $aluno_turma_update = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA)->get()->first();
         //
@@ -120,7 +144,6 @@ class AlunoController extends Controller {
         $nome_turma = $this->turma->find($request->TURMA);
 
         foreach ($result_pivot as $campo_pivot => $valor) {
-
             if ($campo_pivot == "turma_id") {
                 $campo_pivot = "TURMA = ";
                 $valor = " $nome_turma->TURMA " . " $nome_turma->UNICO ";
@@ -130,6 +153,13 @@ class AlunoController extends Controller {
                 $campo_pivot = "";
                 $valor = "";
                 $X = "";
+            } elseif ($campo_pivot == "aluno_classificacao_id") {
+//              Recuperar o Nome do Status Atual
+                $status_atual_id = $this->alunoClassificacao->find($request->STATUS);
+                $status_atual_nome = $status_atual_id->STATUS;
+                $campo_pivot = "STATUS = ";
+                $valor = "$status_atual_nome";
+                $X = "De" . " $status_antigo_nome " . " para";
                 //
             } else {
                 $X = "De $aluno_turma_backup[$campo_pivot] para";
@@ -173,11 +203,11 @@ class AlunoController extends Controller {
     //
     public function editar($id, $id_turma) {
         include 'selects.php';
-//      $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
         $aluno = $this->aluno->find(Crypt::decrypt($id));
         $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->first();
         $turma = $this->turma->find($id_turma);
         $turmas = $this->turma->all();
+        $status = $this->alunoClassificacao->all();
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
         return view('Alunos.create', compact('title', 'aluno', 'turma', 'turmas', 'aluno_turma', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes', 'status'));
     }
@@ -185,14 +215,11 @@ class AlunoController extends Controller {
     //
     //
     public function updatebloco(Request $request) {
-
         $this->exporter = $request;
         $bt = $request->botao;
-
         // return('Vem da listagem de alunos');       
         //
         if ($request->botao == "geral") {
-
 //            $opcao = [
 //                'Id',
 //                'Inep',
@@ -211,11 +238,33 @@ class AlunoController extends Controller {
             return 'Geral';
         } else {
             $title = "ATUALIZAR VÁRIOS ";
-            // $forms = $request->except(['_token']);
-//              dd(Aluno::whereIn("id",$request->aluno_selecionado)->toSql());
-            $teste = Aluno::with('turmas')->whereIn('id', $request->aluno_selecionado)->get();
+            $arrayId[] = "";
+            foreach ($request->aluno_selecionado as $id) {
+                array_push($arrayId, $id);
+            }
+            array_shift($arrayId);
+            print_r($arrayId);
+
+
+
+            $ids = 5;
+            $alunos2 = DB::table('alunos')
+                    ->join('aluno_turmas', function ($join) {
+                        $join->on('alunos.id', '=', 'aluno_turmas.aluno_id')
+                        ->whereIn('aluno_turmas.id', $ids);
+                    })
+                    ->join('turmas', 'turmas.id', '=', 'aluno_turmas.turma_id')
+                    ->join('aluno_classificacaos', 'aluno_classificacaos.id', '=', 'aluno_turmas.aluno_classificacao_id')
+                    ->select('alunos.*', 'turmas.*', 'aluno_classificacaos.*', 'aluno_turmas.*')
+                    ->get();
+
+            dd($alunos2);
+            exit();
+            $teste = Aluno::with('turmas')->whereIn('id', substr($request->aluno_selecionado, 0, -2))->get();
             $turmas = Turma::all();
             $marcar = "";
+
+
             return view('Alunos.atualizar_varios', compact('title', 'teste', 'marcar', 'turmas'));
         }
     }
@@ -223,7 +272,7 @@ class AlunoController extends Controller {
     //
     //   Recebe os Dados do updatebloco   Recebe os Dados do updatebloco 
     public function updateagora(Request $request) {
-        // dd($request);       
+        dd($request);
         $alunos = $this->aluno->find($request->aluno_selecionado);
         $turma = $this->turma->find($request->inputTurma);
         $todos = "";
@@ -234,7 +283,6 @@ class AlunoController extends Controller {
             $todos_nomes = substr($todos, 0, -1);
         }
         $campo_final = "Alterou a Turma do(as) aluno(as) $todos_nomes para:  $turma->TURMA $turma->UNICO";
-
         if ($request->turma == "turma") {
 //           Limpando os vinculos  da Tabela Pivot        
             $aluno_turma_delete = $this->alunoturma->whereIn('aluno_id', $request->aluno_selecionado)->delete();
@@ -285,7 +333,6 @@ class AlunoController extends Controller {
     //     return response()->json($diff);
     // }
     public function show() {
-
 //        $turma = Turma::where('id', '1')->get()->first();
 //        echo "{$turma->TURMA} : ";
 //        $alunos = $turma->alunos;
@@ -424,15 +471,14 @@ class AlunoController extends Controller {
     //
     //Página Link para Históricos e transferências 
     public function historico($id, $id_turma) {
-
         include 'selects.php';
         $aluno = Aluno::with('turmas')->where('id', Crypt::decrypt($id))->get()->first();
         foreach ($aluno->turmas as $turma) {
             $turma_atual = "($turma->TURMA)";
-        }        
+        }
         $turmas = $this->turma->all();
         $title = "Históricos/Transferências";
-        return view('Alunos.cadastrar_historico_transferencia', compact('title', 'aluno', 'turmas','turma_atual','status','anos'));
+        return view('Alunos.cadastrar_historico_transferencia', compact('title', 'aluno', 'turmas', 'turma_atual', 'status', 'anos'));
     }
 
 }

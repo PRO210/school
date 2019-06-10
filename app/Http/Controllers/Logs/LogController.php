@@ -20,7 +20,7 @@ class LogController extends Controller {
        
     }
     public function showalunos() {
-        $title = "Ações Passadas";
+        $title = "AÇÕES PASSADAS";
         $logs = Log::where('id','>=','1')->orderBy('created_at', 'DESC')->get();
         return view('Logs.listar_logs', compact('title', 'logs'));
     }
