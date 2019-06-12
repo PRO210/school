@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -7,8 +6,8 @@
         <title>{{$title or 'Gestão de Alunos'}}</title>      
         <style>
             @media (max-width: 790px) {#FONE_II{margin-top: 12px};                                    
-            @media (max-width: 790px) {#bt_voltar{margin-top: 12px};                                    
-        </style>
+                                       @media (max-width: 790px) {#bt_voltar{margin-top: 12px};                                    
+                                       </style>
             </head>
             <body>
                 @include('Alunos.alunos_css');
@@ -471,7 +470,7 @@
                                 <select name="OUVINTE" class="form-control" >                        
                                     @if (isset($aluno))
                                     @foreach($ouvintes as $ouvinte)
-                                    @if($ouvinte == "$aluno_turma->OUVINTE")
+                                    @if($ouvinte == $aluno_turma->OUVINTE)
                                     <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>                         
                                     @else
                                     <option value="{{$ouvinte}}">{{$ouvinte}}</option>
@@ -483,7 +482,26 @@
                                     @endforeach 
                                     @endif                            
                                 </select>
-                            </div>                       
+                            </div>                              
+                            {!!Form::label('Necessidades Especiais', 'Necessidades Especiais',['class' => 'col-sm-2 control-label'])!!}
+                            <div class="col-sm-4">
+                                <select name="NECESSIDADES_ESPECIAIS" class="form-control" >                        
+                                    @if (isset($aluno))
+
+                                    @foreach($necessidades as $necessidade)
+
+                                    @if($necessidade == $aluno->NECESSIDADES_ESPECIAIS)
+                                    <option value="{{$necessidade}}" selected="">{{$necessidade}}</option>
+                                    @else
+                                    <option value="{{$necessidade}}">{{$necessidade}}</option>
+                                    @endif
+                                    @endforeach 
+                                    @else
+                                    <option>NAO</option>
+                                    <option>SIM</option>
+                                    @endif                            
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row">

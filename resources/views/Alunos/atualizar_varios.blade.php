@@ -36,18 +36,28 @@
                             <div id="divConteudoBtnTurmas" style="background-color: #cc7700; "><br>
                             <div class="form-group">
                                 <label for="inputTurma" class="col-sm-3 control-label">Turmas</label>
-                                <div class="col-sm-5" >
+                                <div class="col-sm-4" >
                                     <select class="form-control" name="inputTurma" id="inputTurma" >                                                             
-                                        @foreach($turmas as $turma)  
+                                        @foreach($Turmas as $turma)  
                                         <option value="{{$turma->id}}">{{$turma->TURMA }} {{$turma->UNICO }} ({{$turma->TURNO }})</option>
                                         @endforeach                                                                        
                                     </select>
                                 </div>
                             </div>  
+                            <div class="form-group">
+                                {!!Form::label('Status', 'Status',['class' => 'col-sm-3 control-label'])!!}
+                                <div class="col-sm-4"> 
+                                    <select name="STATUS" class="form-control" >                             
+                                        @foreach($status as $status_unico)                                                                   
+                                        <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
+                                        @endforeach                                                                                      
+                                    </select>                          
+                                </div> 
+                            </div>
                             <div class="form-group" >
-                                <div class="col-sm-offset-5 col-sm-9">
-                                    <button type="submit" name="turma" title = "Selecione ao menos um aluno(a) Antes de Clicar" value="turma" class="btn btn-success btEditBloc" onclick='return confirmarAtualizacao()' >Atualizar</button>
-                                </div>
+                                <div class="col-sm-offset-3 col-sm-4">
+                                    <button type="submit" name="botao" title = "Selecione ao menos um aluno(a) Antes de Clicar" value="turma" class="btn btn-success btEditBloc btn-block" onclick='return confirmarAtualizacao()' >Atualizar</button>
+                                </div>                                
                             </div><br>
                         </div> 
                         <!-- Div Bolsa Família-->
@@ -58,7 +68,7 @@
                                     <div class= "col-sm-offset-3 col-sm-9" >
                                         <label class="radio-inline"><input type="radio" name="optradio" value="SIM">Inserir no Bolsa</label>
                                         <label class="radio-inline"><input type="radio" name="optradio" value="NÃO">Retirar do Bolsa</label><br><br>
-                                        <button type="submit"  name="bf" title = "Selecione ao menos um aluno(a) Antes de Clicar" value="bf" class="btn btn-success btEditBloc" onclick='return confirmarAtualizacao()' >Atualizar</button>
+                                        <button type="submit"  name="botao" title = "Selecione ao menos um aluno(a) Antes de Clicar" value="bf" class="btn btn-success btEditBloc" onclick='return confirmarAtualizacao()' >Atualizar</button>
                                     </div>
                                 </div><br>
                             </div>
@@ -67,36 +77,26 @@
                         <table  id = "" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
                                 <thead>                       
                                     <tr>  
-                                        <th><span><input type="checkbox" class="selecionar" id="check" checked = "" ></span></th>                     
                                         <th>NOME</th>
-                                        <th>TURMA</th>
-                                        <th>INEP</th>
+                                        <th>TURMA</th>                                     
                                         <th>NASCIMENTO</th>
-                                        <th>MÃE</th>
                                         <th>BOLSA FAMÍLIA</th>
                                     </tr>                       
                                 </thead>
                                 <tbody>
-                                    @foreach ($teste as $aluno)  
-                                    @foreach($aluno->turmas as $turma)  
+                                    @foreach ($alunoTeste as $aluno)  
+                                    @foreach($aluno->turmas as $turma) 
                                     <tr>      
-                                        <td></td>       
-                                <div class="dropdown">
-                                    <td>                                                        
-                                        &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}' checked></span>
-                                        &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
-                                    </td>
-                                </div>                           
-
-                                <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}})</td>
-                                <td>{{$aluno->INEP}}</td>                   
-                                <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
-                                <td>{{$aluno->MAE}}</td>
-                                <td>{{$aluno->BOLSA_FAMILIA}}</td>
-
-                                </tr>
-                                @endforeach
-                                @endforeach
+                                        <td>                                                        
+                                            &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}/{{$turma->id}}' checked></span>
+                                            &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
+                                        </td>
+                                        <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}})</td>                                                        
+                                        <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
+                                        <td>{{$aluno->BOLSA_FAMILIA}}</td>
+                                    </tr>
+                                    @endforeach
+                                    @endforeach
                                 </tbody>                              
                             </table> 
                             <input type="hidden" name="_token" value="{{csrf_token()}}">                

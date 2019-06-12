@@ -63,6 +63,7 @@
                     </thead>
                     <tbody>                                   
                         @foreach($alunos as $aluno)                     
+                        @foreach($aluno->turmas as $key=> $turma)                     
                         <tr>     
                             <td></td>       
                             <td>
@@ -72,16 +73,16 @@
                                         <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
                                         <li><a href='folha_re_matricula.php?id={{''}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
                                         <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
-                                        <li><a href="{{route('edição',['id' => Crypt::encrypt($aluno->id),'id_turma' => $aluno->turma_id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href="{{route('edição',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
                                         <li><a href="{{route('edição/turma',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>
                                         <li><a href='folha_re_matricula.php?id={{''}}'                               target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
-                                        <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $aluno->turma_id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
+                                        <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
                                     </ul>                              
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}'></span>
+                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}/{{$turma->id}}'></span>
                                     &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
                                 </div>                           
                             </td>  
-                            <td>{{$aluno->TURMA}} {{$aluno->UNICO}}</td>
+                            <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}})</td>
                             <td>{{$aluno->INEP}}</td>                  
                             <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
                             <td>{{$aluno->MAE}}</td>
@@ -97,8 +98,9 @@
                             <td>{{$aluno->TRANSFERENCIA}}</td>
                             <td>{{$aluno->NECESSIDADES_ESPECIAIS}}</td>
                             <td>{{$aluno->OBSERVACOES}}</td>
-                            <td>{{$aluno->STATUS}}</td>                        
+                            <td>{{$aluno->classificacaos[$key]->STATUS}}</td>                        
                         </tr>
+                        @endforeach                     
                         @endforeach                     
                     </tbody>
                     <tfoot>

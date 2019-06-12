@@ -14,7 +14,7 @@
         @include('Menu.menu');
         <form name="cadastrar" action="{{url('alunos/update/turma')}}" method="post" class="form-horizontal" > 
             <input type="hidden" name="_token" value="{{csrf_token()}}">                  
-            <input type="hidden" name="id" value="{{$aluno->id}}">                  
+            <input type="hidden" name="id" value="{{$id_aluno}}">                  
             <h3 style="text-align:center; ">Turma(s) em que  {{$nome}} está Inscrito(a)</h3>
             <div class="container-fluid">   
                 <!--Turmas que o Aluno está matriculado-->
@@ -31,17 +31,19 @@
                                 </div>
                             </th>                    
                             <th>TURMA</th>
-                            <th>TURMA_EXTRA</th>
-                            <th>STATUS</th>
-                            <th>OUVINTE</th>
+                            <th>TURMA_EXTRA</th>                          
                             <th>TURNO</th>
                             <th>UNICO</th>
                             <th>ANO</th>
                             <th>CATEGORIA</th>
+                            <th>STATUS DO ALUNO</th>
+                            <th>OUVINTE</th>
                         </tr>
                     </thead>
                     <tbody>                                   
-                        @foreach($aluno->turmas as $turma) 
+                        @foreach($alunos as $aluno)                     
+                        @foreach($aluno->turmas as $key=> $turma)  
+
                         <tr>
                             <td></td>
                             <td>
@@ -50,24 +52,25 @@
                                     &nbsp;<span id = "nome">{{$turma->TURMA}}</span>
                                 </div>
                             </td>
-                            <td>{{$turma->TURMA_EXTRA}}</td>
-                            <td>{{$turma->pivot->STATUS}}</td>    
-                            <td>
+                            <td>{{$turma->TURMA_EXTRA}}</td>                           
+                            <td>{{$turma->TURNO}}</td>
+                            <td>{{$turma->UNICO}}</td>
+                            <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
+                            <td>{{$turma->CATEGORIA}}</td>
+                            <td>{{$aluno->classificacaos[$key]->STATUS}}</td>    
+                            <td>                              
                                 <select name="OUVINTE_UM" class="form-control" >                       
                                     @foreach($ouvintes as $ouvinte)
-                                    @if($turma->pivot->OUVINTE == "$ouvinte")
+                                    @if($ouvinte == $turma->pivot->OUVINTE)
                                     <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>                         
                                     @else
                                     <option value="{{$ouvinte}}">{{$ouvinte}}</option>
                                     @endif                                                               
                                     @endforeach                                                               
-                                </select>                             
+                                </select> 
                             </td>
-                            <td>{{$turma->TURNO}}</td>
-                            <td>{{$turma->UNICO}}</td>
-                            <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-                            <td>{{$turma->CATEGORIA}}</td>
                         </tr>
+                        @endforeach
                         @endforeach
                     </tbody>
                 </table> 
@@ -99,12 +102,12 @@
                                 </div>
                             </th>                    
                             <th>TURMA</th>
-                            <th>TURMA_EXTRA</th>                         
-                            <th>OUVINTE</th>
+                            <th>TURMA_EXTRA</th>                        
                             <th>TURNO</th>
                             <th>UNICO</th>
                             <th>ANO</th>
-                            <th>CATEGORIA</th>
+                            <th>CATEGORIA</th>                          
+                            <th>OUVINTE</th>
                         </tr>
                     </thead>
                     <tbody>                                   
@@ -118,6 +121,11 @@
                                 </div>
                             </td>
                             <td>{{$turma->TURMA_EXTRA}}</td>                          
+
+                            <td>{{$turma->TURNO}}</td>
+                            <td>{{$turma->UNICO}}</td>
+                            <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
+                            <td>{{$turma->CATEGORIA}}</td>                           
                             <td>
                                 <select name="OUVINTE_DOIS" class="form-control" > 
                                     @foreach($ouvintes as $ouvinte)
@@ -125,11 +133,6 @@
                                     @endforeach 
                                 </select>
                             </td>
-                            <td>{{$turma->TURNO}}</td>
-                            <td>{{$turma->UNICO}}</td>
-                            <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-                            <td>{{$turma->CATEGORIA}}</td>
-
                         </tr>
                         @endforeach
                     </tbody>
