@@ -197,7 +197,7 @@ class AlunoController extends Controller {
         $turmas = $this->turma->all();
         $status = AlunoClassificacao::all()->where('ORDEM_I', 'S');
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
-       
+
         return view('Alunos.create', compact('title', 'aluno', 'turma', 'turmas', 'aluno_turma', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes', 'status', 'necessidades'));
     }
 
@@ -419,7 +419,8 @@ class AlunoController extends Controller {
                 $ouvinte = $turma->pivot->OUVINTE;
                 $campo .= "$turma->TURMA " . "$turma->UNICO " . ',' . 'Status:' . " $status " . ',' . 'Ouvinte:' . " $ouvinte" . '/ ';
             }
-        }       
+        }
+
         /* DB::enableQueryLog(); */
 //      Backup da Tabel da Pivot
         $aluno_turma_backup = $this->alunoturma->where('aluno_id', Crypt::decrypt($request->id))->get();
@@ -436,18 +437,18 @@ class AlunoController extends Controller {
 //      Inserindo da Tabela Pivot
 //        DB::enableQueryLog();    
         if (isset($request->turma_selecionada)) {
-            foreach ($request->turma_selecionada as $turma) {
+            foreach ($request->turma_selecionada as $key => $turma) {
                 $aluno_pivot = Aluno::findOrfail(Crypt::decrypt($request->id));
                 $turma_atual = Turma::findOrfail($turma);
-                $turma_atual->alunos()->attach($aluno_pivot->id, array('TURMA_ANO' => "$turma_atual->ANO", 'aluno_classificacao_id' => "$status", 'OUVINTE' => "$request->OUVINTE_UM", 'updated_at' => NOW()));
+                $turma_atual->alunos()->attach($aluno_pivot->id, array('TURMA_ANO' => "$turma_atual->ANO", 'aluno_classificacao_id' => "$status", 'OUVINTE' => $request->OUVINTE_UM[$key], 'updated_at' => NOW()));
             }
         }
 //      Inserindo da Tabela Pivot da turmas novas// 
         if (isset($request->turma_selecionada_2)) {
-            foreach ($request->turma_selecionada_2 as $turma) {
+            foreach ($request->turma_selecionada_2 as $key => $turma) {
                 $aluno_pivot = Aluno::findOrfail(Crypt::decrypt($request->id));
                 $turma_atual = Turma::findOrfail($turma);
-                $turma_atual->alunos()->attach($aluno_pivot->id, array('TURMA_ANO' => "$turma_atual->ANO", 'aluno_classificacao_id' => "$status", 'OUVINTE' => "$request->OUVINTE_DOIS", 'updated_at' => NOW()));
+                $turma_atual->alunos()->attach($aluno_pivot->id, array('TURMA_ANO' => "$turma_atual->ANO", 'aluno_classificacao_id' => "$status", 'OUVINTE' => $request->OUVINTE_DOIS[$key], 'updated_at' => NOW()));
             }
         }
 //       
@@ -460,11 +461,12 @@ class AlunoController extends Controller {
                 $campo_2 .= "$turma->TURMA " . "$turma->UNICO " . ',' . 'Status:' . " $status " . ',' . 'Ouvinte:' . " $ouvinte" . '/ ';
             }
         }
-        if($campo_2 ==""){
+
+        if ($campo_2 == "") {
             $campo_2 = "";
-            $campo_3  = "";
-        }else{
-            $campo_3  = "e Vinculou a(s) Turma(s):";
+            $campo_3 = "";
+        } else {
+            $campo_3 = "e Vinculou a(s) Turma(s):";
         }
         $campo_final = "Desvinculou " . $aluno->NOME . " da(s) Turma(s): $campo $campo_3 $campo_2 ";
         //dd($campo_final);
@@ -475,7 +477,7 @@ class AlunoController extends Controller {
             'TABELA' => 'ALUNOS',
             'ALTERAR' => 'SIM',
             'ACAO' => "$campo_final",
-        ]);        
+        ]);
         //Redireciona
         if ($insert) {
             return redirect()->route('alunos.index');
@@ -483,6 +485,7 @@ class AlunoController extends Controller {
             return redirect()->route('alunos.create');
         }
     }
+
     //
     //Página Link para Históricos e transferências 
     public function historico($id, $id_turma) {

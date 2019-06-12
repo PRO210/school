@@ -59,7 +59,7 @@
                             <td>{{$turma->CATEGORIA}}</td>
                             <td>{{$aluno->classificacaos[$key]->STATUS}}</td>    
                             <td>                              
-                                <select name="OUVINTE_UM" class="form-control" >                       
+                                <select name="OUVINTE_UM[]" class="form-control">                       
                                     @foreach($ouvintes as $ouvinte)
                                     @if($ouvinte == $turma->pivot->OUVINTE)
                                     <option value="{{$ouvinte}}" selected="">{{$ouvinte}}</option>                         
@@ -127,7 +127,7 @@
                             <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
                             <td>{{$turma->CATEGORIA}}</td>                           
                             <td>
-                                <select name="OUVINTE_DOIS" class="form-control" > 
+                                <select name="OUVINTE_DOIS[]" class="form-control" > 
                                     @foreach($ouvintes as $ouvinte)
                                     <option value="{{$ouvinte}}" >{{$ouvinte}}</option>
                                     @endforeach 
