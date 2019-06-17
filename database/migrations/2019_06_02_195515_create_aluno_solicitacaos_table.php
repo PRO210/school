@@ -41,6 +41,7 @@ class CreateAlunoSolicitacaosTable extends Migration {
             $table->string('T5')->nullable();
             $table->string('T6')->nullable();
             $table->string('T7')->nullable();
+            $table->string('OBS')->nullable();
             $table->timestamps();
         });
     }

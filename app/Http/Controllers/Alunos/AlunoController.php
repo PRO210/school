@@ -11,6 +11,7 @@ use App\Models\Turmas\Turma;
 use App\Models\AlunosTurmas\AlunoTurma;
 use App\Models\Logs\Log;
 use App\Models\Escola\Escola;
+use Gate;
 use App\Http\Requests\AlunoFormRequest;
 // 
 use App\Exports;
@@ -45,21 +46,11 @@ class AlunoController extends Controller {
 //
     public function index() {
         $title = "TODOS OS ALUNOS";
-        $alunos = Aluno::with(['turmas', 'classificacaos'])->get(); //   
-//        foreach ($alunos as $aluno) {
-//            foreach ($aluno->turmas as $key => $turma) {
-//
-//                echo  $aluno->NOME . " - " .$turma->TURMA . " - " . $aluno->classificacaos[$key]->STATUS . "<br>";
-//            }
-//        }       
+        $alunos = Aluno::with(['turmas', 'classificacaos'])->get();
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //
     public function create() {
 //Formulario que Cadastra o Aluno.OBS: Envia para o Store
         include 'selects.php';
@@ -90,9 +81,11 @@ class AlunoController extends Controller {
         $campo_final = "Cadastrou" . " $request->NOME" . " na Turma: " . " $turmas->TURMA " . " $turmas->UNICO";
 //      Redireciona
         if ($insert) {
+            //Traz i usuário
+            $usuario = \Auth::user()->name;
 //          Faz o Log
             $insert = $this->log->create([
-                'USUARIO' => 'ANDRÉ',
+                'USUARIO' => $usuario,
                 'TABELA' => 'ALUNOS',
                 'CADASTRAR' => 'SIM',
                 'ACAO' => "$campo_final",
@@ -172,9 +165,11 @@ class AlunoController extends Controller {
         /* dd(DB::getQueryLog()); */
         //Redireciona
         if ($update) {
+            //Traz o usuario
+            $usuario = \Auth::user()->name;
 //          Faz o Log
             $insert = $this->log->create([
-                'USUARIO' => 'ANDRÉ',
+                'USUARIO' => $usuario,
                 'TABELA' => 'ALUNOS',
                 'ALTERAR' => 'SIM',
                 'ACAO' => "$campo_final",
@@ -189,9 +184,13 @@ class AlunoController extends Controller {
     //    
     // Esse método envia para a Create para atualizar os dados Exsitentes - Esse método envia para a Create para atualizar os dados Exsitentes.
     //
-    public function editar($id, $id_turma) {
+    public function editar($id, $id_turma) {      
+              
         include 'selects.php';
-        $aluno = $this->aluno->find(Crypt::decrypt($id));
+        $aluno = $this->aluno->find(Crypt::decrypt($id));        
+//        //$this->authorize('editar',$aluno);        
+//        if(Gate::denies('editar',$aluno))
+//            abort (403,'Unauthorized');        
         $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->first();
         $turma = $this->turma->find($id_turma);
         $turmas = $this->turma->all();
@@ -287,9 +286,11 @@ class AlunoController extends Controller {
 //                    ->update(['TURMA' => "$request->inputTurma"]);
             //
             if ($turma_atual) {
+                //Traz o usuario
+                $usuario = \Auth::user()->name;
 //                Faz o Log
                 $insert = $this->log->create([
-                    'USUARIO' => 'ANDRÉ',
+                    'USUARIO' => $usuario,
                     'TABELA' => 'ALUNOS',
                     'ALTERAR' => 'SIM',
                     'ACAO' => "$campo_final",
@@ -322,17 +323,23 @@ class AlunoController extends Controller {
     //     $diff = $todosItens->diff($produto->itens);
     //     return response()->json($diff);
     // }
-    public function show() {
+    public function show($id, $id_turma) {
+        include 'selects.php';
+        $aluno = $this->aluno->find(Crypt::decrypt($id));
+        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->first();
+        $turma = $this->turma->find($id_turma);
+        $turmas = $this->turma->all();
+        $status = AlunoClassificacao::all()->where('ORDEM_I', 'S');
+        $title = "Visualizar o Cadastro de: {$aluno->NOME} ";
+
+        return view('Alunos.listar_unico', compact('title', 'aluno', 'turma', 'turmas', 'aluno_turma', 'tiposcertidoes', 'certidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes', 'status', 'necessidades'));
+
 //        $turma = Turma::where('id', '1')->get()->first();
 //        echo "{$turma->TURMA} : ";
 //        $alunos = $turma->alunos;
 //        foreach ($alunos as $aluno) {
 //            echo "{$aluno->NOME} - ";
 //        }
-        //
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
         //
 //        $aluno = Aluno::where('id', '1')->get()->first();
 //        echo "{$aluno->NOME} : ";
@@ -471,9 +478,11 @@ class AlunoController extends Controller {
         $campo_final = "Desvinculou " . $aluno->NOME . " da(s) Turma(s): $campo $campo_3 $campo_2 ";
         //dd($campo_final);
         /* dd(DB::getQueryLog()); */
+        //Traz o usuario
+        $usuario = \Auth::user()->name;
 //         Faz o Log
         $insert = $this->log->create([
-            'USUARIO' => 'ANDRÉ',
+            'USUARIO' => $usuario,
             'TABELA' => 'ALUNOS',
             'ALTERAR' => 'SIM',
             'ACAO' => "$campo_final",

@@ -27,6 +27,7 @@ class CreateAlunoTurmasTable extends Migration {
             $table->string('OUVINTE')->nullable();
             $table->string('EXCLUIDO')->nullable();
             $table->string('EXCLUIDO_PASTA')->nullable();
+            $table->string('ATA')->nullable();
             $table->timestamps();
         });
     }
