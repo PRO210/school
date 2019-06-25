@@ -5,21 +5,33 @@ namespace App\Models\Alunos;
 use App\Models\Turmas\Turma;
 use App\Models\AlunosTurmas\AlunoTurma;
 use App\Models\Alunos\AlunoClassificacao;
+use App\Models\Alunos\AlunoSolicitacao;
 use Illuminate\Database\Eloquent\Model;
 
 class Aluno extends Model {
-   
-    //Traz o relacionamento entre Alunos e Turmas através da tabela 'aluno_turmas'
+
+//Alimenta a View soliciações de tranferencias
+    public function transferidos() {
+        return $this->belongsToMany(Turma::class, 'aluno_solicitacaos')->withPivot(['SOLICITANTE'])->withPivot(['TRANSFERENCIA_STATUS'])->withPivot(['aluno_classificacao_id']);
+    }
+
+    public function status() {
+        return $this->belongsToMany(AlunoClassificacao::class, 'aluno_solicitacaos');
+    }
+//
+//
+//    Traz o relacionamento entre Alunos e Turmas através da tabela 'aluno_turmas'
     public function turmas() {
         return $this->belongsToMany(Turma::class, 'aluno_turmas')->withPivot(['Aluno_Classificacao_id'])->withPivot(['OUVINTE']);
     }
-
+//
     //Traz o relacionamento entre Alunos e Status através da tabela 'aluno_turmas'
-
     public function classificacaos() {
         return $this->belongsToMany(AlunoClassificacao::class, 'aluno_turmas');
-    }  
-    
+    }
+//
+
+
     protected $fillable = ['INEP', 'NOME', 'NASCIMENTO', 'CERTIDAO_CIVIL', 'MODELO_CERTIDAO', 'MATRICULA_CERTIDAO',
         'DADOS_CERTIDAO', 'NUMERO_RG', 'ORGAO_EXPEDIDOR_RG', 'EXPEDICAO_CERTIDAO', 'NATURALIDADE', 'ESTADO', 'NACIONALIDADE',
         'SEXO', 'NIS', 'BOLSA_FAMILIA', 'SUS', 'NECESSIDADES_ESPECIAIS', 'COR', 'FONE', 'FONE_II', 'MAE', 'PROF_MAE', 'PAI',
@@ -31,4 +43,7 @@ class Aluno extends Model {
 //    protected $guarded = [
 //        'ID'
 //    ];
+//    public function status() {
+//        return $this->belongsToMany(AlunoClassificacao::class, 'aluno_solicitacaos');
+//    }
 }

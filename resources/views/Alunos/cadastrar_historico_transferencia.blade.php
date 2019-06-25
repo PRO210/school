@@ -9,12 +9,15 @@
     </head>
     <body>
         @include('Alunos.alunos_css');
-        @include('Menu.menu');
+        @include('Menu.menu')
+
         <div class="container-fluid"> 
-            <form class="form-inline" action="" method="post" name="form">
-                {{-- {!! Form::open(['route' => 'alunos.store','class' => 'form-control','name' => 'form1'])!!} --}}    
-                <input type="hidden" class="form-control" id="" name="inputId" value="" >
-                <h4 style="text-align: center">HISTÓRICO DO(A) ALUNO(A): &nbsp;&nbsp; {{$aluno->NOME}}&nbsp;&nbsp;<b></b>Turma Atual:&nbsp;&nbsp;{{$turma_atual}}  <b></b></h4>
+            <form name="cadastrar" action="{{url('aluno/solicitação/transferência')}}" method="post" class="form-horizontal btn-block" > 
+                <input type="hidden" name="_token" value="{{csrf_token()}}">                
+                <input type="hidden" class="form-control"  name="aluno_id" value="{{$id}}" >
+                <input type="hidden" class="form-control"  name="turma_id" value="{{$id_turma}}" >
+                <input type="hidden" class="form-control"  name="aluno_classificacao_id" value="{{$id_classificacao}}" >
+                <h3 style="text-align: center">HISTÓRICO DO(A) ALUNO(A): &nbsp;&nbsp; {{$aluno->NOME}}&nbsp;&nbsp;<b></b>Turma Atual:&nbsp;&nbsp;{{$turma_atual}}  <b></b></h3>
                 <div class="col-md-6">                   
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -106,20 +109,20 @@
                         </tr>
                         <tr>
                             <th colspan="3">
-                                <input style="width: 100%" type="text" name="inputSolicitante" id="idSolicitante" placeholder="Nome do(a) Solicitante" onkeyup="maiuscula(this)">
+                                <input style="width: 100%" type="text" name="SOLICITANTE" id="" placeholder="Nome do(a) Solicitante" onkeyup="maiuscula(this)">
                             </th>
                         </tr>
                         <tr>
                             <th colspan="3">
-                                <input id="idData" type="date" name="inputData">
+                                <input id="idData" type="date" name="DATA_SOLICITACAO" >
                             </th>
                         </tr>
                         <tr>
                             <th >&nbsp;
-                                {!! Form:: submit('Pesquiar',['class' => 'btn btn-success btn-block','name' =>'botao','value'=>'pesquisar','onclick'=>'return confirmarAtualizacao()'])!!}
+                                {!! Form:: submit('pesquiar',['class' => 'btn btn-success btn-block','name' =>'botao', 'onclick'=>'return confirmarAtualizacao()'])!!}
                             </th>
                             <th>&nbsp;&nbsp; 
-                                {!! Form:: submit('Consultar',['class' => 'btn btn-success btn-block','name' =>'botao','value'=>'consultar','onclick'=>'return confirmarAtualizacao()'])!!}  
+                                {!! Form:: submit('solicitar',['class' => 'btn btn-primary btn-block','name' =>'botao', 'onclick'=>'return confirmarAtualizacao()'])!!}  
                             </th>
                             <th>&nbsp;&nbsp;<button type='reset' value='' name ='botao' class='btn btn-danger btn-block '>&nbsp;&nbsp;Limprar&nbsp;&nbsp;</button></th>
                         </tr>

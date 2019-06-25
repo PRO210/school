@@ -3,6 +3,7 @@
 namespace App\Models\Turmas;
 
 use App\Models\Alunos\Aluno;
+use App\Models\Alunos\AlunoSolicitacao;
 use Illuminate\Database\Eloquent\Model;
 
 class Turma extends Model {
@@ -11,6 +12,7 @@ class Turma extends Model {
     public function alunos() {
         return $this->belongsToMany(Aluno::class, 'aluno_turmas');
     }
+    
 
 //    public function alunos_cursando() {
 //        return $this->belongsToMany(Aluno::class, 'aluno_turmas')->withPivot('STATUS')->wherePivot('STATUS', 'cursando');
@@ -19,4 +21,9 @@ class Turma extends Model {
 //    public function alunos_reprovados() {
 //        return $this->belongsToMany(Aluno::class, 'aluno_turmas')->withPivot('STATUS')->wherePivot('STATUS', '!=', 'cursando');
 //    }
+     //Adiciona os pedidos de transferências
+    public function transferencias() {
+        return $this->belongsToMany(Aluno::class, 'aluno_solicitacaos');
+    }
+    
 }

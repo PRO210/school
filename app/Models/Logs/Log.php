@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
 {
-     protected $fillable = ['USUARIO', 'TABELA', 'CADASTRAR', 'ALTERAR', 'EXCLUIR','ACAO',
+     protected $fillable = ['USUARIO', 'TABELA', 'DETALHES_ACAO', 'ACAO',
         
     ];
 }

@@ -18,7 +18,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alunos <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{route ('alunos.index')}}">Listar os Alunos</a></li>           
+                        <li><a href="{{route ('alunos.index')}}">Listar Todos os Alunos</a></li>           
+                        <li><a href="{{route ('alunos.create')}}">Cadastrar Novato</a></li>           
+                        <li><a href="{{url ('alunos/solicitações/transferência')}}">Transferências Solicitadas</a></li>
                         <li><a href="{{url('alunos/logs')}}"> Ações Passadas</a></li>
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
@@ -32,12 +34,12 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @guest
-                <li class="nav-item">
+<!--                <li class="nav-item">
                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                </li>
-                <li class="nav-item">
+                </li>-->
+<!--                <li class="nav-item">
                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                </li>
+                </li>-->
                 @else
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

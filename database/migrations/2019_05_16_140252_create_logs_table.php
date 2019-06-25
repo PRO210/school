@@ -16,10 +16,8 @@ class CreateLogsTable extends Migration {
             $table->increments('id');
             $table->string('USUARIO')->nullable();
             $table->string('TABELA')->nullable();
-            $table->string('CADASTRAR')->nullable();
-            $table->string('ALTERAR')->nullable();
-            $table->string('EXCLUIR')->nullable();
-            $table->text('ACAO')->nullable();
+            $table->string('ACAO')->nullable();
+            $table->text('DETALHES_ACAO')->nullable();
             $table->timestamps();
         });
     }

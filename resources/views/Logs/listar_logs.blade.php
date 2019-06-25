@@ -54,11 +54,9 @@ $(document).ready(function () {
                                 </div>
                             </th>                     
                             <th>USUÁRIO</th>                          
-                            <th>CADASTRAR</th>
-                            <th>ALTERAR</th>                         
-                            <th>EXCLUIR</th>
-                            <th>DATA</th>
                             <th>AÇÃO</th>
+                            <th>DATA</th>    
+                            <th>DETALHES DA AÇÃO</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,12 +66,10 @@ $(document).ready(function () {
                             <td>                               
                                 <span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$log->ID}}'></span>
                                 &nbsp;<span id = "nome">{{$log->USUARIO}}</span>
-                            </td>
-                            <td>{{$log->CADASTRAR}}</td>
-                            <td>{{$log->ALTERAR}}</td>                  
-                            <td>{{$log->EXCLUIR}}</td>                  
+                            </td>                                          
+                            <td>{{$log->ACAO}}</td>                  
                             <td>{{\Carbon\Carbon::parse($log->NASCIMENTO)->format('d/m/Y h:i')}}</td>                           
-                            <td style="white-space: normal">{{$log->ACAO}}</td>
+                            <td style="white-space: normal">{{$log->DETALHES_ACAO}}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -81,11 +77,9 @@ $(document).ready(function () {
                         <tr>      
                             <th></th>                
                             <th>USUÁRIO</th>
-                            <th>CADASTRAR</th>
-                            <th>ALTERAR</th>                         
-                            <th>EXCLUIR</th>
-                            <th>DATA</th>    
                             <th>AÇÃO</th>
+                            <th>DATA</th>    
+                            <th>DETALHES DA AÇÃO</th>
                         </tr>
                     </tfoot>        
                 </table>                 

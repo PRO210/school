@@ -11,13 +11,19 @@ Route::get('/{id}/aluno/mostrar/{id_turma}', 'Alunos\AlunoController@show')->nam
 Route::get('/{id}/aluno/turma', 'Alunos\AlunoController@showturma')->name('edição/turma');
 Route::get('/{id}/aluno/{id_turma}', 'Alunos\AlunoController@editar')->name('edição');
 Route::get('/{id}/historico/{id_turma}', 'Alunos\AlunoController@historico')->name('histórico');
-
-
-
 Route::post('/alunos/update/turma', 'Alunos\AlunoController@update_turma');
+//
+//Aluno Solicitações
+Route::post('/aluno/solicitação/transferência', 'Alunos\SolicitacaoController@store');
+Route::resource('/alunos/solicitações/transferência', 'Alunos\SolicitacaoController');
+Route::get('/alunos/solicitações/transferência/show/{id}', 'Alunos\SolicitacaoController@show');
+Route::post('/alunos/solicitações/transferência/editar', 'Alunos\SolicitacaoController@editar');
+Route::post('/alunos/solicitações/transferência/update', 'Alunos\SolicitacaoController@update');
 
 
 //Route::get('/export', 'ExportController@export')->name('invoices');
+
+
 
 
 

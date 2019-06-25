@@ -11,7 +11,7 @@
             </head>
             <body>
                 @include('Alunos.alunos_css');
-                @include('Menu.menu');
+                @include('Menu.menu')
                 <div class="container-fluid">
                     <h4 style="text-align:center;font">{{$title or 'Gestão de Alunos'}}</h4>
 
@@ -25,6 +25,7 @@
                     {{-- // --}}
                     @if (isset($aluno))
                     {!! Form::model($aluno,['route' => ['alunos.update',$aluno->id],'class' => 'form-horizontal','name' => 'form1','method'=> 'put'])!!}
+                    <!--//-->
                     {!! Form::hidden('TURMA_ATUAL', "$turma->id") !!}
                     {!! Form::hidden('STATUS_ATUAL', "$aluno_turma->aluno_classificacao_id") !!}
                     @else
