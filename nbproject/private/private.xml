@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Menu/menu.blade.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/routes/web.php</file>
-            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/listar_transferidos.blade.php</file>
-            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/listar_transferidos_json.php</file>
-            <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Alunos/SolicitacaoController.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/listar_disciplinas.blade.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Alunos/AlunoController.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Disciplinas/DisciplinaController.php</file>
         </group>
     </open-files>
 </project-private>

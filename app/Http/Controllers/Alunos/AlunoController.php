@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Alunos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+
 use App\Models\Alunos\Aluno;
 use App\Models\Alunos\AlunoClassificacao;
 use App\Models\Turmas\Turma;

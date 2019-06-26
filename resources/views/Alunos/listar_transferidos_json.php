@@ -1,5 +1,5 @@
 <!-- Modal -->          <!-- Modal -->   <!-- Modal -->          <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="myModal" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
@@ -108,10 +108,10 @@
                         </div>                            
                     </div>
                 </div>   
-                <button type="submit" name ="botao" value="unico"  class="btn btn-success btn-block" onclick="return confirmarAtualizacao()" >Salvar as Alterações </button> 
+                <button type="submit" name ="botao" value="unico"  class="btn btn-success btn-block" onclick="return confirmar()" >Salvar as Alterações </button> 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Voltar para as Solicitações</button>
             </div>
         </div>
     </div>
@@ -195,6 +195,12 @@
         } else {
             $('#btEditBloc').attr('disabled', 'disabled');
         }
+        //
+        if (total === 1) {
+            $('.btvalida').removeAttr('disabled');
+        } else {
+            $('.btvalida').attr('disabled', 'disabled');
+        }
     });
 </script>
 <script type="text/javascript">
@@ -212,4 +218,23 @@
             }
         });
     });
+</script>
+<script type="text/javascript">
+    // INICIO FUNÇÃO DE MASCARA MAIUSCULA
+    function maiuscula(z) {
+        v = z.value.toUpperCase();
+        z.value = v;
+    }
+</script>
+<!--Confimar se pode Salvar-->
+<script type="text/javascript">
+    function confirmar() {
+        var u = $('#usuario_logado').val();
+        var r = confirm("Já Posso Enviar " + u + "? ");
+        if (r == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 </script>

@@ -22,3 +22,13 @@ function maiuscula(z) {
     v = z.value.toUpperCase();
     z.value = v;
 }
+//Confirmar se pode salvar
+function confirmar() {
+    var u = $('#usuario_logado').val();
+    var r = confirm("Já Posso Enviar " + u + "? ");
+    if (r == true) {
+        return true;
+    } else {
+        return false;
+    }
+}

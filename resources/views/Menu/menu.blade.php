@@ -16,7 +16,7 @@
                 <li><a href="#contact">Contact</a></li>
 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alunos <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alunos<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route ('alunos.index')}}">Listar Todos os Alunos</a></li>           
                         <li><a href="{{route ('alunos.create')}}">Cadastrar Novato</a></li>           
@@ -30,26 +30,41 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Disciplinas<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route ('disciplinas.index')}}">Listar Disciplinas</a></li>    
+
+                    </ul>
+                </li>
             </ul>
+
+
+
+
+
+
+
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @guest
-<!--                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                </li>-->
-<!--                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                </li>-->
+                <!--                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                </li>-->
+                <!--                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>-->
                 @else
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
+                    <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('logout') }}"
                            onclick="event.preventDefault();
-                                               document.getElementById('logout-form').submit();">
+                                   document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
 

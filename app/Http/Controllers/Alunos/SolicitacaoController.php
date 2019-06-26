@@ -215,7 +215,7 @@ class SolicitacaoController extends Controller {
                 }
                 $pivot .= "$campo_pivot $X $valor / ";
             }
-            $campo_final = "Alterou o Pedido de Tranferência de " . $aluno->NOME . " da TURMA: " . $turma->TURMA . " em : $pivot";
+            $campo_final = "Alterou o Pedido de Tranferência de " . $aluno->NOME . " da TURMA: " . $turma->TURMA . " " . $turma->UNICO ." em : $pivot";
 //
             if ($turma_nova) {
 //          Traz o usuário

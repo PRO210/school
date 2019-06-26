@@ -521,9 +521,9 @@
                         <div class="form-group col-sm-12">                         
                             <div class="col-sm-4 col-sm-offset-2">
                                 @if (isset($aluno))
-                                {!! Form:: submit('Atualizar os Dados',['class' => 'btn btn-success btn-block','onclick'=>'return confirmarAtualizacao()'])!!}  
+                                {!! Form:: submit('Atualizar os Dados',['class' => 'btn btn-success btn-block','onclick'=>'return confirmar()'])!!}  
                                 @else
-                                {!! Form:: submit('Cadastrar',['class' => 'btn btn-success btn-block','onclick'=>'return confirmarAtualizacao()'])!!}  
+                                {!! Form:: submit('Cadastrar',['class' => 'btn btn-success btn-block','onclick'=>'return confirmar()'])!!}  
                                 @endif
                             </div> 
                             <div class="col-sm-4 col-sm-offset-2">                            

@@ -19,6 +19,10 @@ Route::resource('/alunos/solicitações/transferência', 'Alunos\SolicitacaoCont
 Route::get('/alunos/solicitações/transferência/show/{id}', 'Alunos\SolicitacaoController@show');
 Route::post('/alunos/solicitações/transferência/editar', 'Alunos\SolicitacaoController@editar');
 Route::post('/alunos/solicitações/transferência/update', 'Alunos\SolicitacaoController@update');
+//
+//Disciplinas
+Route::resource('/disciplinas', 'Disciplinas\DisciplinaController');
+Route::post('/disciplinas/update/bloco', 'Disciplinas\DisciplinaController@updatebloco');
 
 
 //Route::get('/export', 'ExportController@export')->name('invoices');

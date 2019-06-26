@@ -12,6 +12,7 @@
             .dropdown-menu > li > a {padding-bottom: 4px;}
             .checkbox{display: inline-block !important;} 
             @media (max-width: 720px) {#nome{white-space: normal};
+            @media (max-width: 720px) {.btvalida{margin-bottom: 12px !important};
            .spb{ margin-right: 12px !important;};
           
             </style>            
@@ -67,18 +68,18 @@
                 {{-- {!! Form::open(['route' => 'alunos.store','class' => 'form-control','name' => 'form1'])!!} --}}      
                 <input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}"> 
                 <div class = "row" style = "margin-bottom:12px">
-                    <div class="col-sm-2">
+                    <div class="col-sm-2" >
                         <!--<a href="" target="_self"><button type="submit" value="" class="btn btn-warning btn-block botoes"><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Capa da Transferência</button></a>-->      
-                        <button type="submit" value="" class="btn btn-warning btn-block botoes"><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Capa da Transferência</button>    
+                        <button type="submit" style="margin-bottom: 12px" value="" class="btn btn-warning btn-block btvalida" disabled=""><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Capa da Transferência</button>    
                     </div>
                     <div class="col-sm-3">
-                        <a href="solicitacao_transferencia.php"><button type="button" value="" class="btn btn-primary btn-block botoes"><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Notas para a Transferência</button></a>      
+                        <a href="solicitacao_transferencia.php"><button type="button" style="margin-bottom: 12px" value="" class="btn btn-primary btn-block  btvalida" disabled=""><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Notas para a Transferência</button></a>      
                     </div>
                     <div class="col-sm-4">                
-                        <button type="button" class="btn btn-success btn-block" id="button" data-toggle="modal" data-target="#myModal" onclick="json()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Atualizar a Transferência</button>
+                        <button type="button" style="margin-bottom: 12px" class="btn btn-success btn-block btvalida"  data-toggle="modal" data-target="#myModal" disabled="" onclick="json()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Atualizar a Transferência</button>
                     </div>
                     <div class="col-sm-3">
-                        <button type="submit" name ="botao" value="retirar" id="button2" class="btn btn-danger btn-block" onclick="return confirmarExclusao()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Retirar Pedido De Transferência</button>
+                        <button type="submit" style="margin-bottom: 12px" name ="botao" value="retirar" class="btn btn-danger btn-block btvalida" disabled="" onclick="return confirmarExclusao()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Retirar Pedido De Transferência</button>
                     </div>
                 </div>
                 <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
@@ -181,7 +182,7 @@
                             "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
 echo""
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
-."<button type='submit' name ='botao' value='varios'  class='btn btn-primary btn-block' style= 'display: inline-block !important' onclick='return confirmarAtualizacao()' id = 'btEditBloc' title = 'Selecione ao menos um aluno(a)' disabled>Atualizar Vários</button>" ;
+."<button type='submit' name ='botao' value='varios'  class='btn btn-primary btn-block ' style= 'display: inline-block !important; width:auto !important;' onclick='return confirmarAtualizacao()' id = 'btEditBloc' title = 'Selecione ao menos um aluno(a)' disabled>Atualizar Vários</button>" ;
 ?>@endcan      ",
                             "zeroRecords": "Nenhum aluno encontrado",
                             "info": "Mostrando pagina _PAGE_ de _PAGES_",
