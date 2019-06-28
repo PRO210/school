@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Disciplinas;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Disciplinas\Disciplina;
+use Illuminate\Support\Facades\DB;
 
 class DisciplinaController extends Controller {
 
@@ -31,7 +32,8 @@ class DisciplinaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+
+        return 'create';
     }
 
     /**
@@ -86,9 +88,36 @@ class DisciplinaController extends Controller {
     }
 
     public function updatebloco(Request $request) {
+
+
+        $title = "Gerenciamento de Disciplinas";
+        $disciplinas = $this->disciplina->whereIn('id', $request->aluno_selecionado)->get();
+
+        return view('Disciplinas.atualizar_varias_disciplinas', compact('disciplinas', 'title'));
+    }
+
+    public function updateblocoserver(Request $request) {
+        //dd($request);
         
-//        return redirect()->route('disciplinas.index')->with('msg','Parabéns');
-        return 'updatebloco';
+        foreach ($request->aluno_selecionado as $id) {
+
+
+            foreach ($request->BOLETIM_ORD as $key => $boletim_ord) {
+
+                if ($boletim_ord != "0") {
+
+                    $disciplinas = \DB::table('disciplinas')
+                            ->where('id', $id)
+                            ->update(['BOLETIM' => $request->BOLETIM[$key], 'BOLETIM_ORD' => $request->BOLETIM_ORD[$key]]);
+                }
+            }
+        }
+        //
+        if ($disciplinas) {
+            return redirect()->route('disciplinas.index')->with('msg', 'Alterações Salvas com Sucesso');
+        } else {
+            redirect()->route('disciplinas.index')->with('msg', 'Falha em Salvar as Alterações');
+        }
     }
 
 }

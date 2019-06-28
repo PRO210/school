@@ -23,6 +23,7 @@ Route::post('/alunos/solicitações/transferência/update', 'Alunos\SolicitacaoC
 //Disciplinas
 Route::resource('/disciplinas', 'Disciplinas\DisciplinaController');
 Route::post('/disciplinas/update/bloco', 'Disciplinas\DisciplinaController@updatebloco');
+Route::post('/disciplinas/update/bloco/server', 'Disciplinas\DisciplinaController@updateblocoserver');
 
 
 //Route::get('/export', 'ExportController@export')->name('invoices');

@@ -54,7 +54,7 @@
                 @endif
             </script>  
 
-            <div class="container-fluid">     
+            <div class="container">     
 
                 {{-- {{$impressao}}imprimir do php --}}
                 {{-- {!!$xss!!} imprimir do java --}}          
@@ -89,8 +89,9 @@
                                     &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                     </ul>                              
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$disciplina->id}}'></span>
-                                    &nbsp;<span id = "nome">{{$disciplina->DISCIPLINA}}</span>
+                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]'  class = 'checkbox' id="{{$disciplina->id}}" value='{{$disciplina->id}}'>
+                                     <label class="form-check-label" for="{{$disciplina->id}}">{{$disciplina->DISCIPLINA}}</label>
+                                    </span>
                                 </div>                           
                             </td>  
                                                
@@ -125,7 +126,11 @@
                             }],
                         "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
                         "language": {
-                            "lengthMenu": "_MENU_",
+                            "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
+echo "&nbsp;<a href='disciplinas/create' target='_self' class = 'btn btn-success' ><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
+."&nbsp;<button type='submit' name ='botao' value='varios'  class='btn btn-primary btn-block ' style= 'display: inline-block !important; width:auto !important;' onclick='return confirmarAtualizacao()' id = 'btEditBloc' title = 'Selecione ao menos uma Disciplina' disabled>Atualizar Vários</button>" 
+;
+?>@endcan      ",
                             "zeroRecords": "Nenhum aluno encontrado",
                             "info": "Mostrando pagina _PAGE_ de _PAGES_",
                             "infoEmpty": "Sem registros",
@@ -157,5 +162,6 @@
                     });
                 });
             </script>
+            <script src="{{url('js/disciplinas/listar_disciplinas.js')}}" type="text/javascript"></script>
         </body>
     </html>

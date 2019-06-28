@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Menu/menu.blade.php</file>
-            <file>file:/opt/lampp/htdocs/laravel/school/routes/web.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/listar_disciplinas.blade.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/tabela_disciplinas.blade.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Alunos/AlunoController.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Disciplinas/DisciplinaController.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/atualizar_varias_disciplinas.blade.php</file>
         </group>
     </open-files>
 </project-private>
