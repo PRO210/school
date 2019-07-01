@@ -7,13 +7,13 @@
         <style>
             @media (max-width: 790px) {#FONE_II{margin-top: 12px};                                    
                                        @media (max-width: 790px) {#bt_voltar{margin-top: 12px};                                    
-                                       </style>
+        </style>
             </head>
             <body>
                 @include('Alunos.alunos_css');
                 @include('Menu.menu')
                 <div class="container-fluid">
-                    <h4 style="text-align:center;font">{{$title or 'Gestão de Alunos'}}</h4>
+                    <h4 style="text-align:center;">{{$title or 'Gestão de Alunos'}}</h4>
 
                     @if (isset($errors) && count($errors) > 0)
                     <div class="alert alert-danger">

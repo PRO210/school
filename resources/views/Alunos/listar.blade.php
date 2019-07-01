@@ -22,37 +22,7 @@
                 });
             </script>            
             <h3 style="text-align:center; margin-top: 36px ">Todos os Alunos </h3>
-
-            @if(session('msg'))
-            <!--Modal-->                <!--Modal-->            <!--Modal-->        
-            <div class="modal fade" id="exemplomodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                            <h4 class="modal-title" id="gridSystemModalLabel">Avisos</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="alert alert-success" style=" color:black" >
-                                {{session('msg')}}
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <!--<button type="button" class="btn btn-danger " data-dismiss="modal">Prosseguir</button>-->
-                        </div>
-                    </div>
-                </div>
-            </div> 
-            <script type='text/javascript'>
-                $(document).ready(function () {
-                    $('#exemplomodal').modal('show');
-                });
-                var intervalo = window.setInterval(fechar, 5000);
-                function fechar() {
-                    $('.modal').modal('hide');
-                }
-                @endif
-            </script>  
+            @include('msg')
 
             <div class="container-fluid">      
 
@@ -107,7 +77,7 @@
                                         <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
                                         <li><a href='folha_re_matricula.php?id={{''}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
                                         <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
-                                        <li><a href="{{route('edição',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href="{{route('edição/aluno',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
                                         <li><a href="{{route('edição/turma',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>
                                         <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
                                         @endcan

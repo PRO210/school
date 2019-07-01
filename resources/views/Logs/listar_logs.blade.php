@@ -55,6 +55,7 @@ $(document).ready(function () {
                             </th>                     
                             <th>USUÁRIO</th>                          
                             <th>AÇÃO</th>
+                            <th>TABELA</th>
                             <th>DATA</th>    
                             <th>DETALHES DA AÇÃO</th>
                         </tr>
@@ -68,7 +69,8 @@ $(document).ready(function () {
                                 &nbsp;<span id = "nome">{{$log->USUARIO}}</span>
                             </td>                                          
                             <td>{{$log->ACAO}}</td>                  
-                            <td>{{\Carbon\Carbon::parse($log->NASCIMENTO)->format('d/m/Y h:i')}}</td>                           
+                            <td>{{$log->TABELA}}</td>                  
+                            <td>{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}</td>                           
                             <td style="white-space: normal">{{$log->DETALHES_ACAO}}</td>
                         </tr>
                         @endforeach
@@ -78,6 +80,8 @@ $(document).ready(function () {
                             <th></th>                
                             <th>USUÁRIO</th>
                             <th>AÇÃO</th>
+                            <th>TABELA</th>
+'
                             <th>DATA</th>    
                             <th>DETALHES DA AÇÃO</th>
                         </tr>

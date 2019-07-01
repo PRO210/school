@@ -36,11 +36,17 @@ php artisan make:model Models\\AlunosTurmas\\AlunoTurma -m (OBS: A migration vai
 php artisan make:model Models\\Escola\\Escola -m
 php artisan make:model Models\\Alunos\\AlunoSolicitacao -m
 //
+//Servidores
+php artisan make:model Models\\Servidores\\Servidor -m
+php artisan make:controller Servidores\\Servidor --resource
+//
+//
 //Disciplinas
 php artisan make:model Models\\Disciplinas\\Disciplina -m
 php artisan make:controller Disciplinas\\DisciplinaController --resource
 //
-//
+//Disciplinas_Professor
+php artisan make:model Models\\DisciplinasTurmas\\DisciplinaTurma -m
 
 //
 //Criação de Login
@@ -49,5 +55,7 @@ php artisan make:auth
 php artisan make:model Role -m
 php artisan make:model Permission -m
 php artisan make:policy AlunoPolicy
+//
+//
 
 

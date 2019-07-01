@@ -49,3 +49,14 @@ function validaCheckbox() {
 //        }
 //    }
 //}
+//Confirmar se pode deletar
+function deletar() {
+    var u = $('#usuario').val();
+    var r = confirm("Já Posso Enviar " + u + "? ");
+
+    if (r == true) {
+        return true;
+    } else {
+        return false;
+    }
+}

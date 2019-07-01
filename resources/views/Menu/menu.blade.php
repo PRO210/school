@@ -21,7 +21,6 @@
                         <li><a href="{{route ('alunos.index')}}">Listar Todos os Alunos</a></li>           
                         <li><a href="{{route ('alunos.create')}}">Cadastrar Novato</a></li>           
                         <li><a href="{{url ('alunos/solicitações/transferência')}}">Transferências Solicitadas</a></li>
-                        <li><a href="{{url('alunos/logs')}}"> Ações Passadas</a></li>
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
@@ -33,16 +32,12 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Disciplinas<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{route ('disciplinas.index')}}">Listar Disciplinas</a></li>    
+                        <li><a href="{{route ('disciplinas.index')}}">Listar Disciplinas</a></li>  
+                        <li><a href="{{route ('disciplinas.create')}}">Cadastrar Disciplina</a></li> 
 
                     </ul>
                 </li>
             </ul>
-
-
-
-
-
 
 
             <ul class="nav navbar-nav navbar-right">
@@ -55,25 +50,26 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>-->
                 @else
-                <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }} <span class="caret"></span>
-                    </a>
+                <li class="dropdown">                    
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}&nbsp;<span class="caret"></span></a>
                     <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
+                    <ul class="dropdown-menu">
+                        <li><a class="" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+                            <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                        <li><a href="{{route ('logs.index')}}">Ações Passadas</a></li>  
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                   document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </div>
+                    </ul>
                 </li>
                 @endguest
+                
+
+
             </ul>
         </div><!--/.nav-collapse -->
     </div>

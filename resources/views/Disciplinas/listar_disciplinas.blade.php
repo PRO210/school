@@ -55,7 +55,6 @@
             </script>  
 
             <div class="container">     
-
                 {{-- {{$impressao}}imprimir do php --}}
                 {{-- {!!$xss!!} imprimir do java --}}          
 
@@ -67,17 +66,20 @@
 
                             <th> 
                                 <div class='dropdown'>
-                                    <span><input type='checkbox'  class = 'selecionar'/></span>
+                                    @if($obs == "")                                   
+                                    @else
+                                    <span><input type='checkbox'  class = 'selecionar' /></span>                                  
                                     &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                         <li><a><button type='submit' value='basica' name = 'botao' class='btn btn-link' onclick= 'return validaCheckbox()'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'></span></button>Básica</a></li>
                                         <li><a><button type='submit' value='geral' name = 'botao' class='btn btn-link '  onclick= 'return validaCheckbox()'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'></span></button>Geral</a></li>
                                     </ul>
+                                    @endif
                                 </div>
                             </th>   
 
                             <th>DISCIPLINA</th>
-                          
+
                         </tr>
                     </thead>
                     <tbody>                                   
@@ -86,15 +88,22 @@
                             <td></td>       
                             <td>
                                 <div class="dropdown">
-                                    &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
+                                    &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'  ></span>
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
+                                        @can('EDITAR_ALUNOS')
+                                        <li><a href="{{route('edição',['id' => Crypt::encrypt($disciplina->id)])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href="{{route('deletar',['id' => Crypt::encrypt($disciplina->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-remove text-danger' aria-hidden='true' onclick="return deletar()">&nbsp;Deletar a Disciplina</span></a></li>
+
+                                        @endcan
                                     </ul>                              
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]'  class = 'checkbox' id="{{$disciplina->id}}" value='{{$disciplina->id}}'>
-                                     <label class="form-check-label" for="{{$disciplina->id}}">{{$disciplina->DISCIPLINA}}</label>
+                                    &nbsp;&nbsp;
+
+                                    <span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' id="{{$disciplina->id}}" value='{{$disciplina->id}}'>
+                                        <label class="form-check-label" style="margin-bottom: 0px !important;" for="{{$disciplina->id}}">{{$disciplina->DISCIPLINA}}</label>
                                     </span>
                                 </div>                           
                             </td>  
-                                               
+
                         </tr>                                        
                         @endforeach                     
                     </tbody>
@@ -102,12 +111,12 @@
                         <tr>  
                             <th></th>
                             <th>DISCIPLINA</th>
-                          
+
 
 
                         </tr>
                     </tfoot>        
-                </table>             
+                </table>                  
                 {!! Form:: close()!!}        
             </div>   
             <script>
@@ -127,8 +136,8 @@
                         "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
                         "language": {
                             "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
-echo "&nbsp;<a href='disciplinas/create' target='_self' class = 'btn btn-success' ><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
-."&nbsp;<button type='submit' name ='botao' value='varios'  class='btn btn-primary btn-block ' style= 'display: inline-block !important; width:auto !important;' onclick='return confirmarAtualizacao()' id = 'btEditBloc' title = 'Selecione ao menos uma Disciplina' disabled>Atualizar Vários</button>" 
+echo "&nbsp;<a href='disciplinas/create' target='_self' class = 'btn btn-success'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
+ . "&nbsp;<button type='submit' name ='botao' value='varios'  class='btn btn-primary btn-block ' style= 'display: inline-block !important; width:auto !important;' onclick='return confirmarAtualizacao()' id = 'btEditBloc' title = 'Selecione ao menos uma Disciplina' disabled>Atualizar Vários</button>"
 ;
 ?>@endcan      ",
                             "zeroRecords": "Nenhum aluno encontrado",

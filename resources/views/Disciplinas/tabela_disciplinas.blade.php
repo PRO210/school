@@ -7,7 +7,7 @@
         });
         //Data Table
         var table = $('#example').DataTable({
-            
+
             //
             "columnDefs": [{
                     "targets": 0,
@@ -63,3 +63,22 @@
         });
     });
 </script>
+<!--Botão Boletim-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btBoletim').click(function () {
+            var ativar = $("#btBoletim").hasClass("ativar");
+            if (ativar) {
+                $("#btBoletim").removeClass("btn-warning ativar");
+                $("#btBoletim").addClass("btn-primary desativar");
+                $(".BOLETIM").show('slow');
+                $('.BOLETIM_ORD').show('slow');
+            } else {
+                $("#btBoletim").removeClass("btn-primary desativar");
+                $("#btBoletim").addClass("btn-warning ativar");
+                $(".BOLETIM").hide('slow');
+                $('.BOLETIM_ORD').hide('slow');
+            }
+        });
+    });
+</script> 

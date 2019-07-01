@@ -35,28 +35,7 @@
                         <button type="submit" id="" class="btn btn-warning botoes btn-block BOLETIM" style="display: none">Salvar as Alterações</button>
                     </div>
                 </div>
-                <br>
-                <script type="text/javascript">
-                    $(document).ready(function () {
-                        $('#btBoletim').click(function () {
-                            var ativar = $("#btBoletim").hasClass("ativar");
-                            if (ativar) {
-
-                                $("#btBoletim").removeClass("btn-warning ativar");
-                                $("#btBoletim").addClass("btn-primay desativar");
-                                $(".BOLETIM").show('slow');
-                                $('.BOLETIM_ORD').show('slow');
-                                //                                   
-                            } else {
-
-                                $("#btBoletim").removeClass("btn-primay desativar");
-                                $("#btBoletim").addClass("btn-warning ativar");
-                                $(".BOLETIM").hide('slow');
-                                $('.BOLETIM_ORD').hide('slow');
-                            }
-                        });
-                    });
-                </script> 
+                <br>                
                 <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
                     <thead>
                         <tr> 

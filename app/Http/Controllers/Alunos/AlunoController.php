@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Alunos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
 use App\Models\Alunos\Aluno;
 use App\Models\Alunos\AlunoClassificacao;
 use App\Models\Turmas\Turma;
@@ -110,9 +109,9 @@ class AlunoController extends Controller {
                 'ACAO' => 'CADASTRAR',
                 'DETALHES_ACAO' => "$campo_final",
             ]);
-            return redirect()->route('alunos.index');
+            return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
-            return redirect()->route('alunos.create');
+            return redirect()->route('alunos.create')->with('msg', 'Falha em Salvar os Dados!');
         }
     }
 
@@ -480,9 +479,7 @@ class AlunoController extends Controller {
 
     //
     //
-    public function update_turma(Request $request) {
-//       
-
+    public function update_turma(Request $request) {//       
         $form = $request->except(['_token', '_method']);
 //       
         $alunos = Aluno::with('turmas', 'classificacaos')->where('id', Crypt::decrypt($request->id))->get();
@@ -535,7 +532,6 @@ class AlunoController extends Controller {
                 $campo_2 .= "$turma->TURMA " . "$turma->UNICO " . ',' . 'Status:' . " $status " . ',' . 'Ouvinte:' . " $ouvinte" . '/ ';
             }
         }
-
         if ($campo_2 == "") {
             $campo_2 = "";
             $campo_3 = "";
@@ -555,10 +551,10 @@ class AlunoController extends Controller {
             'DETALHES_ACAO' => "$campo_final",
         ]);
         //Redireciona
-        if ($insert) {
-            return redirect()->route('alunos.index');
+        if ($insert) {            
+            return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
-            return redirect()->route('alunos.create');
+            return redirect()->route('alunos.index')->with('msg_2', 'Falha em Salvar as Alterações!');
         }
     }
 
