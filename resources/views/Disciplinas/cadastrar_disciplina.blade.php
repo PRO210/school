@@ -28,11 +28,7 @@
                         {!!Form::label('Disciplina', 'Disciplina',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
                             {!! Form:: text('DISCIPLINA',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                        </div>
-                        {!!Form::label('Carga Horária', 'Carga Horária',['class' => 'col-sm-2 control-label'])!!}
-                        <div class="col-sm-4">
-                            {!! Form:: text('CARGA_HORARIA',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                        </div>                                       
+                        </div>                                                             
                     </div>
                 </div>
                 <div class="row">

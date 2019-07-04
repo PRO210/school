@@ -20,6 +20,7 @@
             </div>         
             @endif
             {!! Form::model($disciplina,['route' => ['disciplinas.update',Crypt::encrypt($disciplina->id)],'class' => 'form-horizontal','name' => 'form1','method'=> 'put'])!!}
+
             <div class="container-fluid">
                 <h4 style="text-align:center; margin-top: 36px">{{$title or 'Gestão de Disciplinas'}}</h4>
                 <div class="row">
@@ -27,11 +28,7 @@
                         {!!Form::label('Disciplina', 'Disciplina',['class' => 'col-sm-2 control-label'])!!}
                         <div class="col-sm-4">
                             {!! Form:: text('DISCIPLINA',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                        </div>
-                        {!!Form::label('Carga Horária', 'Carga Horária',['class' => 'col-sm-2 control-label'])!!}
-                        <div class="col-sm-4">                            
-                            {!! Form:: text('CARGA_HORARIA',null,['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
-                        </div>                         
+                        </div>                        
                     </div>
                 </div>
                 <div class="row">
@@ -65,6 +62,7 @@
                             <th>UNICO</th>
                             <th>ANO</th>
                             <th>CATEGORIA</th>                          
+                            <th>CARGA HORÁRIA</th>                          
                         </tr>
                     </thead>
                     <tbody>                              
@@ -84,6 +82,7 @@
                             <td>{{$turma->UNICO}}</td>
                             <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
                             <td>{{$turma->CATEGORIA}}</td>                          
+                            <td><input type="number" name="CARGA_HORARIA[]" min="0" value="{{$turma->pivot->CARGA_HORARIA}}"></td>                          
                         </tr>
                         @endforeach
                         @endforeach
@@ -108,7 +107,8 @@
                             <th>TURNO</th>
                             <th>UNICO</th>
                             <th>ANO</th>
-                            <th>CATEGORIA</th>                         
+                            <th>CATEGORIA</th>  
+                            <th>CARGA HORÁRIA</th>    
                         </tr>
                     </thead>
                     <tbody>                                   
@@ -126,6 +126,7 @@
                             <td>{{$turma->UNICO}}</td>
                             <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
                             <td>{{$turma->CATEGORIA}}</td>                          
+                            <td><input type="number" name="CARGA_HORARIA_DOIS[]" min="0" value=""></td>                          
 
                         </tr>
                         @endforeach

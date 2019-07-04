@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/listar_disciplinas.blade.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/cadastrar_disciplina.blade.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Disciplinas/DisciplinaController.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Disciplinas/editar_disciplina.blade.php</file>
         </group>
     </open-files>
 </project-private>

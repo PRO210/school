@@ -54,6 +54,7 @@ php artisan make:auth
 //
 php artisan make:model Role -m
 php artisan make:model Permission -m
+php artisan make:migration create_permissions_table
 php artisan make:policy AlunoPolicy
 //
 //

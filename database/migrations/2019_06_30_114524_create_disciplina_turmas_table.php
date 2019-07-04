@@ -13,15 +13,17 @@ class CreateDisciplinaTurmasTable extends Migration {
      */
     public function up() {
         Schema::create('disciplina_turmas', function (Blueprint $table) {
-            $table->increments('id');          
-            
+            $table->increments('id');
+
             $table->integer('turma_id')->unsigned();
             $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
 
             $table->integer('disciplina_id')->unsigned();
             $table->foreign('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
+            
+            $table->string('CARGA_HORARIA')->nullable();
 
-             $table->timestamps();
+            $table->timestamps();
         });
     }
 

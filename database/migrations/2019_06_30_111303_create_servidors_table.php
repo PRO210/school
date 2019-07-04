@@ -31,7 +31,7 @@ class CreateServidorsTable extends Migration {
             $table->string('CPF')->nullable();
             $table->string('FONE')->nullable();
             $table->string('FONE_II')->nullable();
-            $table->string('EMAIL')->unique()->nullable();
+            $table->string('EMAIL')->nullable();
             $table->string('MAE')->nullable();
             $table->string('PAI')->nullable();
             $table->string('ENDERECO')->nullable();

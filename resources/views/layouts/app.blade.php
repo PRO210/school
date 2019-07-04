@@ -22,7 +22,6 @@
         <script src="{{url('assets/js/jquery-3.1.1.min.js')}}" type="text/javascript"></script>
         <!-- Styles -->
 
-        @include('Alunos.alunos_css')
 
     </head>
     <body>
@@ -62,6 +61,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
     document.getElementById('logout-form').submit();">

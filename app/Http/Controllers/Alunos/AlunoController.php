@@ -45,7 +45,7 @@ class AlunoController extends Controller {
 
 //
     public function index() {
-        $title = "TRANFERÊNCIAS SOLICITADAS";
+        $title = "TODOS OS ALUNOS";
         $alunos = Aluno::with(['turmas', 'classificacaos'])->get();
 //        $alunoTeste = (Aluno::with(['turmas' => function($query) use($id_turma) {
 //                                $query->where('turma_id', $id_turma);

@@ -8,11 +8,12 @@ use App\Models\DisciplinasTurmas\DisciplinaTurma;
 
 class Disciplina extends Model
 {
-     protected $fillable = ['DISCIPLINA', 'CARGA_HORARIA',
+     protected $fillable = ['DISCIPLINA', 
         
     ];
      //Alimenta a View Editar_disciplina
     public function disciplinas_turmas() {
-        return $this->belongsToMany(Turma::class, 'disciplina_turmas');
+        return $this->belongsToMany(Turma::class, 'disciplina_turmas')->withPivot(['CARGA_HORARIA']);
     }
+    
 }

@@ -31,6 +31,8 @@
                             <a href="{{route ('alunos.index')}}">Listar os Alunos</a><br>
                             <a href="{{route ('alunos.create')}}">Cadastrar Aluno</a>
                             {{$usuario}}
+                            
+                            
                         </div>
                     </div>
                 </div>

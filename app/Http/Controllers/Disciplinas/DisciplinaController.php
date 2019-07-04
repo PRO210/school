@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Disciplinas\Disciplina;
 use App\Models\Logs\Log;
+use App\Models\Turmas\Turma;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\DisciplinaFormRequest;
 use Illuminate\Support\Facades\Crypt;
@@ -14,10 +15,11 @@ class DisciplinaController extends Controller {
 
     private $disciplina;
 
-    public function __construct(Disciplina $disciplina, Log $log) {
+    public function __construct(Disciplina $disciplina, Log $log, Turma $turma) {
 
         $this->disciplina = $disciplina;
         $this->log = $log;
+        $this->turma = $turma;
     }
 
 //
@@ -25,9 +27,17 @@ class DisciplinaController extends Controller {
     public function index() {
 
         $title = "DISCIPLINAS";
-        $disciplinas = $this->disciplina->all();
+        //$disciplinas = $this->disciplina->all();
+        $disciplinas = Disciplina::with(['disciplinas_turmas'])->get();
+//        foreach ($disciplinas as $disciplina) {
+//            echo $disciplina->DISCIPLINA ." - ";
+//            
+//            foreach ($disciplina->disciplinas_turmas as $turma) {
+//                  echo $turma->TURMA . $turma->pivot->CARGA_HORARIA ." , ";
+//            }
+//        }
         $obs = "";
-        //dd($disciplinas);
+        // dd($disciplinas);
         if (empty($disciplinas->DISCIPLINA)) {
             $obs = "disabled";
         }
@@ -56,7 +66,7 @@ class DisciplinaController extends Controller {
 //      Insere os dados
         $insert = $this->disciplina->create($form);
         //Recupera os dados inseridos
-        $campo_final = "Cadastrou a Disciplina  $request->DISCIPLINA de Carga Horária: $request->CARGA_HORARIA";
+        $campo_final = "Cadastrou a Disciplina  $request->DISCIPLINA";
 //      Redireciona
         if ($insert) {
             //Traz o usuário
@@ -70,7 +80,7 @@ class DisciplinaController extends Controller {
             ]);
             return redirect()->route('disciplinas.index')->with('msg', 'Alteraçaões Salvas com Sucesso!');
         } else {
-            return redirect()->back()->with('msg', 'Falha na operação');
+            return redirect()->back()->with('msg_02', 'Falha na operação');
         }
     }
 
@@ -96,16 +106,17 @@ class DisciplinaController extends Controller {
         $disciplina = $this->disciplina->find(Crypt::decrypt($id));
         $title = "EDIÇÃO DE DISCIPLINA";
         $disciplinas_turmas = Disciplina::with(['disciplinas_turmas'])->where('id', Crypt::decrypt($id))->get();
-        
-          $arrayTurmas[] = "";
+
+        $arrayTurmas[] = "";
         foreach ($disciplinas_turmas as $disciplina) {
             foreach ($disciplina->disciplinas_turmas as $turma_backup) {
                 array_push($arrayTurmas, $turma_backup->id);
             }
         }
         array_shift($arrayTurmas);
+        //dd($arrayTurmas);
         $turmas_base = DB::table('turmas')->whereNotIn('id', $arrayTurmas)->get();
-        return view('Disciplinas.editar_disciplina', compact('disciplinas_turmas', 'title', 'sim_nao','disciplina','turmas_base'));
+        return view('Disciplinas.editar_disciplina', compact('disciplinas_turmas', 'title', 'sim_nao', 'disciplina', 'turmas_base'));
         //
     }
 
@@ -119,7 +130,8 @@ class DisciplinaController extends Controller {
     //Recebe o que vem do Edit
     public function update(Request $request, $id) {
 
-//        Backup da disciplina
+        DB::beginTransaction();
+        //        Backup da disciplina
         $disciplina_backup = $this->disciplina->find(Crypt::decrypt($id));
         $form = $request->except(['_token', '_method']);
 //        Update dos dados
@@ -131,24 +143,75 @@ class DisciplinaController extends Controller {
         $campo = "";
 //
         foreach ($result as $nome_campo => $valor) {
+
             if ($disciplina_backup[$nome_campo] == "") {
                 $disciplina_backup[$nome_campo] = "Vazio";
-            }
-            if ($valor == "") {
-                $valor = "Vazio";
-            }
-            if ($disciplina_backup[$nome_campo] == "updated_at") {
-                $disciplina_backup[$nome_campo] = "";
+                $X = "De";
+            } elseif ($nome_campo == "updated_at") {
+                $nome_campo = "";
                 $valor = "";
+                $X = "";
+            } else {
+                $X = "De $disciplina_backup[$nome_campo] para";
             }
-            $campo .= "$nome_campo = De $disciplina_backup[$nome_campo] para $valor / ";
+            $campo .= "$nome_campo  $X  $valor / ";
         }
-        $campo_final = "Alterou o(s) Campo(s) da Disciplina " . $disciplina_backup['DISCIPLINA'] . " em :  $campo ";
-        if ($campo == "") {
+        //Preparando para Limpar a tabela disciplinas_turmas
+//        Backup da Tabel da disciplinas_turmas
+        $disciplinas_turmas = Disciplina::with(['disciplinas_turmas'])->where('id', Crypt::decrypt($id))->get();
+        //dd($disciplinas_turmas);
+        $arrayTurmas[] = "";
+        foreach ($disciplinas_turmas as $disciplina) {
+            foreach ($disciplina->disciplinas_turmas as $turma_backup) {
+                array_push($arrayTurmas, $turma_backup->id);
+            }
+        }
+        array_shift($arrayTurmas);
+//        Limpando a tabela em questão
+        $disciplina_pivot = Disciplina::findOrfail(Crypt::decrypt($id));
+        $disciplina_pivot->disciplinas_turmas()->detach($arrayTurmas);
+//                   
+//        Inserindo da Tabela Pivot da turmas atuais// 
+        $campo_turma = "";
+        if (isset($request->turma_selecionada)) {
+            foreach ($request->turma_selecionada as $key => $turma) {
+                $disciplina_pivot = Disciplina::findOrfail(Crypt::decrypt($id));
+                $turma_atual = Turma::findOrfail($turma);
+                $turma_atual->disciplinas()->attach($disciplina_pivot->id, array('CARGA_HORARIA' => $request->CARGA_HORARIA[$key], 'updated_at' => NOW()));
+                //
+                $turmas_base = Turma::find($turma);
+                $campo_turma .= $turmas_base->TURMA . "  " . $turmas_base->UNICO . " - " . $request->CARGA_HORARIA[$key] . ' Horas' . " / ";
+            }
+        }
+//        Inserindo da Tabela Pivot da turmas novas// 
+        if (isset($request->turma_selecionada_2)) {
+            foreach ($request->turma_selecionada_2 as $key => $turma) {
+                $disciplina_pivot = Disciplina::findOrfail(Crypt::decrypt($id));
+                $turma_atual = Turma::findOrfail($turma);
+                $turma_atual->disciplinas()->attach($disciplina_pivot->id, array('CARGA_HORARIA' => $request->CARGA_HORARIA_DOIS[$key], 'updated_at' => NOW()));
+                //
+                $turmas_base = Turma::find($turma);
+                $campo_turma .= $turmas_base->TURMA . "  " . $turmas_base->UNICO . " - " . $request->CARGA_HORARIA_DOIS[$key] . ' Horas' . " / ";
+            }
+        }
+
+        if (!empty($campo_turma)) {
+            $campo_turma_final = " Turma(s): $campo_turma";
+        }
+
+
+
+        if ($campo == "" && $campo_turma == "") {
             $campo_final = "Nada Foi Alterado !";
+        } elseif ($campo == "") {
+            $campo_final = "Inseriu a Disciplina " . $disciplina_backup['DISCIPLINA'] . " a(s) ";
+        } else {
+            $campo_final = "Alterou o(s) Campo(s) da Disciplina " . $disciplina_backup['DISCIPLINA'] . " em :  $campo e inseriu a(s) ";
         }
+
         //Redireciona
-        if ($update) {
+        if ($update && $turma_atual) {
+            DB::commit();
             //Traz o usuario
             $usuario = \Auth::user()->name;
 //          Faz o Log
@@ -156,12 +219,12 @@ class DisciplinaController extends Controller {
                 'USUARIO' => $usuario,
                 'TABELA' => 'DISCIPLINAS',
                 'ACAO' => 'ALTETAR',
-                'DETALHES_ACAO' => "$campo_final",
+                'DETALHES_ACAO' => "$campo_final" . "$campo_turma_final",
             ]);
             return redirect()->route('disciplinas.index')->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
-            return redirect()->route('disciplinas.edit')->with('msg', 'Falha em Salvar as Alterações!');
-            ;
+            DB::rollback();
+            return redirect()->route('disciplinas.index')->with('msg_2', 'Falha em Salvar as Alterações!');
         }
     }
 
@@ -192,12 +255,10 @@ class DisciplinaController extends Controller {
             return redirect()->route('disciplinas.index')->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
             return redirect()->route('disciplinas.index')->with('msg', 'Falha em Salvar as Alterações!');
-            ;
         }
     }
 
     public function updatebloco(Request $request) {
-
 
         $title = "Gerenciamento de Disciplinas";
         $disciplinas = $this->disciplina->whereIn('id', $request->aluno_selecionado)->get();

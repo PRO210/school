@@ -41,33 +41,47 @@
 
 
             <ul class="nav navbar-nav navbar-right">
-                <!-- Authentication Links -->
-                @guest
-                <!--                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>-->
-                <!--                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>-->
-                @else
-                <li class="dropdown">                    
+                <li class="dropdown"> 
+                    @guest
+
+
+                    @else           
+
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}&nbsp;<span class="caret"></span></a>
                     <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
                     <ul class="dropdown-menu">
+
+                        @if (Route::has('login'))
+
+                        @auth   
+                        @can('CADASTRAR_USUARIO')
+                        <li><a href="{{ route('register') }}">Registrar Usuário</a></li>
+                        @endcan
+                        @else
+                        <!--<li><a href="{{ route('login') }}">Login</a></li>-->
+
+                        @endauth
+                        @endif
+
+
+
+
                         <li><a class="" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
                             <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
                                 @csrf
                             </form>
                         </li>
                         <li><a href="{{route ('logs.index')}}">Ações Passadas</a></li>  
 
+
                     </ul>
                 </li>
                 @endguest
-                
+
 
 
             </ul>
@@ -75,4 +89,3 @@
     </div>
 </nav>
 <div style="height:24px"></div>
-

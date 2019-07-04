@@ -356,6 +356,7 @@ CREATE TABLE `permissions` (
 INSERT INTO `permissions` (`id`, `name`, `label`, `created_at`, `updated_at`) VALUES
 (1, 'LISTAR_ALUNOS', 'LISTAR ALUNOS', NULL, NULL),
 (2, 'EDITAR_ALUNOS', 'EDITAR ALUNOS', NULL, NULL);
+(2, 'CADASTRAR_USUARIO)', 'CADASTRAR USUARIO', NULL, NULL)
 
 -- --------------------------------------------------------
 

@@ -15,7 +15,6 @@ class CreateDisciplinasTable extends Migration {
         Schema::create('disciplinas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('DISCIPLINA');
-            $table->string('CARGA_HORARIA')->nullable();;
             $table->string('EM_DESUSO')->nullable();
             $table->string('BOLETIM')->nullable();
             $table->string('BOLETIM_ORD')->nullable();
