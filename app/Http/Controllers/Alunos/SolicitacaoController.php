@@ -73,6 +73,12 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        // dd($request);
+       
+        if ($request->botao == "pesquisar_transferencia") {
+            return redirect()->action('Alunos\SolicitacaoController@show', ['id' => $request->aluno_id]);
+        } 
+
 //      Valida a Data
         if (empty($request->DATA_SOLICITACAO)) {
             $request->DATA_SOLICITACAO = $data = date('Y-m-d');
@@ -113,6 +119,8 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
+
+
         $title = "GERENCIAMENTO DE TRANSFERÊNCIA";
         $alunos = Aluno::with(['transferidos', 'status'])->where('id', Crypt::decrypt($id))->get();
         return view('Alunos.listar_transferidos', compact('title', 'alunos'));
@@ -215,7 +223,7 @@ class SolicitacaoController extends Controller {
                 }
                 $pivot .= "$campo_pivot $X $valor / ";
             }
-            $campo_final = "Alterou o Pedido de Tranferência de " . $aluno->NOME . " da TURMA: " . $turma->TURMA . " " . $turma->UNICO ." em : $pivot";
+            $campo_final = "Alterou o Pedido de Tranferência de " . $aluno->NOME . " da TURMA: " . $turma->TURMA . " " . $turma->UNICO . " em : $pivot";
 //
             if ($turma_nova) {
 //          Traz o usuário

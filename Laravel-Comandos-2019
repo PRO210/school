@@ -58,5 +58,9 @@ php artisan make:migration create_permissions_table
 php artisan make:policy AlunoPolicy
 //
 //
+//Criação do histórico dos alunos
+php artisan make:model Models\\AlunosHistoricos\\AlunoHistorico -m
+php artisan make:controller AlunosHistoricos\\HistoricoController --resource
+
 
 

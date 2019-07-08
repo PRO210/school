@@ -21,6 +21,7 @@ class Turma extends Model {
 //    public function alunos_reprovados() {
 //        return $this->belongsToMany(Aluno::class, 'aluno_turmas')->withPivot('STATUS')->wherePivot('STATUS', '!=', 'cursando');
 //    }
+//    
     //Adiciona os pedidos de transferências
     public function transferencias() {
         return $this->belongsToMany(Aluno::class, 'aluno_solicitacaos');
@@ -30,5 +31,7 @@ class Turma extends Model {
     public function disciplinas() {
         return $this->belongsToMany(Disciplina::class, 'disciplina_turmas');
     }
+
+    
 
 }

@@ -12,8 +12,16 @@ Route::post('/alunos/update/agora', 'Alunos\AlunoController@updateagora');
 Route::get('/{id}/aluno/mostrar/{id_turma}', 'Alunos\AlunoController@show')->name('visualizar');
 Route::get('/{id}/aluno/turma', 'Alunos\AlunoController@showturma')->name('edição/turma');
 Route::get('/{id}/aluno/{id_turma}', 'Alunos\AlunoController@editar')->name('edição/aluno');
-Route::get('/{id}/historico/{id_turma}', 'Alunos\AlunoController@historico')->name('histórico');
+Route::get('/{id}/transferência/{id_turma}', 'Alunos\AlunoController@historico')->name('transferência');
 Route::post('/alunos/update/turma', 'Alunos\AlunoController@update_turma');
+//
+//aluno/históricos
+Route::resource('/historicos', 'AlunosHistoricos\HistoricoController');
+Route::get('/{id}/historico/{id_turma}', 'AlunosHistoricos\HistoricoController@create')->name('histórico');
+Route::post('/aluno/históricos', 'AlunosHistoricos\HistoricoController@store');
+Route::get('/historico/{id}/{ano}', 'AlunosHistoricos\HistoricoController@edit')->name('histórico/edição');
+
+
 //
 //Aluno Solicitações
 Route::post('/aluno/solicitação/transferência', 'Alunos\SolicitacaoController@store');
@@ -47,3 +55,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/roles', 'HomeController@rolesPermissions')->name('home/roles');
+
+//Route::get('/home/alunos/historicos', 'AlunosHistoricos\HistoricoController@store');
