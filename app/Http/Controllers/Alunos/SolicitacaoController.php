@@ -74,10 +74,10 @@ class SolicitacaoController extends Controller {
      */
     public function store(Request $request) {
         // dd($request);
-       
+
         if ($request->botao == "pesquisar_transferencia") {
             return redirect()->action('Alunos\SolicitacaoController@show', ['id' => $request->aluno_id]);
-        } 
+        }
 
 //      Valida a Data
         if (empty($request->DATA_SOLICITACAO)) {
@@ -119,8 +119,6 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-
-
         $title = "GERENCIAMENTO DE TRANSFERÊNCIA";
         $alunos = Aluno::with(['transferidos', 'status'])->where('id', Crypt::decrypt($id))->get();
         return view('Alunos.listar_transferidos', compact('title', 'alunos'));

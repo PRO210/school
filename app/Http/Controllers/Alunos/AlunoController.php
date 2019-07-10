@@ -111,7 +111,7 @@ class AlunoController extends Controller {
             ]);
             return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
-            return redirect()->route('alunos.create')->with('msg', 'Falha em Salvar os Dados!');
+            return redirect()->route('alunos.create')->with('msg_2', 'Falha em Salvar os Dados!');
         }
     }
 

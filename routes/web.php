@@ -17,7 +17,11 @@ Route::post('/alunos/update/turma', 'Alunos\AlunoController@update_turma');
 //
 //aluno/históricos
 Route::resource('/historicos', 'AlunosHistoricos\HistoricoController');
-Route::get('/{id}/historico/{id_turma}', 'AlunosHistoricos\HistoricoController@create')->name('histórico');
+Route::get('/{id}/historico/{id_turma?}', 'AlunosHistoricos\HistoricoController@create')->name('histórico');
+Route::get('/historico/transferência-{id}', 'Alunos\SolicitacaoController@show')->name('histórico_transferência');
+
+
+
 Route::post('/aluno/históricos', 'AlunosHistoricos\HistoricoController@store');
 Route::get('/historico/{id}/{ano}', 'AlunosHistoricos\HistoricoController@edit')->name('histórico/edição');
 

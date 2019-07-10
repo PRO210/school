@@ -47,14 +47,16 @@ class HistoricoController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id, $id_turma) {
+    public function create($id, $id_turma = null) {
         include 'selects.php';
-        $aluno = (Aluno::with(['turmas' => function($query) use($id_turma) {
-                        $query->where('turma_id', $id_turma);
-                    }])->where('id', Crypt::decrypt($id))->get()->first());
-
+        $aluno = (Aluno::with(['turmas'])->where('id', Crypt::decrypt($id))->get()->first());
+//        $aluno = (Aluno::with(['turmas' => function($query) use($id_turma) {
+//                        $query->where('turma_id', $id_turma);
+//                    }])->where('id', Crypt::decrypt($id))->get()->first());
+        //dd($aluno);
+        $turma_atual = "";
         foreach ($aluno->turmas as $turma) {
-            $turma_atual = "($turma->TURMA)";
+            $turma_atual .= $turma->TURMA . " " . $turma->UNICO . ",";
             $aluno_classificacao_id = $turma->pivot->Aluno_Classificacao_id;
         }
         $aluno_historicos = DB::table('aluno_historicos')->select('ANO')->groupBy('ANO')->where('aluno_id', Crypt::decrypt($id))->get();
@@ -74,7 +76,7 @@ class HistoricoController extends Controller {
         if ($request->botao == "pesquisar") {
             return redirect()->route('histórico/edição', ['id' => $request->aluno_id, 'ano' => $request->ANO2]);
         }
-        $bimestres = ["1", "2", "3", "4", "media", "final"];
+        $bimestres = ["1", "2", "3", "4", "media", "final", "media_final"];
         $disciplinas = $this->disciplina->all();
 
         foreach ($bimestres as $bimestre) {
@@ -84,17 +86,15 @@ class HistoricoController extends Controller {
                 $historico = Disciplina::findOrfail($disciplina->id);
                 $historico->historicos()->attach(Crypt::decrypt($request->aluno_id), array('BIMESTRE' => $bimestre, 'ANO' => $request->ANO, 'disciplina_id' => $disciplina->id,
                     'aluno_classificacao_id' => $request->aluno_classificacao_id, 'ESCOLA' => $request->ESCOLA, 'CIDADE' => $request->CIDADE, 'ESTADO' => $request->ESTADO,
-                    'ESCOLA_DIAS' => $request->ESCOLA_DIAS, 'ESCOLA_HORAS' => $request->ESCOLA_HORAS, 'ALUNO_DIAS' => $request->ALUNO_DIAS, 'ALUNO_HORAS' => $request->ALUNO_HORAS,
+                    'ESCOLA_DIAS' => $request->ESCOLA_DIAS, 'ESCOLA_HORAS' => $request->ESCOLA_HORAS, 'ALUNO_DIAS' => $request->ALUNO_DIAS, 'ALUNO_FREQUENCIA' => $request->ALUNO_FREQUENCIA,
                     'TURMA' => $request->TURMA, 'TURNO' => $request->TURNO, 'UNICO' => $request->UNICO, 'created_at' => NOW()));
-//     
             }
-//            
         }
         //
         if ($historico) {
-            return redirect()->route('histórico/edição', ['id' => $request->aluno_id, 'ano' => $request->ANO]);
+            return redirect()->route('histórico/edição', ['id' => $request->aluno_id, 'ano' => $request->ANO])->with('msg', 'Alterações Salvas com Sucesso !');
         } else {
-            return back();
+            return back()->with('msg_2', 'Falha em Salvar os Dados !');
         }
     }
 
@@ -115,17 +115,29 @@ class HistoricoController extends Controller {
 //    
 //   Recebe o que veio do Store para Edição do histórico
     public function edit($id, $ano) {
+
         $aluno = (Aluno::with(['historicos_alunos' => function($query) use($ano) {
                         $query->where('ANO', $ano);
                     }])->where('id', Crypt::decrypt($id))->get()->first());
 
         $title = "EDITAR HISTÓRICO";
         foreach ($aluno->historicos_alunos as $value) {
-            $ano = $value->pivot->ANO;
-            $turma = $value->pivot->TURMA;
-            break;
+            $ANO = $value->pivot->ANO;
+            $TURMA = $value->pivot->TURMA;
+            $TURNO = $value->pivot->TURNO;
+            $UNICO = $value->pivot->UNICO;
+
+            $ALUNO_DIAS = $value->pivot->ALUNO_DIAS;
+            $ALUNO_FREQUENCIA = $value->pivot->ALUNO_FREQUENCIA;
+
+            $ESCOLA_DIAS = $value->pivot->ESCOLA_DIAS;
+            $ESCOLA_HORAS = $value->pivot->ESCOLA_HORAS;
+            $CIDADE = $value->pivot->CIDADE;
+            $ESTADO = $value->pivot->ESTADO;
+            $ESCOLA = $value->pivot->ESCOLA;
         }
-        $bimestres = ["1", "2", "3", "4", "media", "final"];
+
+        $bimestres = ["1", "2", "3", "4", "media", "final", 'media_final'];
 
 //        foreach ($bimestres as $bimestre) {
 //            echo " Bimestre: " . $bimestre . "  ";
@@ -143,22 +155,9 @@ class HistoricoController extends Controller {
 //                }
 //            }
 //            echo "<br>";
-//        }
-//         <tr>  
-//                        <th></th>
-//                        @foreach ($aluno->historicos_alunos as $disciplina) 
-//
-//                        @if ($disciplina->pivot->BIMESTRE == $bimestre)
-//                        <th><input type="number" min="0" name="{{$disciplina->pivot->disciplina_id }}">{{$disciplina->pivot->disciplina_id }}</th>  
-//
-//                        @endif
-//
-//                        @endforeach  
-//                    </tr>
+//        }//        
 
-        //dd($aluno->historicos_alunos);
-
-        return view('Alunos.editar_historico', compact('title', 'aluno', 'ano', 'turma','bimestres'));
+        return view('Alunos.editar_historico', compact('title', 'aluno', 'ALUNO_DIAS', 'ALUNO_FREQUENCIA', 'ANO', 'TURMA', 'TURNO', 'UNICO', 'CIDADE', 'ESTADO', 'ESCOLA','bimestres'));
     }
 
     /**
@@ -169,7 +168,25 @@ class HistoricoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        // dd($request);
+        $disciplina = $request->DISCIPLINAS;
+        $bimestres = [1, 2, 3, 4, 'media', 'final', 'media_final'];
+//        foreach ($request->B1 as $key => $nota) {
+//            $up = \DB::table('aluno_historicos')->where('BIMESTRE', "1")->where('aluno_id', "$id")->where('disciplina_id', $disciplina[$key])->where('ANO', "$request->ANO")
+//                    ->update(['NOTA' => $nota]);
+//        }      
+        foreach ($bimestres as $bimestre) {
+            foreach ($request->$bimestre as $key => $nota) {
+                $up = \DB::table('aluno_historicos')->where('BIMESTRE', "$bimestre")->where('aluno_id', "$id")->where('disciplina_id', $disciplina[$key])->where('ANO', "$request->ANO")
+                        ->update(['NOTA' => "$nota"]);
+            }
+        }
+
+        if ($up = true) {
+            return redirect()->route('histórico/edição', ['id' => Crypt::encrypt($id), 'ano' => $request->ANO])->with('msg', 'Alterações Salvas com Sucesso !');
+        } else {
+            return redirect()->route('histórico/edição', ['id' => Crypt::encrypt($id), 'ano' => $request->ANO])->with('msg_2', 'Falha em Salvar os Dados !');
+        }
     }
 
     /**

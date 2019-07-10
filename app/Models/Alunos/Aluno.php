@@ -40,10 +40,9 @@ class Aluno extends Model {
     public function historicos_alunos() {
         return $this->belongsToMany(Disciplina::class, 'aluno_historicos')->withPivot(['BIMESTRE'])->withPivot(['ANO'])->withPivot(['NOTA'])->withPivot(['MEDIA'])->withPivot(['APROVADO'])
                 ->withPivot(['FALTAS'])->withPivot(['aluno_classificacao_id '])->withPivot(['ESCOLA'])->withPivot(['CIDADE'])->withPivot(['ESCOLA_DIAS'])->withPivot(['ESCOLA_HORAS'])
-                ->withPivot(['ALUNO_DIAS'])->withPivot(['ALUNO_HORAS'])->withPivot(['TURMA'])->withPivot(['TURNO'])->withPivot(['UNICO'])->withPivot(['T1'])
+                ->withPivot(['ALUNO_DIAS'])->withPivot(['ALUNO_FREQUENCIA'])->withPivot(['TURMA'])->withPivot(['TURNO'])->withPivot(['UNICO'])->withPivot(['T1'])
                 ->withPivot(['T2'])->withPivot(['T3'])->withPivot(['T4'])->withPivot(['T5'])->withPivot(['T6'])->withPivot(['T7'])->withPivot(['T8'])->withPivot(['T9'])
-                ->where('BOLETIM','SIM')->orderBy('BOLETIM_ORD')
-                ;
+                ->where('BOLETIM','SIM')->orderBy('BOLETIM_ORD');
     }
 
     protected $fillable = ['INEP', 'NOME', 'NASCIMENTO', 'CERTIDAO_CIVIL', 'MODELO_CERTIDAO', 'MATRICULA_CERTIDAO',

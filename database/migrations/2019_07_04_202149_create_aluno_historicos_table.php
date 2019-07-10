@@ -39,7 +39,7 @@ class CreateAlunoHistoricosTable extends Migration {
             $table->string('ESCOLA_HORAS')->nullable();
 
             $table->string('ALUNO_DIAS')->nullable();
-            $table->string('ALUNO_HORAS')->nullable();
+            $table->string('ALUNO_FREQUENCIA')->nullable();
             
             $table->string('TURMA')->nullable();
             $table->string('TURNO')->nullable();

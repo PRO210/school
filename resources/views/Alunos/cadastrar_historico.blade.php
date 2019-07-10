@@ -17,8 +17,10 @@
                 <input type="hidden" class="form-control"  name="aluno_id" value="{{$id}}" >
                 <input type="hidden" class="form-control"  name="turma_id" value="{{$id_turma}}" >
                 <input type="hidden" class="form-control"  name="aluno_classificacao_id" value="{{$aluno_classificacao_id}}" >
-                <h3 style="text-align: center">HISTÓRICO DO(A) ALUNO(A): &nbsp;&nbsp; {{$aluno->NOME}}&nbsp;&nbsp;<b></b>Turma Atual:&nbsp;&nbsp;{{$turma_atual}}  <b></b></h3>
-                <div class="col-md-6">                   
+                <div class="col-md-12"><p style="margin-top: 12px ">HISTÓRICO DO(A) ALUNO(A):&nbsp; {{$aluno->NOME}},&nbsp;&nbsp;<b></b>Turma(s) Cadastrada(s):&nbsp;&nbsp;{{$turma_atual}}  <b></b></p>
+                </div>
+
+                <div class="col-md-6">  
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -68,7 +70,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div> 
+                </div> <br>
                 <!--Busca Por historicos//-->
                 <div class="col-md-6">                           
                     <table class="table table-striped table-bordered">

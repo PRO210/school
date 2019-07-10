@@ -20,11 +20,11 @@
 </div> 
 <script type='text/javascript'>
     $(document).ready(function () {
-    $('#exemplomodal').modal('show');
+        $('#exemplomodal').modal('show');
     });
     var intervalo = window.setInterval(fechar, 4000);
-    function fechar() {
-    $('.modal').modal('hide');
+        function fechar() {
+         $('.modal').modal('hide');
     }
     @endif
 </script>  

@@ -6,9 +6,11 @@
             <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/listar.blade.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/routes/web.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/cadastrar_historico.blade.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/editar_historico_tabela.blade.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/AlunosHistoricos/HistoricoController.php</file>
-            <file>file:/opt/lampp/htdocs/laravel/school/app/Models/Disciplinas/Disciplina.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Alunos/AlunoController.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/editar_historico.blade.php</file>
+            <file>file:/opt/lampp/htdocs/laravel/school/app/Models/Alunos/Aluno.php</file>
         </group>
     </open-files>
 </project-private>
