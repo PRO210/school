@@ -53,8 +53,9 @@
                     </thead>
                     <tbody>                                   
                         @foreach($disciplinas as $disciplina)    
-                       
-                           
+                        <tr>
+
+
                             <td></td>       
                             <td>
                                 <div class="dropdown">
@@ -75,7 +76,7 @@
                             </td>  
 
                         </tr>                                        
-                         
+
                         @endforeach                     
                     </tbody>
                     <tfoot>

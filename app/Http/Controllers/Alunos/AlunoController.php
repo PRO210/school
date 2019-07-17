@@ -64,8 +64,8 @@ class AlunoController extends Controller {
 //        foreach ($alunoTeste as $key => $dados) {
 //            // echo "$key :" . " $dados" . "<br>";
 //            $html[$key] = $dados;
-//        }
-
+//        } 
+      
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 

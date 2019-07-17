@@ -24,8 +24,7 @@
             <h3 style="text-align:center; margin-top: 36px ">Todos os Alunos </h3>
             @include('msg')
 
-            <div class="container-fluid">      
-
+            <div class="container-fluid">     
                 {{-- {{$impressao}}imprimir do php --}}
                 {{-- {!!$xss!!} imprimir do java --}}          
 
@@ -73,7 +72,7 @@
                                 <div class="dropdown">
                                     &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
-                                            @can('EDITAR_ALUNOS')
+                                        @can('EDITAR_ALUNOS')
                                         <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
                                         <li><a href='folha_re_matricula.php?id={{''}}' target='_blank' title='Imprimir Folha de Ré Matricula'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Ré Matricula</a></li>
                                         <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
@@ -82,7 +81,7 @@
                                         <li><a href='{{route('transferência',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Transferência/Solicitações'><span class='glyphicon glyphicon-sort text-warning' aria-hidden='true'>&nbsp;</span>Transferências</a></li> 
                                         <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Históricos'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
                                         @endcan
-                                        <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}'                               target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-info' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
+                                        <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-info' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                     </ul>                              
                                     &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}/{{$turma->id}}'></span>
                                     &nbsp;<span id = "nome">{{$aluno->NOME}}</span>

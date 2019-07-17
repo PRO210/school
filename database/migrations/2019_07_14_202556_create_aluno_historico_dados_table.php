@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAlunoHistoricosTable extends Migration {
+class CreateAlunoHistoricoDadosTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,21 +12,18 @@ class CreateAlunoHistoricosTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('aluno_historicos', function (Blueprint $table) {
+        Schema::create('aluno_historico_dados', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('CODIGO');
             
-            $table->string('BIMESTRE');
-            $table->string('ANO');
-            $table->string('NOTA')->nullable();
-            $table->string('MEDIA')->nullable();
-            $table->string('APROVADO')->nullable();
-            $table->string('FALTAS')->nullable();
+            $table->string('ANO');          
+            $table->string('SEMESTRE');
+
+            $table->integer('curso_id')->unsigned();
+            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
 
             $table->integer('aluno_id')->unsigned();
             $table->foreign('aluno_id')->references('id')->on('alunos')->onDelete('cascade');
-
-            $table->integer('disciplina_id')->unsigned();
-            $table->foreign('disciplina_id')->references('id')->on('disciplinas');
 
             $table->integer('aluno_classificacao_id')->unsigned();
             $table->foreign('aluno_classificacao_id')->references('id')->on('aluno_classificacaos');
@@ -40,11 +37,11 @@ class CreateAlunoHistoricosTable extends Migration {
 
             $table->string('ALUNO_DIAS')->nullable();
             $table->string('ALUNO_FREQUENCIA')->nullable();
-            
+
             $table->string('TURMA')->nullable();
             $table->string('TURNO')->nullable();
             $table->string('UNICO')->nullable();
-            
+
             $table->string('T1')->nullable();
             $table->string('T2')->nullable();
             $table->string('T3')->nullable();
@@ -54,8 +51,6 @@ class CreateAlunoHistoricosTable extends Migration {
             $table->string('T7')->nullable();
             $table->string('T8')->nullable();
             $table->string('T9')->nullable();
-
-
 
             $table->timestamps();
         });
@@ -67,7 +62,7 @@ class CreateAlunoHistoricosTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('aluno_historicos');
+        Schema::dropIfExists('aluno_historico_dados');
     }
 
 }

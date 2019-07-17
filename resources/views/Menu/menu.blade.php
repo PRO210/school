@@ -29,6 +29,13 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
+                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cursos<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route ('cursos.index')}}">Listar Todos os Cursos</a></li>  
+                    </ul>
+                 </li>
+                
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Disciplinas<span class="caret"></span></a>
                     <ul class="dropdown-menu">

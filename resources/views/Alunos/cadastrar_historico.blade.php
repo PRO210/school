@@ -4,6 +4,7 @@
         <title>{{$title or 'Scholl 2019'}}</title>
         <style>
             #input_escola{width: 100%}
+            label{margin-top: -30px !important;}
 
         </style>
     </head>
@@ -56,6 +57,29 @@
                             <tr>
                                 <td colspan="2"><input id = 'input_escola' type = 'text' name = 'UNICO' placeholder = 'Única' onkeyup='maiuscula(this)'></td>                            
                             </tr>
+                            <tr>                             
+                                <td colspan="2">                                    
+                                    <select class='form-control' name='curso_id' style="width: 100% !important" id="">  
+                                        <option disabled="" selected=""> Curso</option>
+                                        @forelse ($cursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->NOME}}</option>
+                                        @empty
+                                        <option>Não Existe Curso Cadastrado</option>   
+                                        @endforelse
+                                    </select>                                        
+                                </td>
+                            </tr>
+                            <tr>                             
+                                <td colspan="2">                                    
+                                    <select class='form-control' name='SEMESTRE' style="width: 100% !important" id="">  
+                                        <option disabled="" selected="">Semestre</option>
+                                        <option value="PRIMEIRO">PRIMEIRO</option>
+                                        <option value="SEGUNDO">SEGUNDO</option>
+                                        <option value="ANO">ANO</option>
+
+                                    </select>                                        
+                                </td>
+                            </tr>
                             <tr>                                
                                 <?php
                                 echo "<th>"
@@ -76,28 +100,41 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th style="text-align: center" colspan="2">HISTÓRICOS JÁ CADASTRADOS</th>
+                                <th style="text-align: center" colspan="4">HISTÓRICOS JÁ CADASTRADOS</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody>                           
                             <tr>
-                                <td colspan="2">
-                                    <select class='form-control' name='ANO2' style="width: 100% !important" id="inputAno1">   
-                                        @forelse ($aluno_historicos as $aluno_historico)
-                                        <option>{{$aluno_historico->ANO}}</option>
-                                        @empty
-                                        <option>Não Existe Histórico Cadastrado</option>   
-                                        @endforelse
-                                    </select>                                        
+                                <th>ANO</th>                             
+                                <th>TURMA</th>
+                                <th>SEMESTRE/ANO</th>
+                                <th>CURSO</th>
+                            </tr>
+                            @forelse ($historico_dados as $key => $value)
+                            <tr>
+                                <td><input type="checkbox" name="CODIGO" value="{{$value->CODIGO}}" id="{{$value->CODIGO}}" ><label for="{{$value->CODIGO}}">&nbsp; {{$value->ANO}}</label></td>
+                                <td>{{$value->TURMA}} / {{$value->UNICO}}</td>                               
+                                <td>{{$value->SEMESTRE}}</td>
+                                <td>
+                                    @foreach ($cursos as $curso)
+                                    @if($value->curso_id =="$curso->id")
+                                    {{$curso->NOME}}
+                                    @endif
+                                    @endforeach
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td>O Aluno não tem Histórico Cadastrado!</td>
+                            </tr>
+                            @endforelse
                             <tr>                                        
-                                <td>&nbsp;&nbsp;
+                                <td colspan="2">&nbsp;&nbsp;
                                     <button type="submit" name="botao" value="pesquisar" class="btn btn-success btn-block" onclick="return confirmarAtualizacao()">Pesquisar</button>
                                     </a>
 
                                 </td>
-                                <td>&nbsp;&nbsp;                                                                                          
+                                <td colspan="2">&nbsp;&nbsp;                                                                                          
                                     {!! Form:: submit('Excluir',['class' => 'btn btn-danger btn-block','name' =>'botao','value'=>'exclui_historico','onclick'=>'return confirmarAtualizacao()','id' => 'exclui_historico'])!!}  
 
                                 </td>

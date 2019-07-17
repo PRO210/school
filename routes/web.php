@@ -19,11 +19,9 @@ Route::post('/alunos/update/turma', 'Alunos\AlunoController@update_turma');
 Route::resource('/historicos', 'AlunosHistoricos\HistoricoController');
 Route::get('/{id}/historico/{id_turma?}', 'AlunosHistoricos\HistoricoController@create')->name('histórico');
 Route::get('/historico/transferência-{id}', 'Alunos\SolicitacaoController@show')->name('histórico_transferência');
-
-
-
 Route::post('/aluno/históricos', 'AlunosHistoricos\HistoricoController@store');
 Route::get('/historico/{id}/{ano}', 'AlunosHistoricos\HistoricoController@edit')->name('histórico/edição');
+Route::get('/historico/excluir-{id}-{aluno_id}', 'AlunosHistoricos\HistoricoController@destroy')->name('historico_excluir');
 
 
 //
@@ -40,8 +38,13 @@ Route::post('/disciplinas/update/bloco', 'Disciplinas\DisciplinaController@updat
 Route::post('/disciplinas/update/bloco/server', 'Disciplinas\DisciplinaController@updateblocoserver');
 Route::get('/{id}/Disciplinas', 'Disciplinas\DisciplinaController@edit')->name('edição');
 Route::get('/{id}/disciplinas', 'Disciplinas\DisciplinaController@destroy')->name('deletar');
+//
+//Cursos
+Route::resource('/cursos', 'Cursos\CursoController');
+Route::get('/Cursos/Edição/{id}', 'Cursos\CursoController@edit')->name('cursos/editar');
+Route::get('/Cursos/Deletar/{id}', 'Cursos\CursoController@destroy')->name('cursos/deletar');
 
-
+//
 
 //Route::get('/export', 'ExportController@export')->name('invoices');
 
