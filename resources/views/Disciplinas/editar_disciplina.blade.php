@@ -117,7 +117,7 @@
                             <td></td>
                             <td>
                                 <div class="dropdown">
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='disciplina_selecionada_2[]' class = 'checkbox' value='{{$turma->id}}' ></span>
+                                    &nbsp;&nbsp;<span><input type='checkbox' name='turma_selecionada_dois[]' class = 'checkbox' value='{{$turma->id}}' ></span>
                                     &nbsp;<span id = "nome">{{$turma->TURMA}}</span>
                                 </div>
                             </td>

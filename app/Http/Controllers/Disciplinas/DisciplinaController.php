@@ -129,7 +129,7 @@ class DisciplinaController extends Controller {
      */
     //Recebe o que vem do Edit
     public function update(Request $request, $id) {
-
+        //dd($request);
         DB::beginTransaction();
         //        Backup da disciplina
         $disciplina_backup = $this->disciplina->find(Crypt::decrypt($id));
@@ -184,8 +184,8 @@ class DisciplinaController extends Controller {
             }
         }
 //        Inserindo da Tabela Pivot da turmas novas// 
-        if (isset($request->turma_selecionada_2)) {
-            foreach ($request->turma_selecionada_2 as $key => $turma) {
+        if (isset($request->turma_selecionada_dois)) {
+            foreach ($request->turma_selecionada_dois as $key => $turma) {
                 $disciplina_pivot = Disciplina::findOrfail(Crypt::decrypt($id));
                 $turma_atual = Turma::findOrfail($turma);
                 $turma_atual->disciplinas()->attach($disciplina_pivot->id, array('CARGA_HORARIA' => $request->CARGA_HORARIA_DOIS[$key], 'updated_at' => NOW()));

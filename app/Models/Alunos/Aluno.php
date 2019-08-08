@@ -34,12 +34,11 @@ class Aluno extends Model {
     public function classificacaos() {
         return $this->belongsToMany(AlunoClassificacao::class, 'aluno_turmas');
     }
-
 //
 //  Alimenta o HistoricoController@edit 
     public function historicos_alunos() {
         return $this->belongsToMany(Disciplina::class, 'aluno_historicos')->withPivot(['CODIGO'])->withPivot(['BIMESTRE'])->withPivot(['NOTA'])->withPivot(['MEDIA'])
-                        ->withPivot(['APROVADO']) ->withPivot(['RECUPERACAO'])->withPivot(['FALTAS'])->where('BOLETIM', 'SIM')->orderBy('BOLETIM_ORD');
+                        ->withPivot(['APROVADO']) ->withPivot(['RECUPERACAO'])->withPivot(['FALTAS']);
     }
 
 //    public function historico_aluno_dados() {

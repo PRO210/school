@@ -62,7 +62,7 @@
                                     &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'  ></span>
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                         @can('EDITAR_ALUNOS')
-                                        <li><a href="{{route('edição',['id' => Crypt::encrypt($disciplina->id)])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href="{{route('edição/disciplina',['id' => Crypt::encrypt($disciplina->id)])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
                                         <li><a href="{{route('deletar',['id' => Crypt::encrypt($disciplina->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-remove text-danger' aria-hidden='true' onclick="return deletar()">&nbsp;Deletar a Disciplina</span></a></li>
 
                                         @endcan

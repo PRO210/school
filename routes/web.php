@@ -36,13 +36,23 @@ Route::post('/alunos/solicitações/transferência/update', 'Alunos\SolicitacaoC
 Route::resource('/disciplinas', 'Disciplinas\DisciplinaController');
 Route::post('/disciplinas/update/bloco', 'Disciplinas\DisciplinaController@updatebloco');
 Route::post('/disciplinas/update/bloco/server', 'Disciplinas\DisciplinaController@updateblocoserver');
-Route::get('/{id}/Disciplinas', 'Disciplinas\DisciplinaController@edit')->name('edição');
+Route::get('/edição/disciplina/{id}', 'Disciplinas\DisciplinaController@edit')->name('edição/disciplina');
 Route::get('/{id}/disciplinas', 'Disciplinas\DisciplinaController@destroy')->name('deletar');
 //
 //Cursos
 Route::resource('/cursos', 'Cursos\CursoController');
 Route::get('/Cursos/Edição/{id}', 'Cursos\CursoController@edit')->name('cursos/editar');
 Route::get('/Cursos/Deletar/{id}', 'Cursos\CursoController@destroy')->name('cursos/deletar');
+//
+//Turmas
+Route::resource('/turmas', 'Turmas\TurmaController');
+Route::get('/Turmas/Edição/{id}', 'Turmas\TurmaController@edit')->name('turmas/edit');
+Route::get('/Turmas/Deletar/{id}', 'Turmas\TurmaController@destroy')->name('turmas/destory');
+Route::post('/turmas/update/bloco', 'Turmas\TurmaController@update_bloco');
+
+
+
+
 
 //
 

@@ -22,7 +22,7 @@ php artisan migrate:reset
 php artisan make:migration create_aluno_status_table
 php artisan migrate (Criar a Tabela do mysql NO SERVIDOR)
 php artisan migrate:refresh (Atualizar a Tabela mysql e limpa o Banco)
-php artisan migrate:refresh --step=2 (Número limitado de tabelas para o refresh)
+php artisan migrate:refresh --step=1 (Número limitado de tabelas para o refresh)
 //
 //
 Models  Models  Models  Models

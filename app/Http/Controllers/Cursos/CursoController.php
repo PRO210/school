@@ -84,6 +84,8 @@ class CursoController extends Controller {
         }
         array_shift($arrayDiscipllinas);
         $disciplinas_nao_vinculadas = DB::table('disciplinas')->whereNotIn('id', $arrayDiscipllinas)->get();
+        //dd($disciplinas_curso);
+      
         return view('Cursos.editar_curso', compact('curso', 'disciplinas_curso', 'disciplinas_nao_vinculadas', 'title', 'sim_nao', 'MEDIACOES', 'MODALIDADES', 'ETAPAS'));
     }
 
@@ -95,7 +97,7 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        // dd($request);
         DB::beginTransaction();
 //       Backup do curso
         $curso_backup = $this->curso->find(Crypt::decrypt($id));
@@ -135,7 +137,9 @@ class CursoController extends Controller {
                 $curso_pivot = Curso::findOrfail(Crypt::decrypt($id));
 
                 $disciplina_atual = Disciplina::findOrfail($disciplina);
-                $disciplina_atual->cursos()->attach(Crypt::decrypt($id), array('CARGA_HORARIA' => $request->CARGA_HORARIA[$key], 'updated_at' => NOW()));
+                $disciplina_atual->cursos()->attach(Crypt::decrypt($id), array('CARGA_HORARIA' => $request->CARGA_HORARIA[$key], 'BOLETIM' => $request->BOLETIM[$key],
+                    'BOLETIM_ORD' => $request->BOLETIM_ORD[$key], 'FICHA_DESCRITIVA' => $request->FICHA_DESCRITIVA[$key], 'FICHA_DESCRITIVA_ORD' => $request->FICHA_DESCRITIVA_ORD[$key],
+                    'ATA' => $request->ATA[$key], 'ATA_ORD' => $request->ATA_ORD[$key], 'BNC' => $request->BNC[$key], 'BNC_ORD' => $request->BNC_ORD[$key], 'updated_at' => NOW()));
 
                 $disciplinas_base = Disciplina::find($disciplina);
                 $campo_disciplina .= "";
@@ -149,7 +153,9 @@ class CursoController extends Controller {
                 $curso_pivot = Curso::findOrfail(Crypt::decrypt($id));
 
                 $disciplina_atual02 = Disciplina::findOrfail($disciplina);
-                $disciplina_atual02->cursos()->attach(Crypt::decrypt($id), array('CARGA_HORARIA' => $request->CARGA_HORARIA_DOIS[$key], 'updated_at' => NOW()));
+                $disciplina_atual02->cursos()->attach(Crypt::decrypt($id), array('CARGA_HORARIA' => $request->CARGA_HORARIA_DOIS[$key], 'BOLETIM' => $request->BOLETIM_DOIS[$key],
+                    'BOLETIM_ORD' => $request->BOLETIM_ORD_DOIS[$key], 'FICHA_DESCRITIVA' => $request->FICHA_DESCRITIVA_DOIS[$key], 'FICHA_DESCRITIVA_ORD' => $request->FICHA_DESCRITIVA_ORD_DOIS[$key],
+                    'ATA' => $request->ATA_DOIS[$key], 'ATA_ORD' => $request->ATA_ORD_DOIS[$key], 'BNC' => $request->BNC_DOIS[$key], 'BNC_ORD' => $request->BNC_ORD_DOIS[$key], 'updated_at' => NOW()));
                 //
                 $disciplinas_base = Disciplina::find($disciplina);
                 $campo_disciplina .= "";
@@ -184,5 +190,7 @@ class CursoController extends Controller {
     public function destroy($id) {
         //
     }
+    //
+    
 
 }

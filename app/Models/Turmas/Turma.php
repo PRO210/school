@@ -13,14 +13,6 @@ class Turma extends Model {
     public function alunos() {
         return $this->belongsToMany(Aluno::class, 'aluno_turmas');
     }
-
-//    public function alunos_cursando() {
-//        return $this->belongsToMany(Aluno::class, 'aluno_turmas')->withPivot('STATUS')->wherePivot('STATUS', 'cursando');
-//    }
-//
-//    public function alunos_reprovados() {
-//        return $this->belongsToMany(Aluno::class, 'aluno_turmas')->withPivot('STATUS')->wherePivot('STATUS', '!=', 'cursando');
-//    }
 //    
     //Adiciona os pedidos de transferências
     public function transferencias() {
@@ -31,7 +23,8 @@ class Turma extends Model {
     public function disciplinas() {
         return $this->belongsToMany(Disciplina::class, 'disciplina_turmas');
     }
-
+    //
+    protected $fillable = ['TURMA', 'TURMA_EXTRA', 'CATEGORIA', 'TURNO', 'UNICO', 'STATUS','ANO','TURMA_IDADE'];
     
 
 }

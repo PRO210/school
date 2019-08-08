@@ -11,18 +11,14 @@ use App\Models\Cursos\Curso;
 
 class Disciplina extends Model {
 
-    protected $fillable = ['DISCIPLINA',
-    ];
-
+    protected $fillable = ['DISCIPLINA'];
     //
     //Alimenta a View Editar_disciplina
     public function disciplinas_turmas() {
         return $this->belongsToMany(Turma::class, 'disciplina_turmas')->withPivot(['CARGA_HORARIA']);
     }
-
     //
-    //
-    //Adiciona as disciplinas nas no historico
+    //Adiciona as disciplinas no historico do aluno
     public function historicos() {
         return $this->belongsToMany(Aluno::class, 'aluno_historicos');
     }

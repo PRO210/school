@@ -7,7 +7,7 @@
                     "targets": 0,
                     "orderable": false
                 }],
-            "lengthMenu": [[5,10 , 20, 30, 40, 50, 70, 100, -1], [5,10 ,20, 30, 40, 50, 70, 100, "All"]],
+          "lengthMenu": [[5, 10, 15, 20, 100, -1], [5, 10, 15, 20, "All"]],
             "language": {
                 "lengthMenu": "_MENU_ ",
                 "zeroRecords": "Nenhuma Turma encontrada",

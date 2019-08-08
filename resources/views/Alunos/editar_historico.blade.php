@@ -59,9 +59,9 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-sm-6">  
-                                
+
                                 {!!Form::label('RECUPERAÇÃO', 'RECUPERAÇÃO',['class' => ''])!!}
-                                
+
                                 <select name="RECUPERACAO" name ="RECUPERACAO" class="form-control">
                                     @if($RECUPERACAO == "SIM")
                                     <option selected="">SIM</option>
@@ -72,23 +72,15 @@
                                     @endif
                                 </select>                        
                             </div>
-                            <div class="form-group col-sm-6">  
-                                {!!Form::label('RESULTADO', 'RESULTADO',['class' => ''])!!}                             
-
-                                <select name="aluno_classificacao_id" class="form-control" >    
-
+                            <div class="form-group col-sm-6">             
+                                {!!Form::label('RESULTADO', 'RESULTADO',['class' => ''])!!}                            
+                                <select name="aluno_classificacao_id" class="form-control" > 
                                     @foreach($status as $status_unico)
-
                                     @if($aluno_classificacao_id == "$status_unico->id")
-
                                     <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option>
-
                                     @else 
-
-                                    <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option> 
-
+                                    <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>
                                     @endif
-
                                     @endforeach                                                                                      
                                 </select>                            
                             </div>
@@ -155,11 +147,11 @@
                         <th>BIMESTRES</th>
                         @foreach ($aluno->historicos_alunos as $disciplina) 
                         @if ($disciplina->pivot->BIMESTRE == 1)
+                       
                         <th>{{$disciplina->DISCIPLINA}}</th>
                 <input name="DISCIPLINAS[]" hidden="" value="{{$disciplina->pivot->disciplina_id}}">
                 @endif
                 @endforeach  
-
                 </tr>
                 </thead>
                 <tr>
@@ -218,8 +210,7 @@
 
                     @endforeach 
                 </tr>
-                @endforeach    
-
+                @endforeach  
 
 
                 <tbody>  
@@ -243,7 +234,6 @@
                 <option value="{{$curso->id}}">{{$curso->NOME}}</option> 
 
                 @endif
-
 
 
                 @endforeach
