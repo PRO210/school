@@ -229,7 +229,7 @@
 <!--Confimar se pode Salvar-->
 <script type="text/javascript">
     function confirmar() {
-        var u = $('#usuario_logado').val();
+        var u = $('#usuario').val();
         var r = confirm("Já Posso Enviar " + u + "? ");
         if (r == true) {
             return true;

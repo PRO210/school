@@ -68,4 +68,7 @@ php artisan make:migration create_cursoDisciplinas_table
 php artisan make:model Models\\AlunosHistoricos\\AlunoHistorico -m
 php artisan make:controller AlunosHistoricos\\HistoricoController --resource
 php artisan make:migration create_alunoHistoricoDados_table
-
+//
+//
+Fpdf
+php artisan make:controller ExportPdfController

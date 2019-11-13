@@ -12,6 +12,7 @@ use App\Models\Logs\Log;
 use App\Models\Escola\Escola;
 use App\Models\Disciplinas\Disciplina;
 use App\Models\AlunosHistoricos\AlunoHistorico;
+use App\Models\AlunosTurmas\AlunoTurma;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 
@@ -23,10 +24,11 @@ class HistoricoController extends Controller {
     private $alunoClassificacao;
     private $disciplina;
     private $alunoHistorico;
+    private $alunoturma;
     private $curso;
 
 //
-    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, Disciplina $disciplina, AlunoClassificacao $alunoclassificacao, AlunoHistorico $alunohistorico, Curso $curso) {
+    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, Disciplina $disciplina, AlunoClassificacao $alunoclassificacao, AlunoTurma $alunoturma, AlunoHistorico $alunohistorico, Curso $curso) {
 //
         $this->aluno = $aluno;
         $this->alunoClassificacao = $alunoclassificacao;
@@ -35,6 +37,7 @@ class HistoricoController extends Controller {
         $this->turma = $turma;
         $this->disciplina = $disciplina;
         $this->alunoHistorico = $alunohistorico;
+        $this->alunoturma = $alunoturma;
         $this->curso = $curso;
     }
 
@@ -79,7 +82,7 @@ class HistoricoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-//        dd($curso);
+        // dd($request->TURMA);
         if ($request->botao == "pesquisar") {
             return redirect()->route('histórico/edição', ['id' => $request->aluno_id, 'codigo' => $request->CODIGO]);
         }
@@ -98,7 +101,7 @@ class HistoricoController extends Controller {
                 }
             }
         }
-       //
+        // dd($request);
         if ($historico) {
             $historico_dados = DB::table('aluno_historico_dados')->insert(['curso_id' => $request->curso_id, 'aluno_id' => Crypt::decrypt($request->aluno_id), 'CODIGO' => $unico,
                 'ANO' => $request->ANO, 'SEMESTRE' => $request->SEMESTRE, 'aluno_classificacao_id' => $request->aluno_classificacao_id, 'ESCOLA' => $request->ESCOLA,
@@ -128,9 +131,10 @@ class HistoricoController extends Controller {
     }
 
 //    
-//   Recebe o que veio do Store para Edição do histórico
+//   Recebe o que veio do Store para Edição e atualização do histórico
     public function edit($id, $codigo) {
-        $disciplinas_curso = Curso::with(['curso_disciplinas'])->where('id', Crypt::decrypt($id))->get();
+        //
+        $curso_id_recebido = DB::table('aluno_historico_dados')->where('codigo', $codigo)->get()->first();
 
         $aluno = (Aluno::with(['historicos_alunos' => function($query) use($codigo) {
                         $query->where('CODIGO', $codigo);
@@ -138,7 +142,7 @@ class HistoricoController extends Controller {
 
         $title = "EDITAR HISTÓRICO";
         foreach ($aluno->historicos_alunos as $value) {
-           // dd($aluno->historicos_alunos);
+            // dd($aluno->historicos_alunos);
             $ANO = $value->pivot->ANO;
             $CODIGO = $value->pivot->CODIGO;
             $curso_id = $value->pivot->curso_id;
@@ -149,7 +153,7 @@ class HistoricoController extends Controller {
         $status = AlunoClassificacao::all();
         //        
         $historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $codigo)->get()->first();
-        $curso_disciplinas = DB::table('curso_disciplinas')->where('curso_id', Crypt::decrypt($id))->orderBY('BOLETIM_ORD')->get();        
+        $curso_disciplinas = DB::table('curso_disciplinas')->where('curso_id', $curso_id_recebido->curso_id)->orderBY('BOLETIM_ORD')->get();
         //
         $SEMESTRE = $historico_dados->SEMESTRE;
         $ALUNO_DIAS = $historico_dados->ALUNO_DIAS;
@@ -166,6 +170,8 @@ class HistoricoController extends Controller {
         $CODIGO = $historico_dados->CODIGO;
         $curso_id = $historico_dados->curso_id;
         $aluno_classificacao_id = $historico_dados->aluno_classificacao_id;
+        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->orderBY('TURMA_ANO', 'DESC')->get()->first();
+        // dd($aluno_turma->aluno_classificacao_id);
 //        foreach ($bimestres as $bimestre) {
 //            echo " Bimestre: " . $bimestre . "  ";
 //            foreach ($aluno->historicos_alunos as $disciplina) {
@@ -181,11 +187,9 @@ class HistoricoController extends Controller {
 //            }
 //            echo "<br>";
 //            break;
-//        }       
-       // dd($curso_disciplinas);
-        
+//        }
         return view('Alunos.editar_historico', compact('title', 'aluno', 'SEMESTRE', 'ALUNO_DIAS', 'ALUNO_FREQUENCIA', 'ANO', 'TURMA', 'TURNO', 'UNICO', 'CIDADE', 'ESTADO', 'ESCOLA',
-                        'ESCOLA_DIAS', 'ESCOLA_HORAS', 'bimestres', 'CODIGO', 'curso_id', 'cursos', 'aluno_classificacao_id', 'status', 'RECUPERACAO','curso_disciplinas'));
+                        'ESCOLA_DIAS', 'ESCOLA_HORAS', 'bimestres', 'CODIGO', 'curso_id', 'cursos', 'aluno_classificacao_id', 'status', 'RECUPERACAO', 'curso_disciplinas', 'aluno_turma'));
     }
 
     /**
@@ -215,6 +219,11 @@ class HistoricoController extends Controller {
                 'ALUNO_DIAS' => $request->ALUNO_DIAS, 'ALUNO_FREQUENCIA' => $request->ALUNO_FREQUENCIA, 'TURMA' => $request->TURMA, 'TURNO' => $request->TURNO, 'UNICO' => $request->UNICO,
                 'curso_id' => $request->curso_id, 'updated_at' => NOW()]);
         }
+        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->orderBY('TURMA_ANO', 'DESC')->get()->first();
+    //  Atualizando a Tabela Pivot
+        $user = Aluno::find(Crypt::decrypt($id));
+        $user->turmas()->updateExistingPivot($aluno_turma->turma_id, array('aluno_classificacao_id' => "$request->STATUS", 'updated_at' => NOW()));
+
         $campo_final = "Alterou o Histórico do Aluno(a): $request->NOME ";
         if ($up2 = true) {
             //Traz o usuário
@@ -239,6 +248,7 @@ class HistoricoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, $aluno_id) {
+
         DB::beginTransaction();
 //      Limpando os vinculos da Tabela Pivot Histórico       
         $historico_delete = $this->alunoHistorico->where('CODIGO', $id)->delete();

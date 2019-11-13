@@ -339,15 +339,11 @@
                     </tr>
                     @endforeach
                 </tbody>
-            </table>    
-
-
-
-
+            </table>   
+           
         </div>
         @include('Cursos.tabela_editar_curso')
-        @include('Cursos.tabela_editar_curso_2')
-        
+        @include('Cursos.tabela_editar_curso_2')        
         
     </body>
 </html>

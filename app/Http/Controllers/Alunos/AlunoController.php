@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Crypt;
 
 //
 class AlunoController extends Controller {
-
 //
     private $aluno;
     private $log;
@@ -116,9 +115,8 @@ class AlunoController extends Controller {
     }
 
 //
-//Esse método Recupera o que veio do Create, mas diferente do anterior esse método Atualiza os dados existentes
+//Esse método Recupera o que veio do Create, mas diferente do anterior  Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
-        // dd($request);
 //      Recuperar o Nome do Status Atual
         $status_antigo_id = $this->alunoClassificacao->find($request->STATUS_ATUAL);
         $status_antigo_nome = $status_antigo_id->STATUS;
@@ -557,7 +555,6 @@ class AlunoController extends Controller {
             return redirect()->route('alunos.index')->with('msg_2', 'Falha em Salvar as Alterações!');
         }
     }
-
     //
     //Página Link para Históricos e transferências 
     public function historico($id, $id_turma) {

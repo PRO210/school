@@ -85,7 +85,7 @@ class CursoController extends Controller {
         array_shift($arrayDiscipllinas);
         $disciplinas_nao_vinculadas = DB::table('disciplinas')->whereNotIn('id', $arrayDiscipllinas)->get();
         //dd($disciplinas_curso);
-      
+
         return view('Cursos.editar_curso', compact('curso', 'disciplinas_curso', 'disciplinas_nao_vinculadas', 'title', 'sim_nao', 'MEDIACOES', 'MODALIDADES', 'ETAPAS'));
     }
 
@@ -188,9 +188,20 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
+//        Limpando os vinculos da Tabela Pivot Histórico
+        DB::beginTransaction();
+        $curso_dados_delete = DB::table('curso_disciplinas')->where('curso_id', Crypt::decrypt($id))->delete();
+        $curso_delete = $this->curso->where('id', Crypt::decrypt($id))->delete();
         //
+        if ($curso_delete && $curso_dados_delete) {
+            DB::commit();
+            // return redirect()->route('histórico', ['id' => $aluno_id, 'id_turma' => ''])->with('msg', 'Alterações Salvas com Sucesso!');
+            return redirect()->route('cursos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+        } else {
+            DB::rollback();
+            return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+        }
     }
-    //
-    
 
+    //
 }

@@ -112,7 +112,9 @@
                             </tr>
                             @forelse ($historico_dados as $key => $value)
                             <tr>
-                                <td><input type="checkbox" name="CODIGO" value="{{$value->CODIGO}}" id="{{$value->CODIGO}}" ><label for="{{$value->CODIGO}}">&nbsp; {{$value->ANO}}</label></td>
+                                <td>
+                                    <input type="checkbox" name="CODIGO" value="{{$value->CODIGO}}" id="{{$value->CODIGO}}" ><label for="{{$value->CODIGO}}">&nbsp; {{$value->ANO}}</label>
+                                </td>                               
                                 <td>{{$value->TURMA}} / {{$value->UNICO}}</td>                               
                                 <td>{{$value->SEMESTRE}}</td>
                                 <td>
@@ -129,15 +131,11 @@
                             </tr>
                             @endforelse
                             <tr>                                        
-                                <td colspan="2">&nbsp;&nbsp;
+                                <td colspan="4">&nbsp;&nbsp;
                                     <button type="submit" name="botao" value="pesquisar" class="btn btn-success btn-block" onclick="return confirmarAtualizacao()">Pesquisar</button>
                                     </a>
 
-                                </td>
-                                <td colspan="2">&nbsp;&nbsp;                                                                                          
-                                    {!! Form:: submit('Excluir',['class' => 'btn btn-danger btn-block','name' =>'botao','value'=>'exclui_historico','onclick'=>'return confirmarAtualizacao()','id' => 'exclui_historico'])!!}  
-
-                                </td>
+                                </td>                                
                             </tr>
                         </tbody>
                     </table>  

@@ -15,7 +15,7 @@ class Aluno extends Model {
 
 //Alimenta a View soliciações de tranferencias
     public function transferidos() {
-        return $this->belongsToMany(Turma::class, 'aluno_solicitacaos')->withPivot(['SOLICITANTE'])->withPivot(['TRANSFERENCIA_STATUS'])->withPivot(['aluno_classificacao_id']);
+        return $this->belongsToMany(Turma::class, 'aluno_solicitacaos')->withPivot(['id'])->withPivot(['SOLICITANTE'])->withPivot(['TRANSFERENCIA_STATUS'])->withPivot(['aluno_classificacao_id']);
     }
 
     public function status() {

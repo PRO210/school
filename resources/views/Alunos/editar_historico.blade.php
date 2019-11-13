@@ -16,7 +16,6 @@
         </style>
     </head>
     <body>
-
         @include('Alunos.alunos_css');
         @include('Menu.menu')
         @include('msg')
@@ -83,6 +82,21 @@
                                     @endif
                                     @endforeach                                                                                      
                                 </select>                            
+                            </div>                          
+                        </div>                         
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12"> 
+                                {!!Form::label('Status ', 'Status Atual do Aluno',['class' => ''])!!}                                   
+                                <select name="STATUS" class="form-control" >                             
+                                    @foreach($status as $status_unico)
+                                    @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")
+                                    <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option> 
+                                    @else                               
+                                    <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
+                                    @endif
+                                    @endforeach                                                                                      
+                                </select>                      
                             </div>
                         </div>
                     </div>
@@ -124,9 +138,21 @@
                                 {!! Form:: text('ESTADO',"{$ESTADO}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-sm-12"> 
+                                {!!Form::label('CURSO', 'CURSO',['class' => ''])!!}
+                                <select class='form-control' name='curso_id' style="width: 100% !important" id="" readonly = "">   
+                                    @foreach ($cursos as $curso)
+                                    @if($curso_id == "$curso->id")
+                                    <option value="{{$curso->id}}" selected="" >{{$curso->NOME}}</option>                                
+                                    @endif
+                                    @endforeach
+                                </select> 
+                            </div>
+                        </div>
                     </div>
                 </div> 
-            </div> 
+            </div>
             <div class="row">
                 <div class=" col-sm-4" >
                     <a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id)])}}' target='_self'  title='Históricos'> <button type="button" value="" title="" class="btn btn-primary btn-block" >Cadastrar Um Novo Histórico</button></a>                  
@@ -145,12 +171,16 @@
                 <thead>
                     <tr>
                         <th>BIMESTRES</th>
+                        @foreach ($curso_disciplinas as $disciplina_id)
+
                         @foreach ($aluno->historicos_alunos as $disciplina) 
-                        @if ($disciplina->pivot->BIMESTRE == 1)
-                       
+                        @if ($disciplina->pivot->BIMESTRE == 1 && $disciplina->pivot->disciplina_id == $disciplina_id->disciplina_id)
+
                         <th>{{$disciplina->DISCIPLINA}}</th>
                 <input name="DISCIPLINAS[]" hidden="" value="{{$disciplina->pivot->disciplina_id}}">
                 @endif
+                @endforeach 
+
                 @endforeach  
                 </tr>
                 </thead>
@@ -173,9 +203,11 @@
                     <th> Media Final</th>
                     @endif
 
+                    @foreach ($curso_disciplinas as $disciplina_id) 
+
                     @foreach ($aluno->historicos_alunos as $disciplina) 
 
-                    @if ($disciplina->pivot->BIMESTRE == $bimestre)
+                    @if ($disciplina->pivot->BIMESTRE == $bimestre && $disciplina->pivot->disciplina_id == $disciplina_id->disciplina_id)
                     @if($bimestre=="1")
                     <th>
                         <input class="notas" type="number" min="0" step="0.01" name="1[]" value="{{$disciplina->pivot->NOTA}}">
@@ -209,6 +241,8 @@
                     @endif
 
                     @endforeach 
+
+                    @endforeach 
                 </tr>
                 @endforeach  
 
@@ -222,35 +256,13 @@
             </table>
 
             <br>
-            <select class='form-control' name='curso_id' style="width: 100% !important" id="">   
-                @foreach ($cursos as $curso)
 
-                @if($curso_id == "$curso->id")
-
-                <option value="{{$curso->id}}" selected="">{{$curso->NOME}}</option>
-
-                @else        
-
-                <option value="{{$curso->id}}">{{$curso->NOME}}</option> 
-
-                @endif
-
-
-                @endforeach
-            </select> 
             <br>
-
-
-
-
-
 
 
 
         </div>
         {!! Form:: close()!!} 
         @include('Alunos.editar_historico_tabela')
-
     </body>
-
 </html>

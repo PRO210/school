@@ -19,6 +19,7 @@ use App\Exports;
 use App\Exports\AlunosFiltradosExport;
 use Maatwebsite\Excel\Exporter;
 use Maatwebsite\Excel\Facades\Excel;
+use \Anouar\Fpdf\Facades\Fpdf;
 
 class SolicitacaoController extends Controller {
 
@@ -30,8 +31,7 @@ class SolicitacaoController extends Controller {
     private $alunoClassificacao;
     private $alunoSolicitacao;
 
-    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma, AlunoClassificacao $alunoclassificacao,
-            AlunoSolicitacao $alunosolicitacao) {
+    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma, AlunoClassificacao $alunoclassificacao, AlunoSolicitacao $alunosolicitacao) {
 //
         $this->aluno = $aluno;
         $this->alunoClassificacao = $alunoclassificacao;
@@ -78,7 +78,6 @@ class SolicitacaoController extends Controller {
         if ($request->botao == "pesquisar_transferencia") {
             return redirect()->action('Alunos\SolicitacaoController@show', ['id' => $request->aluno_id]);
         }
-
 //      Valida a Data
         if (empty($request->DATA_SOLICITACAO)) {
             $request->DATA_SOLICITACAO = $data = date('Y-m-d');
@@ -157,7 +156,7 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request) {
-        // dd($request);
+
         if ($request->botao == "unico") {
             foreach ($request->aluno_selecionado as $id) {
                 $ids = explode('/', $id);
@@ -237,8 +236,38 @@ class SolicitacaoController extends Controller {
             } else {
                 return redirect()->back()->with('erro', 'As Alterações NÃO FORAM Salvas !');
             }
-        } elseif ($request->botao == "varios") {
-            return 'varios';
+        } elseif ($request->botao == "folha_rosto") {
+            foreach ($request->aluno_selecionado as $id) {
+                $ids = explode('/', $id);
+                $id_aluno = $ids[0];
+                $id_turma = $ids[1];
+                $id_classificacao = $ids[2];
+                $id_solicitacao = $ids[3];
+            }
+            $aluno = $this->aluno->find(Crypt::decrypt($id_aluno));
+            $transferencia = $this->alunoSolicitacao->find($id_solicitacao);
+            $turmas = $this->turma->all();
+//            dd($aluno->NASCIMENTO);
+            return view('Alunos.folha_rosto', compact('aluno', 'turmas', 'transferencia'));
+            //
+        } elseif ($request->botao == "folha_rosto_servidor") {
+//            dd($request->id);
+            $up = \DB::table('aluno_solicitacaos')
+                    ->where('id', $request->id)
+                    ->update(['T1' => "$request->T1", 'T2' => "$request->T2", 'T3' => "$request->T3", 'T4' => "$request->T4", 'T5' => "$request->T5", 'T6' => "$request->T6", 'T7' => "$request->T7"]);
+            //
+            if ($up = 1) {
+                $transferencia = $this->alunoSolicitacao->find($request->id);
+                $aluno = $this->aluno->find($request->aluno_id);
+                $turma = $request->TURMA; 
+                $pai_e = "";
+                if ($aluno->PAI !== "") {
+                    $pai_e = "e";
+                }
+                return view('Alunos.folha_rosto_impressao', compact('aluno', 'turma', 'transferencia','pai_e','turma'));
+            } else {
+                dd($request);
+            }
         }
     }
 
