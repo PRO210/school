@@ -13,7 +13,7 @@
                     "targets": 0,
                     "orderable": false
                 }],
-            "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
+            "lengthMenu": [[10, 20, 30, 40, 50, 70, 100, -1], [10, 20, 30, 40, 50, 70, 100, "All"]],
             "language": {
                 "lengthMenu": "_MENU_ ",
                 "zeroRecords": "Nenhum aluno encontrado",

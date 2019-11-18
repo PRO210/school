@@ -7,7 +7,7 @@
                     "targets": 0,
                     "orderable": false
                 }],
-            "lengthMenu": [[5, 10, 15, 20, 100, -1], [5, 10, 15, 20, "All"]],
+            "lengthMenu": [[10, 15, 20, 100, -1], [10, 15, 20, "All"]],
             "language": {
                 "lengthMenu": "_MENU_ ",
                 "zeroRecords": "Nenhum aluno encontrado",

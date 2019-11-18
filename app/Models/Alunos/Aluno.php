@@ -12,7 +12,6 @@ use App\Models\Disciplinas\Disciplina;
 use Illuminate\Database\Eloquent\Model;
 
 class Aluno extends Model {
-
 //Alimenta a View soliciações de tranferencias
     public function transferidos() {
         return $this->belongsToMany(Turma::class, 'aluno_solicitacaos')->withPivot(['id'])->withPivot(['SOLICITANTE'])->withPivot(['TRANSFERENCIA_STATUS'])->withPivot(['aluno_classificacao_id']);
@@ -22,14 +21,10 @@ class Aluno extends Model {
         return $this->belongsToMany(AlunoClassificacao::class, 'aluno_solicitacaos');
     }
 
-//
-//
 //    Traz o relacionamento entre Alunos e Turmas através da tabela 'aluno_turmas'
     public function turmas() {
         return $this->belongsToMany(Turma::class, 'aluno_turmas')->withPivot(['Aluno_Classificacao_id'])->withPivot(['OUVINTE']);
     }
-
-//
     //Traz o relacionamento entre Alunos e Status através da tabela 'aluno_turmas'
     public function classificacaos() {
         return $this->belongsToMany(AlunoClassificacao::class, 'aluno_turmas');

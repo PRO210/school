@@ -13,6 +13,8 @@
             .label_margin{margin-top: 12px !important}
             .notas{max-width: 85px;min-height: 16px;}
             a{text-decoration: none !important;}
+
+            .recuperacao{margin-top: 6px; min-width: 85px}
         </style>
     </head>
     <body>
@@ -58,16 +60,14 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-sm-6">  
-
-                                {!!Form::label('RECUPERAÇÃO', 'RECUPERAÇÃO',['class' => ''])!!}
-
-                                <select name="RECUPERACAO" name ="RECUPERACAO" class="form-control">
-                                    @if($RECUPERACAO == "SIM")
-                                    <option selected="">SIM</option>
-                                    <option>NAO</option>
-                                    @else
-                                    <option selected="">NAO</option>
-                                    <option>SIM</option>
+                                {!!Form::label('RECUPERAÇÃO', 'RECUPERAÇÃO',['class' => ''])!!}                               
+                                <select name="RECUPERACAO" name ="RECUPERACAO" class="form-control" id="Selrecuperacao">
+                                    @if($RECUPERACAO == "SIM") 
+                                    <option selected="" value="SIM">SIM</option>                                   
+                                    <option value="NAO">NAO</option>                                   
+                                    @else 
+                                    <option selected="" value="NAO">NAO</option>
+                                    <option value="SIM">SIM</option> 
                                     @endif
                                 </select>                        
                             </div>
@@ -109,11 +109,11 @@
                             <strong class="text-uppercase"> Dados da Escola </strong>
                         </h4> 
                         <div class="form-row">
-                            <div class="form-group col-sm-10">                                
+                            <div class="form-group col-sm-9">                                
                                 {!!Form::label('ESCOLA', 'ESCOLA',['class' => ''])!!}
                                 {!! Form:: text('ESCOLA',"{$ESCOLA}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false'])!!}  
                             </div>
-                            <div class="form-group col-sm-2">  
+                            <div class="form-group col-sm-3">  
                                 {!!Form::label('ANO', 'ANO',['class' => ''])!!}
                                 {!! Form:: text('ANO',"{$ANO}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','readonly'])!!}  
                             </div>
@@ -182,6 +182,7 @@
                 @endforeach 
 
                 @endforeach  
+                <th>FALTAS</th>
                 </tr>
                 </thead>
                 <tr>
@@ -200,7 +201,7 @@
                     @elseif($bimestre=="final")
                     <th> Final</th>
                     @elseif($bimestre=="media_final")
-                    <th> Media Final</th>
+                    <th> Media Final</th>                 
                     @endif
 
                     @foreach ($curso_disciplinas as $disciplina_id) 
@@ -211,7 +212,7 @@
                     @if($bimestre=="1")
                     <th>
                         <input class="notas" type="number" min="0" step="0.01" name="1[]" value="{{$disciplina->pivot->NOTA}}">
-                    </th> 
+                    </th>   
                     @elseif($bimestre=="2")
                     <th>
                         <input class="notas"  type="number" min="0" step="0.01" name="2[]" value="{{$disciplina->pivot->NOTA}}">
@@ -235,34 +236,106 @@
                     @elseif($bimestre=="media_final")
                     <th>
                         <input class="notas"  type="number" min="0" step="0.01" name="media_final[]" value="{{$disciplina->pivot->NOTA}}">
-                    </th> 
+                        <br>
+                        <select name="recuperacao[]" class="recuperacao">                            
+                            @if($disciplina->pivot->RECUPERACAO == "SIM")                            
+                            <option selected="">SIM</option>
+                            <option>NAO</option>                            
+                            @else                            
+                            <option selected="">NAO</option>
+                            <option>SIM</option>                            
+                            @endif                            
+                        </select>
+                    </th>
+
+
                     @endif
 
                     @endif
 
                     @endforeach 
 
+                    @endforeach 
+
+
+                    @foreach ($historicos_alunos_group as $key => $value) 
+                    @if ($key == $bimestre)
+                    @foreach ($value as $key2 => $faltas) 
+                    @if ($key2 == 0)                    
+                    <th>
+                        <input class="notas"  type="number" min="0" step="1" name="FALTAS[]" value="{{$faltas->FALTAS}}">
+                    </th>
+                    @endif
+                    @endforeach  
+                    @endif
                     @endforeach 
                 </tr>
+
+
+
                 @endforeach  
-
-
                 <tbody>  
                     <tr>
 
                     </tr>
                 </tbody>
-
             </table>
-
-            <br>
-
-            <br>
-
-
-
+            <div class="col-sm-12" id="observacao">
+                <div class="panel panel-primary">
+                    <div class="panel-body"> 
+                        <h4 class="text-on-pannel">
+                            <strong class="text-uppercase">Observações:</strong>
+                        </h4> 
+                        <div class="form-row">
+                            <div class=" col-sm-12">                                
+                                {!! Form:: text('T1',"{$T1}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class=" col-sm-12">                                
+                                {!! Form:: text('T2',"{$T2}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class="col-sm-12">                                
+                                {!! Form:: text('T3',"{$T3}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class=" col-sm-12">                                
+                                {!! Form:: text('T4',"{$T4}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class=" col-sm-12">                                
+                                {!! Form:: text('T5',"{$T5}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class="col-sm-12">                                
+                                {!! Form:: text('T6',"{$T6}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class=" col-sm-12">                                
+                                {!! Form:: text('T7',"{$T7}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                            <div class="col-sm-12">                                
+                                {!! Form:: text('T8',"{$T8}",['class' => 'form-control', 'placeholder' =>'' ,'onkeyup' => 'maiuscula(this)','onpaste' => 'return false;','ondrop' => 'return false','maxlength' => '52'])!!}  
+                            </div>                            
+                        </div>
+                    </div>
+                </div> 
+            </div>
         </div>
         {!! Form:: close()!!} 
         @include('Alunos.editar_historico_tabela')
     </body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+//            if ($('#Selrecuperacao').val() == 'NAO') {
+//                $(".recuperacao").hide(2000);
+//            } else {
+//                $(".recuperacao").show(2000);
+//            }
+//            //
+//            $('#Selrecuperacao').change(function () {
+//                if ($('#Selrecuperacao').val() == 'NAO') {
+//                    $(".recuperacao").hide(2000);
+//                } else {
+//                    $(".recuperacao").toggle(2000);
+//                }
+//            });
+        });
+    </script>
 </html>

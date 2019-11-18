@@ -27,16 +27,16 @@ class CreateCursoDisciplinasTable extends Migration
             $table->string('EM_DESUSO')->nullable();
             
             $table->string('BOLETIM')->nullable();
-            $table->string('BOLETIM_ORD')->nullable();
+            $table->integer('BOLETIM_ORD')->nullable();
             
             $table->string('FICHA_DESCRITIVA')->nullable();
-            $table->string('FICHA_DESCRITIVA_ORD')->nullable();
+            $table->integer('FICHA_DESCRITIVA_ORD')->nullable();
             
             $table->string('ATA')->nullable();
-            $table->string('ATA_ORD')->nullable();
+            $table->integer('ATA_ORD')->nullable();
             
             $table->string('BNC')->nullable();
-            $table->string('BNC_ORD')->nullable();
+            $table->integer('BNC_ORD')->nullable();
             
             $table->timestamps();
         });

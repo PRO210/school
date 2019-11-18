@@ -12,6 +12,7 @@ use App\Models\Logs\Log;
 use App\Models\Escola\Escola;
 use App\Models\Alunos\AlunoClassificacao;
 use App\Models\Alunos\AlunoSolicitacao;
+use App\Models\Cursos\Curso;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 //
@@ -30,8 +31,9 @@ class SolicitacaoController extends Controller {
     private $alunoturma;
     private $alunoClassificacao;
     private $alunoSolicitacao;
+    private $curso;
 
-    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma, AlunoClassificacao $alunoclassificacao, AlunoSolicitacao $alunosolicitacao) {
+    public function __construct(Aluno $aluno, Log $log, Escola $escola, Turma $turma, AlunoTurma $alunoturma, AlunoClassificacao $alunoclassificacao, AlunoSolicitacao $alunosolicitacao, Curso $curso) {
 //
         $this->aluno = $aluno;
         $this->alunoClassificacao = $alunoclassificacao;
@@ -40,6 +42,7 @@ class SolicitacaoController extends Controller {
         $this->escola = $escola;
         $this->turma = $turma;
         $this->alunoturma = $alunoturma;
+        $this->curso = $curso;
     }
 
     public function index() {
@@ -143,8 +146,6 @@ class SolicitacaoController extends Controller {
                 ->join('aluno_classificacaos', 'aluno_solicitacaos.aluno_classificacao_id', '=', 'aluno_classificacaos.id')->where('aluno_classificacaos.id', $id_classificacao)
                 ->select('alunos.NOME', 'turmas.*', 'aluno_classificacaos.id', 'aluno_solicitacaos.*')
                 ->get();
-
-
         return Response::json($alunoTeste);
     }
 
@@ -259,16 +260,124 @@ class SolicitacaoController extends Controller {
             if ($up = 1) {
                 $transferencia = $this->alunoSolicitacao->find($request->id);
                 $aluno = $this->aluno->find($request->aluno_id);
-                $turma = $request->TURMA; 
+                $turma = $request->TURMA;
                 $pai_e = "";
                 if ($aluno->PAI !== "") {
                     $pai_e = "e";
                 }
-                return view('Alunos.folha_rosto_impressao', compact('aluno', 'turma', 'transferencia','pai_e','turma'));
-            } else {
-                dd($request);
+                return view('Alunos.folha_rosto_impressao', compact('aluno', 'turma', 'transferencia', 'pai_e', 'turma'));
+                //
             }
+        } elseif ($request->botao == "folha_notas") {
+
+            foreach ($request->aluno_selecionado as $id) {
+                $ids = explode('/', $id);
+                $id_aluno = $ids[0];
+                $id_turma = $ids[1];
+                $id_classificacao = $ids[2];
+                $id_solicitacao = $ids[3];
+            }
+            $aluno = (Aluno::with(['turmas' => function($query) use($id_turma) {
+                            $query->where('turma_id', $id_turma);
+                        }])->where('id', Crypt::decrypt($id_aluno))->get()->first());
+            //
+            $turma_atual = "";
+            foreach ($aluno->turmas as $turma) {
+                $turma_atual .= $turma->TURMA . " " . $turma->UNICO . " (" . substr($turma->ANO, 0, -6) . ") ";
+            }
+            $historico_dados = DB::table('aluno_historico_dados')->where('aluno_id', Crypt::decrypt($id_aluno))->get();
+            $cursos = $this->curso->find($historico_dados[0]->curso_id);
+            $todos_cursos = $this->curso->all();
+            $todas_turmas = ['1 ano', '2 ano', '3 ano', '4 ano', '5 ano', 'Eja I', 'Eja II'];
+            //  dd($cursos->id);
+            return view('Alunos.folha_notas', compact('aluno', 'turma_atual', 'cursos', 'historico_dados', 'todos_cursos', 'todas_turmas'));
+            //
+            //
+        } elseif ($request->botao == "folha_notas_visualizar") {
+
+            $todas_turmas = ['1 ano', '2 ano', '3 ano', '4 ano', '5 ano', 'Eja I', 'Eja II'];
+            $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO)->get()->first();
+            $curso_disciplinas = DB::table('curso_disciplinas')->where('curso_id', $aluno_historico_dados->curso_id)->orderBY('BOLETIM_ORD')->get();
+            $arrayDisciplinas[] = "";
+            $idDisciplinas[] = "";
+            foreach ($curso_disciplinas as $disc) {
+                $disciplina = DB::table('disciplinas')->where('id', $disc->disciplina_id)->get()->first();
+                array_push($arrayDisciplinas, $disciplina->DISCIPLINA);
+                array_push($idDisciplinas, $disciplina->id);
+                //echo $disciplina->DISCIPLINA . "<br>";
+            }
+            array_shift($arrayDisciplinas);
+            array_shift($idDisciplinas);
+
+            $arrayNota[] = "";
+            foreach ($todas_turmas as $key => $value) {
+
+                if (!empty($request->CODIGO[$key])) {
+                    //
+                    echo"$value" . "<br>";
+                    $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[$key])->get()->first();
+                    $id_aluno = $aluno_historico_dados->aluno_id;
+
+                    
+                    foreach ($idDisciplinas as $idDisciplina) {
+                        $aluno_historicos = DB::table('aluno_historicos')->where('CODIGO', $request->CODIGO[$key])->where('disciplina_id', $idDisciplina)->get();
+                        foreach ($aluno_historicos as $value) {
+                            if ($value->BIMESTRE == "media" && $value->APROVADO == "APROVADO") {
+                                array_push($arrayNota, $value->NOTA);
+                            } elseif ($value->BIMESTRE == "media" && $value->APROVADO == "REPROVADO" && $value->RECUPERACAO == "NAO") {
+                                array_push($arrayNota, $value->NOTA);
+                            } elseif ($value->BIMESTRE == "media_final" && $value->RECUPERACAO == "SIM") {
+                                array_push($arrayNota, $value->NOTA);
+                            }
+                        }
+                    }
+                    array_shift($arrayNota);
+                    print_r($arrayNota);
+
+
+                    dd($aluno_historicos2);
+
+
+
+                    $codigo = $request->CODIGO[$key];
+                    $aluno = (Aluno::with(['historicos_alunos' => function($query) use($codigo) {
+                                    $query->where('CODIGO', $codigo);
+                                }])->where('id', $id_aluno)->get()->first());
+                    //
+                    foreach ($aluno->historicos_alunos as $disciplina) {
+
+                        if ($disciplina->pivot->BIMESTRE == "media" && $disciplina->pivot->APROVADO == "APROVADO") {
+                            // echo $disciplina->DISCIPLINA . " NOTA: " . $disciplina->pivot->NOTA . "  -  " . $disciplina->pivot->RECUPERACAO . " / <br><br>";
+                            array_push($arrayNota, $disciplina->pivot->NOTA);
+                        } elseif ($disciplina->pivot->BIMESTRE == "media" && $disciplina->pivot->APROVADO == "REPROVADO" && $disciplina->pivot->RECUPERACAO == "NAO") {
+                            //    echo $disciplina->DISCIPLINA . " NOTA: " . $disciplina->pivot->NOTA . "  -  " . $disciplina->pivot->RECUPERACAO . " / <br><br>";
+                            array_push($arrayNota, $disciplina->pivot->NOTA);
+                        }
+                        //
+                        if ($disciplina->pivot->BIMESTRE == "media_final" && $disciplina->pivot->RECUPERACAO == "SIM") {
+                            //   echo $disciplina->DISCIPLINA . " NOTA: " . $disciplina->pivot->NOTA . "  -  " . $disciplina->pivot->RECUPERACAO . " / <br>";
+                            array_push($arrayNota, $disciplina->pivot->NOTA);
+                        }
+                    }
+                }
+            }
+            array_shift($arrayNota);
+            // print_r($arrayNota);
+            $res_dis = "DE SÁUDE.";
+            $res_dis1 = "E PROGRAMAS";
+            $res_dis2 = "CIÊNCIAS FÍSICA, BIO";
+            $res_dis3 = "LINGUA ESTRANGEIRA";
+            $res_dis4 = "MODERNA (INGLÊS)";
+            $res_dis7 = "ELEMENTOS DE";
+            $res_dis6 = "DESENHOS";
+            $res_dis5 = "GEOMÉTRICOS";
+
+            return view('Alunos.folha_notas_impressao', compact('aluno', 'aluno_historico_dados', 'aluno_historicos', 'arrayDisciplinas', 'res_dis', 'res_dis1', 'res_dis2', 'res_dis3', 'res_dis4'
+                            , 'res_dis5', 'res_dis6', 'res_dis7', 'arrayNota'));
         }
+
+        //
+        //
     }
 
     /**

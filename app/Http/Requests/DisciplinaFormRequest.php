@@ -24,7 +24,7 @@ class DisciplinaFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'DISCIPLINA' => 'required|min:3|max:20',
+            'DISCIPLINA' => 'required|min:3|max:45',
             
         ];
     }

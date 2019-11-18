@@ -138,10 +138,6 @@ class TurmaController extends Controller {
         $turma = $this->turma->find(Crypt::decrypt($id));
         $update = $turma->update($form);
 
-
-
-
-
         //Redireciona
         if ($update) {
             DB::commit();

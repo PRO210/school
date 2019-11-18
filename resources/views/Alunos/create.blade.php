@@ -7,7 +7,7 @@
         <style>
             @media (max-width: 790px) {#FONE_II{margin-top: 12px};                                    
                                        @media (max-width: 790px) {#bt_voltar{margin-top: 12px};                                    
-        </style>
+                                       </style>
             </head>
             <body>
                 @include('Alunos.alunos_css');
@@ -41,18 +41,24 @@
                                     @foreach($turmas as $turma_unica)
 
                                     @if($turma->id  == "$turma_unica->id")
-                                    <option value="{{$turma_unica->id}}" selected="">{{$turma_unica->TURMA}} {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>
+                                    <option value="{{$turma_unica->id}}" selected="">{{$turma_unica->TURMA}} {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>
                                     @else                                                               
-                                    <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
+                                    <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>                          
                                     @endif
                                     @endforeach  
 
                                     @else
 
                                     @foreach($turmas as $turma_unica) 
-                                    <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}}</option>                          
-                                    @endforeach 
 
+                                    @if($sem_turma  == "$turma_unica->TURMA")
+
+                                    <option value="{{$turma_unica->id}}" selected="">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>  
+                                    @else                                                               
+                                    <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>                          
+                                    @endif
+
+                                    @endforeach 
                                     @endif
                                 </select>
                             </div>                 

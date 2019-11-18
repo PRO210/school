@@ -44,7 +44,7 @@ class AlunoController extends Controller {
 
 //
     public function index() {
-        $title = "TODOS OS ALUNOS";
+        $title = "Todos os Alunos";
         $alunos = Aluno::with(['turmas', 'classificacaos'])->get();
 //        $alunoTeste = (Aluno::with(['turmas' => function($query) use($id_turma) {
 //                                $query->where('turma_id', $id_turma);
@@ -64,7 +64,7 @@ class AlunoController extends Controller {
 //            // echo "$key :" . " $dados" . "<br>";
 //            $html[$key] = $dados;
 //        } 
-      
+       // dd($alunos);
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
@@ -74,7 +74,8 @@ class AlunoController extends Controller {
         include 'selects.php';
         $title = "Cadastrar Aluno";
         $turmas = $this->turma->all();
-        return view('Alunos.create', compact('title', 'turmas', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes'));
+        $sem_turma = "SEM TURMA";
+        return view('Alunos.create', compact('title', 'turmas', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes','sem_turma'));
     }
 
 //

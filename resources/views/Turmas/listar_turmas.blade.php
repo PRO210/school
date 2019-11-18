@@ -31,7 +31,6 @@
                 <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
                     <thead>
                         <tr> 
-
                             <th> 
                                 <div class='dropdown'>
                                     @if($obs == "")                                   
@@ -45,11 +44,9 @@
                                     @endif
                                 </div>
                             </th>   
-
                             <th>TURMA</th>
                             <th>TURNO</th>
                             <th>ANO</th>
-
                         </tr>
                     </thead>
                     <tbody>                                   
@@ -62,8 +59,7 @@
                                     <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                         @can('EDITAR_ALUNOS')
                                         <li><a href="{{route('turmas/edit',['id' => Crypt::encrypt($turma->id)])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
-                                        <li><a href="{{route('turmas/destory',['id' => Crypt::encrypt($turma->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-remove text-danger' aria-hidden='true' onclick="return deletar()">&nbsp;Deletar a Turma</span></a></li>
-
+                                        <li><a href="{{route('turmas/destory',['id' => Crypt::encrypt($turma->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-remove text-danger' aria-hidden='true' onclick="return deletar()">&nbsp;</span>Deletar a Turma</a></li>
                                         @endcan
                                     </ul>                              
                                     &nbsp;&nbsp;
@@ -75,9 +71,7 @@
                             </td> 
                             <td>{{$turma->TURNO}}</td>
                             <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-
-                        </tr>                                        
-
+                        </tr>                                      
                         @endforeach                     
                     </tbody>
                     <tfoot>
@@ -86,15 +80,11 @@
                             <th>TURMA</th>
                             <th>TURNO</th>
                             <th>ANO</th>
-
-
-
                         </tr>
                     </tfoot>        
                 </table>                  
                 {!! Form:: close()!!}        
             </div> 
-            @include ('Turmas.tabela_e_extras_listar_turmas')
-            
+            @include ('Turmas.tabela_e_extras_listar_turmas')            
         </body>
     </html>
