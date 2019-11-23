@@ -4,34 +4,42 @@
         <title>Notas</title>
         <style>
             @media (max-width: 720px) {.btvalida{margin-bottom: 12px !important}};
-           
+
         </style>
     </head>
     <body>
         @include('bootstrap4')
         @include('Menu.menu')
         {!!Form::open(['url' => 'alunos/solicitações/transferência/update','class' => 'form-horizontal','name' => 'form1'])!!}
-         <input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}"> 
+        <input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}"> 
+        <input id="" name="curso_id" type="hidden" value="{{$cursos->id}}"> 
         <div class="container">          
-           <p style="margin: 36px; font-size: 14px">Montar a Transferência de: {{$aluno->NOME}},TURMA: {{$turma_atual}},CURSO: {{$cursos->NOME}}</p>
+            <p style="margin: 36px; font-size: 14px">Montar a Transferência de: {{$aluno->NOME}},TURMA: {{$turma_atual}},CURSO: {{$cursos->NOME}}</p>
             @foreach($todas_turmas as $turma)
             <div class="row">
                 <div class="form-group col-sm-12">                   
                     {!!Form::label("{$turma}", "{$turma}",['class' => 'col-sm-2 control-label'])!!}
-                    <div class="col-sm-5">
+                    <div class="col-sm-6">
                         <select class='form-control' name="CODIGO[]" style="width: 100% !important">  
-                            <option  selected="" value="">Escolha um do(s) Histórico Aqui!</option>
+                           <option  selected="" value="">Escolha um do(s) Histórico Aqui!</option>
                             @forelse ($historico_dados as $key => $value)
+                            
                             @foreach ($todos_cursos as $curso)
-                            @if($value->curso_id =="$curso->id")                         
+                            
+                            @if($value->curso_id =="$curso->id")                            
+                                                         
                             <option value="{{$value->CODIGO}}">Ano: {{$value->ANO}} , Semestre/Ano: {{$value->SEMESTRE}} , Curso: {{$curso->NOME}}</option>
+                            
                             @endif
                             @endforeach
                             @empty
                             <option>O Aluno(a) não tem Histórico Cadastrado!</option>
                             @endforelse
                         </select>
-                    </div>                  
+                    </div> 
+                    <div class="col-sm-4">                           
+                        <label class="radio-inline"> <input type="checkbox" name="T{{$turma}}" value="SIM">&nbsp;&nbsp;Ainda Cursando</label>                        
+                    </div>
                 </div>
             </div>
             @endforeach 

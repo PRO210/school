@@ -15,8 +15,8 @@ class CreateAlunoHistoricoDadosTable extends Migration {
         Schema::create('aluno_historico_dados', function (Blueprint $table) {
             $table->increments('id');
             $table->string('CODIGO');
-            
-            $table->string('ANO');          
+
+            $table->string('ANO');
             $table->string('SEMESTRE');
 
             $table->integer('curso_id')->unsigned();
@@ -27,6 +27,8 @@ class CreateAlunoHistoricoDadosTable extends Migration {
 
             $table->integer('aluno_classificacao_id')->unsigned();
             $table->foreign('aluno_classificacao_id')->references('id')->on('aluno_classificacaos');
+
+            $table->integer('turma_id')->unsigned();
 
             $table->string('ESCOLA')->nullable();
             $table->string('CIDADE')->nullable();

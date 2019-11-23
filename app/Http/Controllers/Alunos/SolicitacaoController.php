@@ -268,6 +268,9 @@ class SolicitacaoController extends Controller {
                 return view('Alunos.folha_rosto_impressao', compact('aluno', 'turma', 'transferencia', 'pai_e', 'turma'));
                 //
             }
+            //
+//            Página Que Monta os Anos para a Transferência
+            //
         } elseif ($request->botao == "folha_notas") {
 
             foreach ($request->aluno_selecionado as $id) {
@@ -289,80 +292,110 @@ class SolicitacaoController extends Controller {
             $cursos = $this->curso->find($historico_dados[0]->curso_id);
             $todos_cursos = $this->curso->all();
             $todas_turmas = ['1 ano', '2 ano', '3 ano', '4 ano', '5 ano', 'Eja I', 'Eja II'];
-            //  dd($cursos->id);
+            //  dd($historico_dados);
             return view('Alunos.folha_notas', compact('aluno', 'turma_atual', 'cursos', 'historico_dados', 'todos_cursos', 'todas_turmas'));
             //
             //
         } elseif ($request->botao == "folha_notas_visualizar") {
 
-            $todas_turmas = ['1 ano', '2 ano', '3 ano', '4 ano', '5 ano', 'Eja I', 'Eja II'];
-            $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO)->get()->first();
-            $curso_disciplinas = DB::table('curso_disciplinas')->where('curso_id', $aluno_historico_dados->curso_id)->orderBY('BOLETIM_ORD')->get();
-            $arrayDisciplinas[] = "";
-            $idDisciplinas[] = "";
-            foreach ($curso_disciplinas as $disc) {
-                $disciplina = DB::table('disciplinas')->where('id', $disc->disciplina_id)->get()->first();
-                array_push($arrayDisciplinas, $disciplina->DISCIPLINA);
-                array_push($idDisciplinas, $disciplina->id);
-                //echo $disciplina->DISCIPLINA . "<br>";
-            }
-            array_shift($arrayDisciplinas);
-            array_shift($idDisciplinas);
+            $marcarX = "";
+            $marcarX2 = "";
+            $aluno_historico_dados2 = "";
+            $arrayNota2[] = "";
+            $curso_disciplinas = DB::table('curso_disciplinas')->where('curso_id', $request->curso_id)->orderBY('BOLETIM_ORD')->get();
 
-            $arrayNota[] = "";
-            foreach ($todas_turmas as $key => $value) {
+            foreach ($request->CODIGO as $key => $codigo) {
 
-                if (!empty($request->CODIGO[$key])) {
+                if ($key == 0 && empty($codigo)) {
+
+                    $aluno_historico_dados = "";
+                    $aluno_historicos = "";
+                    $arrayNota[] = "";
+                    $arrayDisciplinas[] = "";
+                    $arrayCursando = array('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
                     //
-                    echo"$value" . "<br>";
-                    $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[$key])->get()->first();
-                    $id_aluno = $aluno_historico_dados->aluno_id;
+                    $idDisciplinas[] = "";
+                    foreach ($curso_disciplinas as $disc) {
 
-                    
-                    foreach ($idDisciplinas as $idDisciplina) {
-                        $aluno_historicos = DB::table('aluno_historicos')->where('CODIGO', $request->CODIGO[$key])->where('disciplina_id', $idDisciplina)->get();
-                        foreach ($aluno_historicos as $value) {
-                            if ($value->BIMESTRE == "media" && $value->APROVADO == "APROVADO") {
-                                array_push($arrayNota, $value->NOTA);
-                            } elseif ($value->BIMESTRE == "media" && $value->APROVADO == "REPROVADO" && $value->RECUPERACAO == "NAO") {
-                                array_push($arrayNota, $value->NOTA);
-                            } elseif ($value->BIMESTRE == "media_final" && $value->RECUPERACAO == "SIM") {
-                                array_push($arrayNota, $value->NOTA);
-                            }
-                        }
+                        $disciplina = DB::table('disciplinas')->where('id', $disc->disciplina_id)->get()->first();
+                        array_push($arrayDisciplinas, $disciplina->DISCIPLINA);
+                        array_push($idDisciplinas, $disciplina->id);
+                        //  echo $disciplina->DISCIPLINA . "<br>";
+                    }
+                    array_shift($arrayDisciplinas);
+                    array_shift($idDisciplinas);
+                    //
+                    foreach ($idDisciplinas as $key2 => $idDisciplina) {
+                        array_push($arrayNota, $arrayCursando[$key2]);
                     }
                     array_shift($arrayNota);
-                    print_r($arrayNota);
-
-
-                    dd($aluno_historicos2);
-
-
-
-                    $codigo = $request->CODIGO[$key];
-                    $aluno = (Aluno::with(['historicos_alunos' => function($query) use($codigo) {
-                                    $query->where('CODIGO', $codigo);
-                                }])->where('id', $id_aluno)->get()->first());
                     //
-                    foreach ($aluno->historicos_alunos as $disciplina) {
+                } elseif ($key == 0 && !empty($codigo)) {
+                    $marcarX = "X";
+                    $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO)->get()->first();
+                    $curso_disciplinas = DB::table('curso_disciplinas')->where('curso_id', $aluno_historico_dados->curso_id)->orderBY('BOLETIM_ORD')->get();
 
-                        if ($disciplina->pivot->BIMESTRE == "media" && $disciplina->pivot->APROVADO == "APROVADO") {
-                            // echo $disciplina->DISCIPLINA . " NOTA: " . $disciplina->pivot->NOTA . "  -  " . $disciplina->pivot->RECUPERACAO . " / <br><br>";
-                            array_push($arrayNota, $disciplina->pivot->NOTA);
-                        } elseif ($disciplina->pivot->BIMESTRE == "media" && $disciplina->pivot->APROVADO == "REPROVADO" && $disciplina->pivot->RECUPERACAO == "NAO") {
-                            //    echo $disciplina->DISCIPLINA . " NOTA: " . $disciplina->pivot->NOTA . "  -  " . $disciplina->pivot->RECUPERACAO . " / <br><br>";
-                            array_push($arrayNota, $disciplina->pivot->NOTA);
-                        }
+                    $arrayDisciplinas[] = "";
+                    $idDisciplinas[] = "";
+                    foreach ($curso_disciplinas as $disc) {
+                        $disciplina = DB::table('disciplinas')->where('id', $disc->disciplina_id)->get()->first();
+                        array_push($arrayDisciplinas, $disciplina->DISCIPLINA);
+                        array_push($idDisciplinas, $disciplina->id);
+                        //  echo $disciplina->DISCIPLINA . "<br>";
+                    }
+                    array_shift($arrayDisciplinas);
+                    array_shift($idDisciplinas);
+
+                    $arrayNota[] = "";
+                    $arrayCursando = array('C', 'U', 'R', 'S', 'A', 'N', 'D', 'O', '---', '---', '---', '---', '---', '---', '---', '---');
+
+                    if ($request->T1_ano == "SIM") {
                         //
-                        if ($disciplina->pivot->BIMESTRE == "media_final" && $disciplina->pivot->RECUPERACAO == "SIM") {
-                            //   echo $disciplina->DISCIPLINA . " NOTA: " . $disciplina->pivot->NOTA . "  -  " . $disciplina->pivot->RECUPERACAO . " / <br>";
-                            array_push($arrayNota, $disciplina->pivot->NOTA);
+                        foreach ($idDisciplinas as $key2 => $idDisciplina) {
+                            array_push($arrayNota, $arrayCursando[$key2]);
                         }
+                        $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[$key])->get()->first();
+                        $id_aluno = $aluno_historico_dados->aluno_id;
+                        $aluno_historicos = DB::table('aluno_historicos')->where('CODIGO', $request->CODIGO[$key])->where('disciplina_id', $idDisciplina)->get();
+                        array_shift($arrayNota);
+                        //
+                    } else {
+                        //                  
+                        $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[$key])->get()->first();
+                        $id_aluno = $aluno_historico_dados->aluno_id;
+
+                        foreach ($idDisciplinas as $idDisciplina) {
+
+                            $aluno_historicos = DB::table('aluno_historicos')->where('CODIGO', $request->CODIGO[$key])->where('disciplina_id', $idDisciplina)->get();
+                            // dd($aluno_historicos);
+                            foreach ($aluno_historicos as $value) {
+                                //
+
+                                if ($value->BIMESTRE == "media" && $value->APROVADO == "REPROVADO") {
+                                    $antiga = $value->NOTA;
+                                }
+                                if ($value->BIMESTRE == "media" && $value->APROVADO == "APROVADO") {
+                                    array_push($arrayNota, $value->NOTA);
+                                } elseif ($value->BIMESTRE == "media" && $value->APROVADO == "REPROVADO" && $value->RECUPERACAO == "NAO") {
+                                    array_push($arrayNota, $value->NOTA);
+                                } elseif ($value->BIMESTRE == "media" && empty($value->APROVADO)) {
+                                    array_push($arrayNota, "---");
+                                    //
+                                } elseif ($value->BIMESTRE == "media_final" && $value->RECUPERACAO == "SIM") {
+
+                                    if ($value->NOTA > $antiga) {
+                                        array_push($arrayNota, $value->NOTA);
+                                    } else {
+                                        array_push($arrayNota, $antiga);
+                                    }
+                                }
+                            }
+                        }
+                        array_shift($arrayNota);
                     }
                 }
+                include '/opt/lampp/htdocs/laravel/school/app/Http/Controllers/Alunos/2ano.php';
             }
-            array_shift($arrayNota);
-            // print_r($arrayNota);
             $res_dis = "DE SÁUDE.";
             $res_dis1 = "E PROGRAMAS";
             $res_dis2 = "CIÊNCIAS FÍSICA, BIO";
@@ -372,10 +405,9 @@ class SolicitacaoController extends Controller {
             $res_dis6 = "DESENHOS";
             $res_dis5 = "GEOMÉTRICOS";
 
-            return view('Alunos.folha_notas_impressao', compact('aluno', 'aluno_historico_dados', 'aluno_historicos', 'arrayDisciplinas', 'res_dis', 'res_dis1', 'res_dis2', 'res_dis3', 'res_dis4'
-                            , 'res_dis5', 'res_dis6', 'res_dis7', 'arrayNota'));
+            return view('Alunos.folha_notas_impressao', compact('aluno_historico_dados', 'aluno_historico_dados2', 'aluno_historicos', 'arrayDisciplinas', 'res_dis', 'res_dis1', 'res_dis2', 'res_dis3', 'res_dis4'
+                            , 'res_dis5', 'res_dis6', 'res_dis7', 'arrayNota', 'arrayNota2', 'marcarX', 'marcarX2'));
         }
-
         //
         //
     }

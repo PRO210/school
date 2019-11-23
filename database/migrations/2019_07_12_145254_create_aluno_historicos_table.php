@@ -24,6 +24,8 @@ class CreateAlunoHistoricosTable extends Migration {
             $table->string('RECUPERACAO')->nullable();
             $table->string('FALTAS')->nullable();
 
+            $table->integer('turma_id')->unsigned();
+            
             $table->integer('aluno_id')->unsigned();
             $table->foreign('aluno_id')->references('id')->on('alunos')->onDelete('cascade');
 

@@ -48,6 +48,18 @@
                             <tr>
                                 <td colspan="2"><input id = 'input_escola' type = 'text' name = 'ESTADO' placeholder = 'Estado' onkeyup='maiuscula(this)'></td>                            
                             </tr>
+                             <tr>                             
+                                <td colspan="2">                                    
+                                    <select class='form-control' name='turma_id' style="width: 100% !important" id="turma">  
+                                        <option selected="Escolha uma Turma Formal">Escolha uma Turma Formal</option>
+                                        @forelse ($turmas as $turma)
+                                        <option value="{{$turma->id}}">{{$turma->TURMA}} - {{$turma->UNICO}}</option>
+                                        @empty
+                                        <option>Não Existe Turma Cadastrada</option>   
+                                        @endforelse
+                                    </select>                                        
+                                </td>
+                            </tr>
                             <tr>
                                 <td colspan="2"><input id = 'input_escola' type = 'text' name = 'TURMA' placeholder = 'Turma' onkeyup='maiuscula(this)'></td>                             
                             </tr>
@@ -83,7 +95,7 @@
                             <tr>                                
                                 <?php
                                 echo "<th>"
-                                . "&nbsp;&nbsp;<button disabled = '' id = 'criar_historico' type='submit' value='criar' name = 'botao' class='btn btn-success  btn-block' onclick = 'return confirmarExclusao2()' >CRIAR NOVO HISTÓRICO</button>"
+                                . "&nbsp;&nbsp;<button disabled = '' title = 'O Campo Ano e Turma Formal não Devem serem Enviados em Branco!' id = 'criar_historico' type='submit' value='criar' name = 'botao' class='btn btn-success  btn-block' onclick = 'return confirmarExclusao2()' >CRIAR NOVO HISTÓRICO</button>"
                                 . "</th>";
                                 ?>                       
                                 <?php

@@ -3,7 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/opt/lampp/htdocs/laravel/school/routes/web.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/listar_transferidos.blade.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/app/Http/Controllers/AlunosHistoricos/HistoricoController.php</file>
             <file>file:/opt/lampp/htdocs/laravel/school/resources/views/Alunos/folha_notas_impressao.blade.php</file>

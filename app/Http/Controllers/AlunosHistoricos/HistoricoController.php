@@ -75,14 +75,11 @@ class HistoricoController extends Controller {
                         'aluno_classificacao_id', 'anos', 'cursos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //
+//    Cria os Históricos dos alunos
+    //
     public function store(Request $request) {
-        // dd($request->TURMA);
+        //  dd($request);
         if ($request->botao == "pesquisar") {
             return redirect()->route('histórico/edição', ['id' => $request->aluno_id, 'codigo' => $request->CODIGO]);
         }
@@ -95,7 +92,7 @@ class HistoricoController extends Controller {
                 foreach ($value as $key => $disciplina) {
                     if ($key == "disciplina_id") {
                         $historico = Disciplina::findOrfail($disciplina);
-                        $historico->historicos()->attach(Crypt::decrypt($request->aluno_id), array('CODIGO' => $unico, 'BIMESTRE' => $bimestre, 'disciplina_id' => $disciplina, 'created_at' => NOW()));
+                        $historico->historicos()->attach(Crypt::decrypt($request->aluno_id), array('CODIGO' => $unico, 'BIMESTRE' => $bimestre, 'disciplina_id' => $disciplina, 'turma_id' => $request->turma_id, 'created_at' => NOW()));
                         // echo " $disciplina " . " <br> ";
                     }
                 }
@@ -104,7 +101,7 @@ class HistoricoController extends Controller {
         // dd($request);
         if ($historico) {
             $historico_dados = DB::table('aluno_historico_dados')->insert(['curso_id' => $request->curso_id, 'aluno_id' => Crypt::decrypt($request->aluno_id), 'CODIGO' => $unico,
-                'ANO' => $request->ANO, 'SEMESTRE' => $request->SEMESTRE, 'aluno_classificacao_id' => $request->aluno_classificacao_id, 'ESCOLA' => $request->ESCOLA,
+                'ANO' => $request->ANO, 'SEMESTRE' => $request->SEMESTRE, 'aluno_classificacao_id' => $request->aluno_classificacao_id, 'turma_id' => $request->turma_id, 'ESCOLA' => $request->ESCOLA,
                 'CIDADE' => $request->CIDADE, 'ESTADO' => $request->ESTADO, 'ESCOLA_DIAS' => $request->ESCOLA_DIAS, 'ESCOLA_HORAS' => $request->ESCOLA_HORAS, 'ALUNO_DIAS' => $request->ALUNO_DIAS,
                 'ALUNO_FREQUENCIA' => $request->ALUNO_FREQUENCIA, 'TURMA' => $request->TURMA, 'TURNO' => $request->TURNO, 'UNICO' => $request->UNICO, 'created_at' => NOW()]);
         }
@@ -132,18 +129,19 @@ class HistoricoController extends Controller {
 
 //    
 //   Recebe o que veio do Store para Edição e atualização do histórico
+//    
     public function edit($id, $codigo) {
         //
         $curso_id_recebido = DB::table('aluno_historico_dados')->where('codigo', $codigo)->get()->first();
 
         $historicos_alunos = DB::table('aluno_historicos')->where('codigo', $codigo)->get();
         $historicos_alunos_group = $historicos_alunos->groupBy('BIMESTRE');
-      //  dd($historicos_alunos_group);
+        //  dd($historicos_alunos_group);
 
         $aluno = (Aluno::with(['historicos_alunos' => function($query) use($codigo) {
                         $query->where('CODIGO', $codigo);
                     }])->where('id', Crypt::decrypt($id))->get()->first());
-        
+
         $title = "EDITAR HISTÓRICO";
         $ARRAY_RECUPERACAO [] = "";
         $RECUPERACAO = "";
@@ -188,9 +186,10 @@ class HistoricoController extends Controller {
         $T7 = $historico_dados->T7;
         $T8 = $historico_dados->T8;
         $curso_id = $historico_dados->curso_id;
-        $aluno_classificacao_id = $historico_dados->aluno_classificacao_id;
-        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->orderBY('TURMA_ANO', 'DESC')->get()->first();
-        // dd($aluno_turma->aluno_classificacao_id);
+        $aluno_classificacao_id = $historico_dados->aluno_classificacao_id;      
+        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $historico_dados->turma_id)->get()->first();      
+        $turma_historico = $this->turma->find($historico_dados->turma_id);
+        
 //        foreach ($bimestres as $bimestre) {
 //            echo " Bimestre: " . $bimestre . " <br> ";
 //            foreach ($aluno->historicos_alunos as $disciplina) {
@@ -234,7 +233,7 @@ class HistoricoController extends Controller {
         // dd($historicos_alunos_group);
         return view('Alunos.editar_historico', compact('title', 'aluno', 'SEMESTRE', 'ALUNO_DIAS', 'ALUNO_FREQUENCIA', 'ANO', 'TURMA', 'TURNO', 'UNICO', 'CIDADE', 'ESTADO', 'ESCOLA',
                         'ESCOLA_DIAS', 'ESCOLA_HORAS', 'bimestres', 'CODIGO', 'curso_id', 'cursos', 'aluno_classificacao_id', 'status', 'RECUPERACAO', 'curso_disciplinas', 'aluno_turma',
-                        'historicos_alunos_group', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8'));
+                        'historicos_alunos_group', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8','turma_historico'));
     }
 
     /**
@@ -245,7 +244,7 @@ class HistoricoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        // dd($request->recuperacao);         
+        //   dd($request);         
         $disciplina = $request->DISCIPLINAS;
         $faltas = $request->FALTAS;
         $bimestres = [1, 2, 3, 4, 'media', 'final', 'media_final'];
@@ -277,8 +276,8 @@ class HistoricoController extends Controller {
                         $up = \DB::table('aluno_historicos')->where('BIMESTRE', "$bimestre")->where('aluno_id', Crypt::decrypt($id))->where('disciplina_id', $disciplina[$key])->where('CODIGO', "$request->CODIGO")
                                 ->update(['NOTA' => "$nota", 'APROVADO' => "$aprovado", 'RECUPERACAO' => $request->recuperacao[$key], 'FALTAS' => $faltas[$keyf], 'updated_at' => NOW()]);
                         //
-                    }else{
-                       $up = \DB::table('aluno_historicos')->where('BIMESTRE', "$bimestre")->where('aluno_id', Crypt::decrypt($id))->where('disciplina_id', $disciplina[$key])->where('CODIGO', "$request->CODIGO")
+                    } else {
+                        $up = \DB::table('aluno_historicos')->where('BIMESTRE', "$bimestre")->where('aluno_id', Crypt::decrypt($id))->where('disciplina_id', $disciplina[$key])->where('CODIGO', "$request->CODIGO")
                                 ->update(['NOTA' => "$nota", 'APROVADO' => "", 'RECUPERACAO' => $request->recuperacao[$key], 'FALTAS' => $faltas[$keyf], 'updated_at' => NOW()]);
                     }
                     //

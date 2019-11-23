@@ -27,7 +27,7 @@
         <input type="hidden" name="SEMESTRE" value="{{$SEMESTRE}}">   
 
         <div class="container-fluid col-sm-12"> 
-            <h4 style="text-align: center">Aluno: {{$aluno->NOME}}, Ano: {{$ANO}}</h4>
+            <h4 style="text-align: center">Aluno: {{$aluno->NOME}},Turma: {{$turma_historico->TURMA}} - {{$turma_historico->UNICO}} ({{$turma_historico->TURNO}}), Ano: {{$ANO}}</h4>
             <div class="col-sm-6">
                 <div class="panel panel-primary">
                     <div class="panel-body"> 
@@ -82,23 +82,36 @@
                                     @endif
                                     @endforeach                                                                                      
                                 </select>                            
-                            </div>                          
-                        </div>                         
-
-                        <div class="form-row">
-                            <div class="form-group col-sm-12"> 
-                                {!!Form::label('Status ', 'Status Atual do Aluno',['class' => ''])!!}                                   
-                                <select name="STATUS" class="form-control" >                             
-                                    @foreach($status as $status_unico)
-                                    @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")
-                                    <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option> 
-                                    @else                               
-                                    <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
-                                    @endif
-                                    @endforeach                                                                                      
-                                </select>                      
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-sm-12"> 
+                                    {!!Form::label('Status ', 'Status Atual do Aluno',['class' => ''])!!}                                   
+                                    <select name="STATUS" class="form-control" >                             
+                                        @foreach($status as $status_unico)
+                                        @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")
+                                        
+                                        <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option> 
+                                        @else                               
+                                        <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
+                                        @endif
+                                        @endforeach                                                                                      
+                                    </select>                      
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>                         
+                        <div class="form-row">
+
                         </div>
+
+
+
                     </div>
                 </div> 
             </div> 
