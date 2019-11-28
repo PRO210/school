@@ -53,7 +53,7 @@
                                     <select class='form-control' name='turma_id' style="width: 100% !important" id="turma">  
                                         <option selected="Escolha uma Turma Formal">Escolha uma Turma Formal</option>
                                         @forelse ($turmas as $turma)
-                                        <option value="{{$turma->id}}">{{$turma->TURMA}} - {{$turma->UNICO}}</option>
+                                        <option value="{{$turma->id}}">{{$turma->TURMA}} - {{$turma->UNICO}} ({{$turma->TURNO}}) {{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</option>
                                         @empty
                                         <option>Não Existe Turma Cadastrada</option>   
                                         @endforelse

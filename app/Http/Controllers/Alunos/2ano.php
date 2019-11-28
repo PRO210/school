@@ -16,7 +16,7 @@ if ($key == 1 && empty($request->CODIGO[1])) {
         $disc2iplina = DB::table('disciplinas')->where('id', $disc2->disciplina_id)->get()->first();
         array_push($arrayDisciplinas2, $disc2iplina->DISCIPLINA);
         array_push($idDisciplinas2, $disc2iplina->id);
-       // echo $disc2iplina->DISCIPLINA . "<br>";
+        // echo $disc2iplina->DISCIPLINA . "<br>";
     }
     array_shift($arrayDisciplinas2);
     array_shift($idDisciplinas2);
@@ -31,7 +31,7 @@ if ($key == 1 && empty($request->CODIGO[1])) {
 } elseif ($key == 1 && !empty($request->CODIGO[1])) {
 
     $marcarX2 = "X";
-    $aluno_historico_dados2 = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO)->get()->first();
+    $aluno_historico_dados2 = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[1])->get()->first();
     $curso_disciplinas2 = DB::table('curso_disciplinas')->where('curso_id', $aluno_historico_dados2->curso_id)->orderBY('BOLETIM_ORD')->get();
 
     $arrayDisciplinas2[] = "";
@@ -45,7 +45,7 @@ if ($key == 1 && empty($request->CODIGO[1])) {
     array_shift($arrayDisciplinas2);
     array_shift($idDisciplinas2);
 
-  
+
     $arrayCursando2 = array('C', 'U', 'R', 'S', 'A', 'N', 'D', 'O', '---', '---', '---', '---', '---', '---', '---', '---');
 
     if ($request->T2_ano == "SIM") {
@@ -59,7 +59,7 @@ if ($key == 1 && empty($request->CODIGO[1])) {
         array_shift($arrayNota2);
 //
     } else {
-       
+
         $aluno_historico_dados2 = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[1])->get()->first();
         $id_aluno = $aluno_historico_dados2->aluno_id;
 
@@ -67,7 +67,7 @@ if ($key == 1 && empty($request->CODIGO[1])) {
 
             $aluno_historicos2 = DB::table('aluno_historicos')->where('CODIGO', $request->CODIGO[1])->where('disciplina_id', $idDisciplina)->get();
             // dd($aluno_historicos2);
-            foreach ($aluno_historicos2 as $value) {//
+            foreach ($aluno_historicos2 as $value) {
                 if ($value->BIMESTRE == "media" && $value->APROVADO == "REPROVADO") {
                     $antiga = $value->NOTA;
                 }
@@ -87,8 +87,8 @@ if ($key == 1 && empty($request->CODIGO[1])) {
                     }
                 }
             }
-        }
-        array_shift($arrayNota2);
-       
+        }       
+        array_shift($arrayNota2);        
     }
 }
+

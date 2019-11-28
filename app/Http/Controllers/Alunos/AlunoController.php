@@ -319,6 +319,7 @@ class AlunoController extends Controller {
                 return redirect()->route('alunos.atualizar_varios');
             }
             //
+            //
             //Bolsa Família     //Bolsa Família     //Bolsa Família
         } elseif ($request->botao == "bf") {
             $up = \DB::table('alunos')

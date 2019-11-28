@@ -35,7 +35,7 @@
                         <div class="form-group col-sm-12">                    
                             {!!Form::label('TURMA', 'Escolha a Turma',['class' => 'col-sm-2 control-label'])!!}
                             <div class="col-sm-4">
-                                <select name="TURMA" class="form-control" required="">
+                                <select name="TURMA" class="form-control" required="" >
                                     @if (isset($aluno))
 
                                     @foreach($turmas as $turma_unica)
