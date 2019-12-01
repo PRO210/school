@@ -67,19 +67,19 @@
                         {{-- {!! Form::open(['route' => 'alunos.store','class' => 'form-control','name' => 'form1'])!!} --}}      
                         <input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}"> 
                         <div class = "row" style = "margin-bottom:12px">
-                            <div class="col-sm-2" >
+                            <div class="col-sm-4" >
                                 <!--<a href="" target="_self"><button type="submit" value="" class="btn btn-warning btn-block botoes"><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Capa da Transferência</button></a>-->      
                                 <button type="submit" style="margin-bottom: 12px" name="botao" value="folha_rosto" class="btn btn-warning btn-block btvalida" disabled=""><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Capa da Transferência</button>    
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <button type="submit" style="margin-bottom: 12px" name="botao" value="folha_notas" class="btn btn-primary btn-block btvalida" disabled=""><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Notas para a Transferência</button>    
                             </div>
                             <div class="col-sm-4">                
                                 <button type="button" style="margin-bottom: 12px" class="btn btn-success btn-block btvalida"  data-toggle="modal" data-target="#myModal" disabled="" onclick="json()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Atualizar a Transferência</button>
                             </div>
-                            <div class="col-sm-3">
-                                <button type="submit" style="margin-bottom: 12px" name ="botao" value="retirar" class="btn btn-danger btn-block btvalida" disabled="" onclick="return confirmarExclusao()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Retirar Pedido De Transferência</button>
-                            </div>
+                            <!--                            <div class="col-sm-3">
+                                                            <button type="submit" style="margin-bottom: 12px" name ="botao" value="retirar" class="btn btn-danger btn-block btvalida" disabled="" onclick="return confirmarExclusao()" title="Marque ao Menos uma Das Caixinhas Para Usar Esse Botão">Retirar Pedido De Transferência</button>
+                                                        </div>-->
                         </div>
                         <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
                             <thead>
@@ -106,7 +106,7 @@
                             </thead>
                             <tbody>                                   
                                 @foreach($alunos as $aluno)                     
-                                @foreach($aluno->transferidos as $key=> $turma)                     
+                                @foreach($aluno->transferidos as $key => $turma)                     
                                 <tr>     
                                     <td></td>       
                                     <td>
@@ -115,12 +115,12 @@
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                                 @can('EDITAR_ALUNOS')
                                                 <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
-                                                <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
+                                                <li><a href='{{route('declaração/transferência',['aluno_id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Transferência</a></li>
                                                 <li><a href="{{route('edição/aluno',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
-                                                <li><a href="{{route('edição/turma',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>
-                                                <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos/Transferências/Solicitações</a></li>
+                                                <li><a href="{{route('pedido/deletar',['id' => Crypt::encrypt($turma->pivot->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-remove text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Pedido de Transferência</a></li>
+                                                <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
                                                 @endcan
-                                                <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}'                               target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
+                                                <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                             </ul>                              
                                             &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{Crypt::encrypt($aluno->id)}}/{{$turma->id}}/{{$turma->pivot->aluno_classificacao_id}}/{{$turma->pivot->id}}'></span>
                                             &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
@@ -156,12 +156,11 @@
                                 </tr>
                             </tfoot>        
                         </table> 
-                        {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}     
+                    {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}     
                         @include('Alunos.listar_transferidos_json')
                         {!! Form:: close()!!}        
-                    </div>   
+                    </div>
                     <script>
-
                         $(document).ready(function () {
                             // Setup - add a text input to each footer cell
                             $('#example tfoot th').each(function () {
@@ -177,11 +176,7 @@
                                     }],
                                 "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
                                 "language": {
-                                    "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
-echo""
-// . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
- . "<button type='submit' name ='botao' value='varios'  class='btn btn-primary btn-block ' style= 'display: inline-block !important; width:auto !important;' onclick='return confirmarAtualizacao()' id = 'btEditBloc' title = 'Selecione ao menos um aluno(a)' disabled>Atualizar Vários</button>";
-?>@endcan      ",
+                                    "lengthMenu": "_MENU_ ",
                                     "zeroRecords": "Nenhum aluno encontrado",
                                     "info": "Mostrando pagina _PAGE_ de _PAGES_",
                                     "infoEmpty": "Sem registros",
@@ -212,6 +207,6 @@ echo""
                                 });
                             });
                         });
-                    </script> 
-                </body>
+                        </script> 
+                    </body>
             </html>

@@ -99,16 +99,8 @@
                                     </select>                      
                                 </div>
                             </div>
-
-
-
-
-
-
-                        </div>                         
-                        <div class="form-row">
-
-                        </div>
+                        </div>                        
+                    
 
 
 
@@ -261,7 +253,6 @@
                         </select>
                     </th>
 
-
                     @endif
 
                     @endif
@@ -269,7 +260,6 @@
                     @endforeach 
 
                     @endforeach 
-
 
                     @foreach ($historicos_alunos_group as $key => $value) 
                     @if ($key == $bimestre)
@@ -283,8 +273,6 @@
                     @endif
                     @endforeach 
                 </tr>
-
-
 
                 @endforeach  
                 <tbody>  

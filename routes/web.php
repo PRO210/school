@@ -32,6 +32,9 @@ Route::get('/alunos/solicitações/transferência/show/{id}', 'Alunos\Solicitaca
 Route::post('/alunos/solicitações/transferência/editar', 'Alunos\SolicitacaoController@editar');
 Route::post('/alunos/solicitações/transferência/update', 'Alunos\SolicitacaoController@update');
 Route::get('/alunos/solicitações/transferência/update/exportpdf/{id}/{turma}', 'ExportPdfController@exportpdf')->name('rosto_tranferencia_pdf');
+Route::get('alunos/solicitações/transferência/deletar/{id}/', 'Alunos\SolicitacaoController@destroy')->name('pedido/deletar');
+Route::get('alunos/solicitações/transferência/declaração/{aluno_id}/{id_turma}', 'Alunos\SolicitacaoController@declaracao')->name('declaração/transferência');
+Route::post('alunos/solicitações/transferência/declaração/impressao', 'Alunos\SolicitacaoController@declaracao_impressao');
 
 //
 //Disciplinas

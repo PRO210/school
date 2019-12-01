@@ -3,11 +3,11 @@
         <meta charset="UTF-8">
         <title>Notas Impressão</title>
         <style>   
-            body{background-color: gray}
+            /*body{background-color: gray}*/
             #corpo{
                 width: 18.8cm;
                 height: 27.5cm;
-                border: solid black thin;
+                /*border: solid black thin;*/
                 margin: 0 auto;
             }
             th{

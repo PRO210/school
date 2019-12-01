@@ -82,13 +82,12 @@
 </div> 
 
 <script type='text/javascript'>
-$(document).ready(function () {
+            $(document).ready(function () {
 
     $("input:text:eq(0):visible").css("border", "1px solid red ");
     $('#exemplomodal_3').modal('show');
     });
     var intervalo = window.setInterval(fechar, 4000);
-    
     function fechar() {
     $('.modal').modal('hide');
     $("input:text:eq(0):visible").focus();

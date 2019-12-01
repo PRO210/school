@@ -155,7 +155,7 @@ echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id =
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
  . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
 ;
-?>@endcan      ",
+?>@endcan",
                             "zeroRecords": "Nenhum aluno encontrado",
                             "info": "Mostrando pagina _PAGE_ de _PAGES_",
                             "infoEmpty": "Sem registros",
@@ -186,7 +186,8 @@ echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id =
                         });
                     });
                 });
-            </script>
-            <script src="{{url('js/alunos/listar.js')}}" type="text/javascript"></script>
-        </body>
-    </html>
+
+                </script>
+                <script src="{{url('js/alunos/listar.js')}}" type="text/javascript"></script>
+            </body>
+        </html>

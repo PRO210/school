@@ -55,7 +55,6 @@ if ($key == 0 && empty($codigo)) {
         //
     } else {
         //           
-
         $aluno_historico_dados = DB::table('aluno_historico_dados')->where('CODIGO', $request->CODIGO[$key])->get()->first();
         $id_aluno = $aluno_historico_dados->aluno_id;
 

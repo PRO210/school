@@ -56,7 +56,7 @@ class SolicitacaoController extends Controller {
 //        }//
 //        dd($alunos);
         $alunos = Aluno::with(['transferidos', 'status'])->get();
-        $title = "GERENCIAMENTO DE TRANSFERÊNCIA";
+        $title = "Gerenciamento de Transferências";
         return view('Alunos.listar_transferidos', compact('title', 'alunos'));
     }
 
@@ -76,8 +76,7 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        // dd($request);
-
+        //dd($request);
         if ($request->botao == "pesquisar_transferencia") {
             return redirect()->action('Alunos\SolicitacaoController@show', ['id' => $request->aluno_id]);
         }
@@ -85,6 +84,18 @@ class SolicitacaoController extends Controller {
         if (empty($request->DATA_SOLICITACAO)) {
             $request->DATA_SOLICITACAO = $data = date('Y-m-d');
         }
+//      Valida o Requerente
+        if (empty($request->SOLICITANTE)) {
+            $request->SOLICITANTE = \Auth::user()->name;
+        }
+//      Testa se Existe algum pedido pedente
+        //DB::enableQueryLog();
+        $solicitacaos = DB::table('aluno_solicitacaos')->where('aluno_id', Crypt::decrypt($request->aluno_id))->where('turma_id', $request->turma_id)->where('TRANSFERENCIA_STATUS', 'PENDENTE')->get()->count();
+        // dd(DB::getQueryLog());  
+        if ($solicitacaos > 0) {
+            return redirect()->back()->with('msg_3', 'Existe Pedidos de Tranferência para esse Aluno(a) Ainda Pendente!');
+        }
+        // 
 //     Inserindo da Tabela Pivot AlunoClassificacaos//      
         $turma_nova = Turma::findOrfail($request->turma_id);
         $turma_nova->transferencias()->attach(Crypt::decrypt($request->aluno_id), array('TURMA_ANO' => $turma_nova->ANO, 'aluno_classificacao_id' => "$request->aluno_classificacao_id", 'SOLICITANTE' => "$request->SOLICITANTE", 'TRANSFERENCIA_STATUS' => 'PENDENTE', 'DATA_SOLICITACAO' => "$request->DATA_SOLICITACAO"));
@@ -121,8 +132,10 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
+
         $title = "GERENCIAMENTO DE TRANSFERÊNCIA";
         $alunos = Aluno::with(['transferidos', 'status'])->where('id', Crypt::decrypt($id))->get();
+        //dd($alunos);
         return view('Alunos.listar_transferidos', compact('title', 'alunos'));
     }
 
@@ -235,7 +248,7 @@ class SolicitacaoController extends Controller {
                 ]);
                 return redirect()->action('Alunos\SolicitacaoController@show', ['id' => $id_aluno])->with('msg', 'Alterações Salvas com Sucesso!');
             } else {
-                return redirect()->back()->with('erro', 'As Alterações NÃO FORAM Salvas !');
+                return redirect()->back()->with('erro', 'As Alterações Não Foram Salvas !');
             }
         } elseif ($request->botao == "folha_rosto") {
             foreach ($request->aluno_selecionado as $id) {
@@ -286,13 +299,13 @@ class SolicitacaoController extends Controller {
             //
             $turma_atual = "";
             foreach ($aluno->turmas as $turma) {
-                $turma_atual .= $turma->TURMA . " " . $turma->UNICO . " (".$turma->TURNO . ") ". substr($turma->ANO, 0, -6) . "";
+                $turma_atual .= $turma->TURMA . " " . $turma->UNICO . " (" . $turma->TURNO . ") " . substr($turma->ANO, 0, -6) . "";
             }
             $historico_dados = DB::table('aluno_historico_dados')->where('aluno_id', Crypt::decrypt($id_aluno))->get();
             $cursos = $this->curso->find($historico_dados[0]->curso_id);
             $todos_cursos = $this->curso->all();
             $todas_turmas = ['1 ano', '2 ano', '3 ano', '4 ano', '5 ano', 'Eja I', 'Eja II'];
-              dd($historico_dados);
+
             return view('Alunos.folha_notas', compact('aluno', 'turma_atual', 'cursos', 'historico_dados', 'todos_cursos', 'todas_turmas'));
             //
             //
@@ -345,12 +358,7 @@ class SolicitacaoController extends Controller {
             if ($testeEja2 > 0) {
                 $testeEja2 = true;
             }
-            return view('Alunos.folha_notas_impressao', compact('aluno_historico_dados', 'aluno_historico_dados2', 'aluno_historico_dados3', 'aluno_historico_dados4',
-                            'aluno_historico_dados5', 'aluno_historico_dados6', 'aluno_historico_dados7', 'aluno_historico_dados8', 'aluno_historico_dados9', 'aluno_historico_dadosEja', 'aluno_historico_dadosEjaII',
-                            'aluno_historicos', 'arrayDisciplinas', 'res_dis', 'res_dis1', 'res_dis2', 'res_dis3', 'res_dis4', 'res_dis5', 'res_dis6', 'res_dis7', 'arrayNota', 'arrayNota2', 'arrayNota3',
-                            'arrayNota4', 'arrayNota5', 'arrayNota6', 'arrayNota7', 'arrayNota8', 'arrayNota9', 'arrayNotaEja', 'arrayNotaEjaII', 'marcarX', 'marcarX2', 'marcarX3',
-                            'marcarX4', 'marcarX5', 'marcarX6', 'marcarX7', 'marcarX8', 'marcarX9', 'marcarXEja', 'marcarXEjaII',
-                            'dia', 'mes', 'ano', 'teste2', 'testeEja2'));
+            return view('Alunos.folha_notas_impressao', compact('aluno_historico_dados', 'aluno_historico_dados2', 'aluno_historico_dados3', 'aluno_historico_dados4', 'aluno_historico_dados5', 'aluno_historico_dados6', 'aluno_historico_dados7', 'aluno_historico_dados8', 'aluno_historico_dados9', 'aluno_historico_dadosEja', 'aluno_historico_dadosEjaII', 'aluno_historicos', 'arrayDisciplinas', 'res_dis', 'res_dis1', 'res_dis2', 'res_dis3', 'res_dis4', 'res_dis5', 'res_dis6', 'res_dis7', 'arrayNota', 'arrayNota2', 'arrayNota3', 'arrayNota4', 'arrayNota5', 'arrayNota6', 'arrayNota7', 'arrayNota8', 'arrayNota9', 'arrayNotaEja', 'arrayNotaEjaII', 'marcarX', 'marcarX2', 'marcarX3', 'marcarX4', 'marcarX5', 'marcarX6', 'marcarX7', 'marcarX8', 'marcarX9', 'marcarXEja', 'marcarXEjaII', 'dia', 'mes', 'ano', 'teste2', 'testeEja2'));
         }
         //
         //
@@ -363,7 +371,98 @@ class SolicitacaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
+//      Backup dos dados
+        $pedido_transferencia = DB::table('aluno_solicitacaos')->where('id', Crypt::decrypt($id))->get()->first();
+        $aluno = (Aluno::with(['turmas' => function($query) use($pedido_transferencia) {
+                        $query->where('turma_id', $pedido_transferencia->turma_id);
+                    }])->where('id', $pedido_transferencia->aluno_id)->get()->first());
+        $turma = $this->turma->find($pedido_transferencia->turma_id);
+//      Limpando os vinculos da Tabela Pivot Histórico
+        DB::beginTransaction();
+        $pedido_transferencia_delete = DB::table('aluno_solicitacaos')->where('id', Crypt::decrypt($id))->delete();
+        //
+        if ($pedido_transferencia_delete) {
+            DB::commit();
+            // return redirect()->route('histórico', ['id' => $aluno_id, 'id_turma' => ''])->with('msg', 'Alterações Salvas com Sucesso!');
+            // return redirect()->route('Solicitacao.index')->with('msg', 'Alterações Salvas com Sucesso!');
+            //Traz o usuario
+            $usuario = \Auth::user()->name;
+//          Faz o Log
+            $insert = $this->log->create([
+                'USUARIO' => $usuario,
+                'TABELA' => 'ALUNO_SOLICITAÇÕES',
+                'ACAO' => 'DELETAR',
+                'DETALHES_ACAO' => "Deletou o Pedido de Transferência de $aluno->NOME, $turma->TURMA $turma->UNICO ($turma->TURNO) - " . \Carbon\Carbon::parse($turma->ANO)->format('Y') . "",
+            ]);
+            return redirect()->action('Alunos\SolicitacaoController@index')->with('msg', 'Alterações Salvas com Sucesso!');
+        } else {
+            DB::rollback();
+            return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+        }
 //
     }
 
+//
+    public function declaracao($aluno_id, $turma_id) {
+        //
+        $alunos = (Aluno::with(['turmas' => function($query) use($turma_id) {
+                        $query->where('turma_id', $turma_id);
+                    }])->where('id', Crypt::decrypt($aluno_id))->get());
+        $aluno_turmas = (Aluno::with(['turmas'])->where('id', Crypt::decrypt($aluno_id))->get());
+        //
+        $title = 'Declaração de Transferência';
+
+        //
+        return view('Alunos.declaracao_transferencia_tratamento', compact('alunos', 'aluno_turmas', 'title'));
+    }
+
+//
+    public function declaracao_impressao(Request $request) {
+        // dd($request);
+        $turma_id = $request->turma_id;
+        $alunos = (Aluno::with(['turmas' => function($query) use($turma_id) {
+                        $query->where('turma_id', $turma_id);
+                    }])->where('id', Crypt::decrypt($request->aluno_id))->get());
+
+        $aprovado = "";
+        $reprovado = "";
+        $desistente = "";
+        $cursando = "";
+        if ($request->inputaprovacao == "APROVADO") {
+            $aprovado = "X";
+        } elseif ($request->inputaprovacao == "REPROVADO") {
+            $reprovado = "X";
+        } elseif ($request->inputaprovacao == "CURSANDO") {
+            $cursando = "X";
+        } else {
+            $desistente = "X";
+        }
+        $grau = "";
+        $fase = "";
+        foreach ($alunos as $aluno) {
+            foreach ($aluno->turmas as $turma) {
+                if ($turma->CATEGORIA == "FASE") {
+                    $fase = "X";
+                    $categoria = "1º Grau";
+                } elseif ($turma->CATEGORIA == "INFANTIL") {
+                    $grau = "";
+                    $categoria = $turma->CATEGORIA;
+                } else {
+                    $grau = "X";
+                    $categoria = $turma->CATEGORIA;
+                }
+            }
+        }
+
+        $transferencia = $request->transferencia;
+        // $aluno_turmas = (Aluno::with(['turmas'])->where('id', Crypt::decrypt($aluno_id))->get());
+
+        $title = 'Declaração de Transferência';
+        include '/opt/lampp/htdocs/laravel/school/app/Http/Controllers/data_atual_completa.php';
+
+        return view('Alunos.declaracao_transferencia_impressao', compact('alunos', 'title', 'dia', 'mes', 'ano', 'aprovado', 'reprovado', 'desistente', 'transferencia', 'grau',
+                        'fase', 'categoria'));
+    }
+
+//
 }

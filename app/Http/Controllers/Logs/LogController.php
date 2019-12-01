@@ -16,7 +16,7 @@ class LogController extends Controller {
     }
 
     public function index() {
-        $title = "AÇÕES PASSADAS";
+        $title = "Ações Passadas";
         $logs = Log::where('id', '>=', '1')->orderBy('created_at', 'DESC')->get();
         return view('Logs.listar_logs', compact('title', 'logs'));
     }

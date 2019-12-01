@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Crypt;
 
 //
 class AlunoController extends Controller {
+
 //
     private $aluno;
     private $log;
@@ -64,7 +65,7 @@ class AlunoController extends Controller {
 //            // echo "$key :" . " $dados" . "<br>";
 //            $html[$key] = $dados;
 //        } 
-       // dd($alunos);
+        // dd($alunos);
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
@@ -75,7 +76,7 @@ class AlunoController extends Controller {
         $title = "Cadastrar Aluno";
         $turmas = $this->turma->all();
         $sem_turma = "SEM TURMA";
-        return view('Alunos.create', compact('title', 'turmas', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes','sem_turma'));
+        return view('Alunos.create', compact('title', 'turmas', 'certidoes', 'tiposcertidoes', 'sexos', 'bolsas', 'urbanos', 'transportes', 'cores', 'declaracoes', 'transferencias', 'ouvintes', 'sem_turma'));
     }
 
 //
@@ -551,12 +552,13 @@ class AlunoController extends Controller {
             'DETALHES_ACAO' => "$campo_final",
         ]);
         //Redireciona
-        if ($insert) {            
+        if ($insert) {
             return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
             return redirect()->route('alunos.index')->with('msg_2', 'Falha em Salvar as Alterações!');
         }
     }
+
     //
     //Página Link para Históricos e transferências 
     public function historico($id, $id_turma) {
@@ -569,11 +571,12 @@ class AlunoController extends Controller {
             $turma_atual = "($turma->TURMA)";
             //  dd($turma);
         }
+        $solicitacaos = DB::table('aluno_solicitacaos')->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $id_turma)->get()->count();
         $id_classificacao = $turma->pivot->Aluno_Classificacao_id;
-
         $turmas = $this->turma->all();
-        $title = "Históricos/Transferências";
-        return view('Alunos.cadastrar_historico_transferencia', compact('title', 'id', 'aluno', 'turmas', 'turma_atual', 'id_turma', 'id_classificacao', 'anos'));
+        $title = "Transferências";
+
+        return view('Alunos.cadastrar_transferencia', compact('title', 'id', 'aluno', 'turmas', 'turma_atual', 'id_turma', 'id_classificacao', 'anos','solicitacaos'));
     }
 
 }
