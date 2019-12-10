@@ -72,3 +72,11 @@ php artisan make:migration create_alunoHistoricoDados_table
 //
 Fpdf
 php artisan make:controller ExportPdfController
+//
+//
+//Criação da tabela arquivos
+//
+php artisan make:model Models\\Arquivos\\Arquivo -m
+php artisan make:controller Arquivos\\ArquivoController --resource
+php artisan make:migration create_arquivos_table
+php artisan migrate:refresh --step=1

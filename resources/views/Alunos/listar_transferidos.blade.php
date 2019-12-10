@@ -115,9 +115,15 @@
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                                 @can('EDITAR_ALUNOS')
                                                 <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
+                                               
+                                                @if($aluno->status[$key]->STATUS =="TRANSFERIDO")
                                                 <li><a href='{{route('declaração/transferência',['aluno_id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Transferência</a></li>
+                                                @else
+                                                <li><a href="#"><span  class='glyphicon glyphicon-minus '  aria-hidden='true'>&nbsp;</span>Aluno não Tranferido Ainda;</a></li>
+                                                @endif
+                                                
                                                 <li><a href="{{route('edição/aluno',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
-                                                <li><a href="{{route('pedido/deletar',['id' => Crypt::encrypt($turma->pivot->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-remove text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Pedido de Transferência</a></li>
+                                                <li><a href="{{route('pedido/deletar',['id' => Crypt::encrypt($turma->pivot->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-trash text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Pedido de Transferência</a></li>
                                                 <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
                                                 @endcan
                                                 <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
@@ -156,7 +162,7 @@
                                 </tr>
                             </tfoot>        
                         </table> 
-                    {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}     
+                        {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}     
                         @include('Alunos.listar_transferidos_json')
                         {!! Form:: close()!!}        
                     </div>
@@ -207,6 +213,6 @@
                                 });
                             });
                         });
-                        </script> 
-                    </body>
+                    </script> 
+                </body>
             </html>

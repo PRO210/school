@@ -14,7 +14,7 @@
             </style>            
         </head>
         <body>
-            @include('Alunos.alunos_css')
+            @include('bootstrap4')
             @include('Menu.menu')
             <script>
                 $(document).ready(function () {
@@ -65,7 +65,7 @@
                     </thead>
                     <tbody>                                   
                         @foreach($alunos as $aluno)                     
-                        @foreach($aluno->turmas as $key=> $turma)                     
+                        @foreach($aluno->turmas as $key=> $turma)                        
                         <tr>     
                             <td></td>       
                             <td>
@@ -187,7 +187,7 @@ echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id =
                     });
                 });
 
-                </script>
-                <script src="{{url('js/alunos/listar.js')}}" type="text/javascript"></script>
-            </body>
-        </html>
+            </script>
+            <script src="{{url('js/alunos/listar.js')}}" type="text/javascript"></script>
+        </body>
+    </html>

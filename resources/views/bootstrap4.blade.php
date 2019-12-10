@@ -8,3 +8,11 @@
 <script src="{{url('assets/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
 <script src="{{url('js/bootstrap.min.js')}}" type="text/javascript"></script>
 <link rel="stylesheet" href="{{url('assets/css/responsive.dataTables.min.css')}}">
+
+
+
+
+
+
+
+

@@ -18,6 +18,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alunos<span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                        <li><a href="{{route ('arquivos.index')}}">Arquivo Passivo</a></li>           
                         <li><a href="{{route ('alunos.index')}}">Todos os Alunos</a></li>           
                         <li><a href="{{route ('alunos.create')}}">Cadastrar Novato</a></li>           
                         <li><a href="{{url ('alunos/solicitações/transferência')}}">Transferências Solicitadas</a></li>
@@ -54,11 +55,9 @@
                 </li>
             </ul>
 
-
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown"> 
                     @guest
-
 
                     @else           
 
@@ -78,9 +77,6 @@
                         @endauth
                         @endif
 
-
-
-
                         <li><a class="" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
@@ -98,9 +94,8 @@
                 @endguest
 
 
-
             </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<div style="height:24px"></div>
+<div style="height:36px"></div>

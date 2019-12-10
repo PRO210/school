@@ -14,7 +14,7 @@ class CreateAlunosTable extends Migration {
     public function up() {
         Schema::create('alunos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('INEP')->nullable();           
+            $table->string('INEP')->nullable();
             $table->string('NOME');
             $table->date('NASCIMENTO')->nullable();
             $table->string('CERTIDAO_CIVIL')->nullable();
@@ -48,14 +48,16 @@ class CreateAlunosTable extends Migration {
             $table->string('MOTORISTA')->nullable();
             $table->string('MOTORISTA_II')->nullable();
             $table->date('MATRICULA')->nullable();
-            $table->date('MATRICULA_RENOVADA')->nullable();                  
+            $table->date('MATRICULA_RENOVADA')->nullable();
             $table->string('DECLARACAO')->nullable();
             $table->date('DECLARACAO_DATA')->nullable();
             $table->string('DECLARACAO_RESPONSAVEL')->nullable();
             $table->string('TRANSFERENCIA')->nullable();
             $table->date('TRANSFERENCIA_DATA')->nullable();
-            $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();           
+            $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();
             $table->string('OBSERVACOES')->nullable();
+            $table->string('EXCLUIDO')->nullable();
+            $table->string('EXCLUIDO_PASTA')->nullable();
             $table->timestamps();
         });
     }

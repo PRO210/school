@@ -53,8 +53,8 @@ class SolicitacaoController extends Controller {
 //                echo "$aluno->NOME " . " $turma->TURMA / " . $aluno->classificacaos[$key]->STATUS . " / " . $turma->pivot->SOLICITANTE . $turma->pivot->TRANSFERENCIA_STATUS;
 //                echo '<br>';
 //            }
-//        }//
-//        dd($alunos);
+//        }
+       // dd($alunos);
         $alunos = Aluno::with(['transferidos', 'status'])->get();
         $title = "Gerenciamento de Transferências";
         return view('Alunos.listar_transferidos', compact('title', 'alunos'));

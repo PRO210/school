@@ -12,8 +12,10 @@
             <body>
                 @include('Alunos.alunos_css');
                 @include('Menu.menu')
+                @include('msg')
+
                 <div class="container-fluid">
-                    <h4 style="text-align:center;">{{$title or 'Gestão de Alunos'}}</h4>
+                    <h4 style="text-align:center;">{{$title or 'Gestão de Alunos'}}, Turma(s): {{$turma_atual or 'Sem Turma Cadastrada'}} </h4>
 
                     @if (isset($errors) && count($errors) > 0)
                     <div class="alert alert-danger">
@@ -31,55 +33,28 @@
                     @else
                     {!! Form::open(['route' => 'alunos.store','class' => 'form-horizontal','name' => 'form1'])!!}          
                     @endif
+
+                    @if (isset($aluno))
+                    {!! Form::hidden('TURMA', "$turma->id") !!}
+
+                    @else
                     <div class="row">
                         <div class="form-group col-sm-12">                    
                             {!!Form::label('TURMA', 'Escolha a Turma',['class' => 'col-sm-2 control-label'])!!}
                             <div class="col-sm-4">
-                                <select name="TURMA" class="form-control" required="" >
-                                    @if (isset($aluno))
-
-                                    @foreach($turmas as $turma_unica)
-
-                                    @if($turma->id  == "$turma_unica->id")
-                                    <option value="{{$turma_unica->id}}" selected="">{{$turma_unica->TURMA}} {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>
-                                    @else                                                               
-                                    <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>                          
-                                    @endif
-                                    @endforeach  
-
-                                    @else
-
+                                <select name="TURMA" class="form-control" required="" >                                
                                     @foreach($turmas as $turma_unica) 
-
                                     @if($sem_turma  == "$turma_unica->TURMA")
-
                                     <option value="{{$turma_unica->id}}" selected="">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>  
                                     @else                                                               
                                     <option value="{{$turma_unica->id}}">{{$turma_unica->TURMA}}  {{$turma_unica->UNICO}} - {{$turma_unica->TURNO}} ({{\Carbon\Carbon::parse($turma_unica->ANO)->format('Y')}})</option>                          
                                     @endif
-
                                     @endforeach 
-                                    @endif
                                 </select>
-                            </div>                 
-                            @if (isset($aluno))
-                            {!!Form::label('Status', 'Status',['class' => 'col-sm-2 control-label'])!!}
-                            <div class="col-sm-4"> 
-                                <select name="STATUS" class="form-control" >                             
-                                    @foreach($status as $status_unico)
-                                    @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")
-                                    <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option> 
-                                    @else                               
-                                    <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
-                                    @endif
-                                    @endforeach                                                                                      
-                                </select>                          
-                            </div> 
-                            @else 
-
-                            @endif  
+                            </div>   
                         </div>
                     </div> 
+                    @endif
                     <div class="row">
                         <div class="form-group col-sm-12">
                             {!!Form::label('Nome do Aluno(a)', 'Nome do Aluno(a)',['class' => 'col-sm-2 control-label'])!!}

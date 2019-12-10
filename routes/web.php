@@ -54,7 +54,9 @@ Route::resource('/turmas', 'Turmas\TurmaController');
 Route::get('/Turmas/Edição/{id}', 'Turmas\TurmaController@edit')->name('turmas/edit');
 Route::get('/Turmas/Deletar/{id}', 'Turmas\TurmaController@destroy')->name('turmas/destory');
 Route::post('/turmas/update/bloco', 'Turmas\TurmaController@update_bloco');
-
+//
+//
+Route::resource('/arquivos', 'Arquivos\ArquivoController');
 
 //
 //Route::get('/export', 'ExportController@export')->name('invoices');
