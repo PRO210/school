@@ -16,7 +16,7 @@ class CreateArquivosTable extends Migration
         Schema::create('arquivos', function (Blueprint $table) {
             $table->increments('id');
              $table->string('PASTA')->nullable();
-            $table->string('CHEIA')->nullable();
+            $table->string('CHEIA')->default('NAO');
             $table->timestamps();
         });
     }

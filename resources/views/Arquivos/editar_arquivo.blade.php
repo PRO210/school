@@ -16,21 +16,25 @@
         @include('msg')
         <script>
             $(document).ready(function () {
-                $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
+                $(".checkbox").wrap("<span style='background-color:#d9534f;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
+                $(".PastaCheckbox").wrap("<span style='background-color:#f0ad4e;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
             });
         </script>
-        {!! Form::open(['route' => 'arquivos.store','class' => 'form-horizontal','name' => 'form1'])!!}     
+        {!! Form::open(['route' => 'arquivos.store','class' => 'form-horizontal','name' => 'form1'])!!} 
 
         <h4 style=" text-align: center; margin-top: 24px">Arquivo Passivo</h4>
-        <div class="col-sm-4 "><button type="button" id="btn-add-item" class=" btn btn-primary btn-block">Adcionar Nova Pasta</button></div>
-        <div class="col-sm-4 "><button type="submit" class=" btn btn-success btn-block">Salvar</button></div>
-        <div class="col-sm-12">           
-            <div class="col-sm-4 " style=" margin-top: 12px">
+        <div class="col-sm-3 "><button type="button" id="btn-add-item" class=" btn btn-primary btn-block">Adcionar Nova Pasta</button></div>
+        <div class="col-sm-3 "><button type="submit" name="botao" value="adicionar" class=" btn btn-success btn-block">Salva Nova Pasta</button></div>
+        <div class="col-sm-3 "><button type="submit" name="botao" value="editar" class=" btn btn-warning btn-block">Editar Pasta</button></div>
+        <div class="col-sm-3 "><button type="submit" name="botao" value="excluir" class=" btn btn-danger btn-block">Excluir Pasta</button></div>
+        <div class="container-fluid">           
+            <div class="col-md-4 " style=" margin-top: 12px">
                 <table id = "" class= " table table-striped table-bordered" style="width:100%" cellspacing="0">
                     <thead>
                         <tr>  
-                            <th><input type='checkbox'  class = 'selecionar'/> &nbsp;&nbsp;PASTAS</th>
+                            <th>PASTAS</th>
                             <th>CHEIA</th>                     
+                            <th style="width: 110px "><input type='checkbox'  class = 'selecionar '/> &nbsp;&nbsp;EXCLUIR</th>                     
                         </tr>                       
                     </thead>
 <!--                    <tfoot>
@@ -41,11 +45,13 @@
                         </tr>
                     </tfoot>-->
                     <tbody>
-                        @foreach($pastas as $pasta)
+                        @foreach($pastas as $key => $pasta)
                         <tr>
-                            <td><input class="checkbox" type="checkbox" checked="" name="checkbox[]" value="{{$pasta->id}}"><input class="pasta" type="text" name="PASTA[]" value="{{$pasta->PASTA}}"></td>
+                            <td><input class="PastaCheckbox" type="checkbox" name="PastaCheckbox[]" value="{{$pasta->id}}/{{$key}}">
+                                <input class="pasta" type="text" name="PASTA[]" id="{{$pasta->id}}" value="{{$pasta->PASTA}}">
+                            </td>
                             <td>                               
-                                <select name="CHEIA[]">
+                                <select name="CHEIA[]" class="form-control">
                                     @if($pasta->CHEIA == 'SIM')
                                     <option selected="">SIM</option>
                                     <option>NAO</option>
@@ -55,12 +61,13 @@
                                 </select>                           
                                 @endif
                             </td>
+                            <td><input class="checkbox" type="checkbox" name="checkbox[]" value="{{$pasta->id}}"></td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            <div class="col-sm-4" style="margin-top:12px">
+            <div class="col-md-4" style="margin-top:12px">
                 <div class="table-responsive">
                     <table id = "details-table" class= "table table-hover table-striped" style="display: none ">
                         <tbody>
@@ -110,7 +117,7 @@
                     counter++;
 
                     // Coluna 1
-                    input = $('<input>').attr('name', 'data[PASTA]').addClass('form-control tb_nova').val(counter);
+                    input = $('<input>').attr('name', 'data[PASTA][' + counter + '][pasta]').prop('required', true).addClass('form-control tb_nova').val(counter);
                     cols.push(
                             $('<td>').append(
                             $('<div>').addClass('form-group').append(input)
@@ -118,8 +125,8 @@
                             );
 
                     // Coluna 2
-                    //  input = $('<input>').attr('name', 'data[CHEIA]').addClass('form-control tb_nova');
-                    input = $('<select>').append('<option value="NAO">NÃO</option>','<option value="SIM">SIM</option>').attr('name', 'data[CHEIA]').addClass('form-control tb_nova');
+                    //  input = $('<input>').attr('name', 'data[ExampleItems][' + counter + '][name]').addClass('form-control tb_nova');
+                    input = $('<select>').append('<option value="NAO">NÃO</option>', '<option value="SIM">SIM</option>').attr('name', 'data[CHEIA][' + counter + '][opt]').addClass('form-control tb_nova');
 
                     cols.push(
                             $('<td>').append(

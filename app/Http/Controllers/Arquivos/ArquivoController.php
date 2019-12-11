@@ -53,8 +53,9 @@ class ArquivoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $pastas = $this->arquivo->all();
-       // dd($pastas);
+        //  $pastas = $this->arquivo->all();
+        $pastas = Arquivo::orderBy('PASTA')->get();
+        // dd($pastas);
 
         return view('Arquivos.editar_arquivo', compact('pastas'));
     }
@@ -66,17 +67,99 @@ class ArquivoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        dd($request);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        // dd($request);
+        if ($request->botao == "adicionar" && isset($request->data)) {
+            $arraypasta[] = "";
+            $arraycheia[] = "";
+            foreach ($request->data as $key => $pasta) {
+                foreach ($pasta as $key2 => $names) {
+                    foreach ($names as $key => $name) {
+                        if ($key == 'pasta') {
+                            $log = "Inseriu as pasta(s)" . $name . ' , ';
+                            array_push($arraypasta, $name);
+                        }
+                    }
+                    foreach ($names as $key => $name) {
+
+                        if ($key == 'opt') {
+                            echo "Update Cheia " . $name . '--';
+                            array_push($arraycheia, $name);
+                        }
+                    }
+                }
+                echo "<br>";
+            }
+            array_shift($arraypasta);
+            array_shift($arraycheia);
+            //Inseri na Tabela Arquivos dos Alunos
+            foreach ($arraypasta as $key => $value) {
+                $insert = $this->arquivo->create(['PASTA' => $value, 'CHEIA' => $arraycheia[$key]]);
+            }
+            if ($insert) {
+                //Traz o usuario
+                $usuario = \Auth::user()->name;
+//          Faz o Log
+                $insert = $this->log->create([
+                    'USUARIO' => $usuario,
+                    'TABELA' => 'ARQUIVOS',
+                    'ACAO' => 'INSERIR',
+                    'DETALHES_ACAO' => "$log",
+                ]);
+                return redirect()->route('arquivos.create')->with('msg', 'Alterações Salvas com Sucesso!');
+            } else {
+                return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+            }
+            //Fim do botao adicionar
+            //
+            //Envia para o Método Destroy
+        } elseif ($request->botao == "excluir") {
+            $pastas = "";
+            $select = $this->arquivo::whereIn('id', $request->checkbox)->get();
+            foreach ($select as $key => $value) {
+                $pastas .= $value->PASTA . " ,";
+            }
+            $log = substr($pastas, 0, -1);
+            //
+            $delete = Arquivo::destroy($request->checkbox);
+
+            if ($delete) {
+                //Traz o usuario
+                $usuario = \Auth::user()->name;
+//                Faz o Log
+                $insert = $this->log->create([
+                    'USUARIO' => $usuario,
+                    'TABELA' => 'ARQUIVOS',
+                    'ACAO' => 'DELETAR',
+                    'DETALHES_ACAO' => " Deletou a(s) seguinte(s) pasta(s)  " . $log,
+                ]);
+                return redirect()->route('arquivos.create')->with('msg', 'Alterações Salvas com Sucesso!');
+            } else {
+                return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+            }
+//
+        } elseif ($request->botao == "editar") {
+            // dd($request->PASTA);
+            if (isset($request->PastaCheckbox)) {
+                foreach ($request->PastaCheckbox as $value) {
+                    $ids = explode('/', $value);
+                    $id_pasta = $ids[0];
+                    $key_pasta = $ids[1];
+                    //echo 'id: ' . $id_pasta . " Pasta: " . $request->PASTA[$key_pasta] . ' Cheia: ' . $request->CHEIA[$key_pasta] . "<br>";
+                    $update = \DB::table('arquivos')->where('id', $id_pasta)->update(['PASTA' => $request->PASTA[$key_pasta], 'CHEIA' => $request->CHEIA[$key_pasta]]);
+                }
+                if ($update) {
+                    return redirect()->route('arquivos.create')->with('msg', 'Alterações Salvas com Sucesso!');
+                } else {
+                    return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+                }
+            } else {
+                return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+            }
+
+//
+        } else {
+            return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+        }
     }
 
     /**
@@ -133,7 +216,7 @@ class ArquivoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        
     }
 
 }
