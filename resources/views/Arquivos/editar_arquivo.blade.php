@@ -1,4 +1,3 @@
-
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -6,9 +5,9 @@
         <style>
             .pasta{width: 54px!important; margin-left: 8px}
             .checkbox{display: inline-block !important; }
-            .tb_nova{width: 80% !important;}           
+            .tb_nova{width: 80% !important;}
+            .excluir2{display: none}
         </style>
-
     </head>
     <body>
         @include('bootstrap4')
@@ -16,25 +15,116 @@
         @include('msg')
         <script>
             $(document).ready(function () {
-                $(".checkbox").wrap("<span style='background-color:#d9534f;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
+                $(".checkbox").wrap("<span style='background-color:#d9534f;padding: 4px; border-radius: 3px;padding-top: 13px;padding-bottom: 1px !important;'>");
                 $(".PastaCheckbox").wrap("<span style='background-color:#f0ad4e;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
             });
         </script>
         {!! Form::open(['route' => 'arquivos.store','class' => 'form-horizontal','name' => 'form1'])!!} 
-
         <h4 style=" text-align: center; margin-top: 24px">Arquivo Passivo</h4>
-        <div class="col-sm-3 "><button type="button" id="btn-add-item" class=" btn btn-primary btn-block">Adcionar Nova Pasta</button></div>
-        <div class="col-sm-3 "><button type="submit" name="botao" value="adicionar" class=" btn btn-success btn-block">Salva Nova Pasta</button></div>
-        <div class="col-sm-3 "><button type="submit" name="botao" value="editar" class=" btn btn-warning btn-block">Editar Pasta</button></div>
-        <div class="col-sm-3 "><button type="submit" name="botao" value="excluir" class=" btn btn-danger btn-block">Excluir Pasta</button></div>
-        <div class="container-fluid">           
+        
+        <div class="container-fluid">
+            <div class="col-sm-12 ">
+                <div class="col-sm-4 " style="margin-bottom: 12px "><button type="button" id="adicionar" class=" btn btn-primary btn-block">Habilitar/Desab. Nova Pasta</button></div> 
+                <div class="col-sm-4 " style="margin-bottom: 12px "><button type="button" id="editar" class=" btn btn-warning btn-block">Habilitar/Desab. Edição de Pasta</button></div>
+                <div class="col-sm-4 " style="margin-bottom: 12px "><button type="button" id="excluir" class=" btn btn-danger btn-block">Habilitar/Desab. Exclusão de Pasta</button></div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="col-sm-12 "  style="margin-top: 12px ">
+                <button type="submit" name="botao" value="excluir" class=" excluir2 btn btn-danger btn-block">Salar Alterações</button>
+                <button type="submit" name="botao" value="adicionar" class="adicionar2 btn btn-primary btn-block">Salva Nova Pasta</button>
+                <button type="submit" name="botao" value="editar" class="editar2 btn btn-warning btn-block">Editar Pasta</button>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".excluir2").hide();
+                $(".adicionar2").hide();
+                $(".editar2").hide();
+                //
+                $("#excluir").click(function () {
+                    $(".excluir2").toggle(2000);
+                  
+
+                });
+                //
+                $("#adicionar").click(function () {
+                    $(".adicionar2").toggle(2000);
+                    $(".adicionar3").toggle(2000);
+                   // $("#original").toggle(2000);
+                    //
+                    var teste = $("#teste").hasClass("tb_nova");
+                    if (teste) {
+                        $(".tb_nova").attr('disabled', 'disabled');
+                    } else {
+                        $('#details-table').removeAttr('disabled');
+
+                    }
+                    //           
+                });
+                //
+                $("#editar").click(function () {
+                    $(".editar2").toggle(2000);
+                    $(".editar3").toggle(2000);
+                    $("#original").toggle(2000);
+
+                });
+                //
+            });
+        </script>  
+
+        <div class="container">           
+            <div class="col-md-4 " style=" margin-top: 12px" id="original">
+                <table  class= "table table-striped table-bordered " style="width:100%;" cellspacing="0" >
+                    <thead>
+                        <tr>  
+                            <th>PASTAS</th>
+                            <th>CHEIA</th>   
+                            <th style="width: 110px " class="excluir2">EXCLUIR</th>                    
+                        </tr>                      
+                    </thead>
+                    <tbody>
+                        @foreach($pastas as $key => $pasta)
+                        <tr> 
+                            <td>{{$pasta->PASTA}}</td>
+                            <td>                             
+                                @if($pasta->CHEIA == 'SIM')
+                                <p>SIM</p>
+                                @else
+                                <p>NÃO</p>
+                                @endif
+                            </td>
+                            <td class="excluir2"><input class="checkbox" type="checkbox" name="checkbox[]" value="{{$pasta->id}}"></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>                
+            </div>
+
+            <div class="col-md-4 " style="margin-top:12px">
+                <div class="table-responsive">
+                    <table id = "details-table" class= "table table-hover table-striped adicionar3" style="display: none ">
+                        <tbody>
+                            <tr>  
+                                <th class=""> &nbsp;&nbsp;PASTAS</th>
+                                <th class="">CHEIA</th>                     
+                                <th class="actions"><button type="button" title="Adicionar Linha" onclick="return addRow()" class="btn btn-primary glyphicon glyphicon-plus-sign"></button></th>                     
+                            </tr>                      
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
             <div class="col-md-4 " style=" margin-top: 12px">
-                <table id = "" class= " table table-striped table-bordered" style="width:100%" cellspacing="0">
+                <table  class= "table table-striped table-bordered editar3" style="width:100%; display: none" cellspacing="0" >
                     <thead>
                         <tr>  
                             <th>PASTAS</th>
                             <th>CHEIA</th>                     
-                            <th style="width: 110px "><input type='checkbox'  class = 'selecionar '/> &nbsp;&nbsp;EXCLUIR</th>                     
+                            <!--<th style="width: 110px " class="excluir2"><input type='checkbox'  class = 'selecionar '/> &nbsp;&nbsp;EXCLUIR</th>-->                     
                         </tr>                       
                     </thead>
 <!--                    <tfoot>
@@ -61,25 +151,25 @@
                                 </select>                           
                                 @endif
                             </td>
-                            <td><input class="checkbox" type="checkbox" name="checkbox[]" value="{{$pasta->id}}"></td>
+                            <!--<td class="excluir2"><input class="checkbox" type="checkbox" name="checkbox[]" value="{{$pasta->id}}"></td>-->
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-4" style="margin-top:12px">
-                <div class="table-responsive">
-                    <table id = "details-table" class= "table table-hover table-striped" style="display: none ">
-                        <tbody>
-                            <tr>  
-                                <th class=""> &nbsp;&nbsp;PASTAS</th>
-                                <th class="">CHEIA</th>                     
-                                <th class="actions"><button type="button" title="Esconder" id="bt_esc" class="btn btn-primary glyphicon glyphicon-eye-close"></button></th>                     
-                            </tr>                      
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <!--            <div class="col-md-4 " style="margin-top:12px">
+                            <div class="table-responsive">
+                                <table id = "details-table" class= "table table-hover table-striped adicionar3" style="display: none ">
+                                    <tbody>
+                                        <tr>  
+                                            <th class=""> &nbsp;&nbsp;PASTAS</th>
+                                            <th class="">CHEIA</th>                     
+                                            <th class="actions"><button type="button" title="Adicionar Linha" onclick="return addRow()" class="btn btn-primary glyphicon glyphicon-plus-sign"></button></th>                     
+                                        </tr>                      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>-->
 
 
 
@@ -95,7 +185,7 @@
                     $('#details-table').removeAttr('disabled');
                 });
                 $("#bt_esc").click(function () {
-                    $("#details-table").hide(2000);
+                    $("#details-table").hide(5000);
                     $(".tb_nova").attr('disabled', 'disabled');
 
 
@@ -117,7 +207,7 @@
                     counter++;
 
                     // Coluna 1
-                    input = $('<input>').attr('name', 'data[PASTA][' + counter + '][pasta]').prop('required', true).addClass('form-control tb_nova').val(counter);
+                    input = $('<input>').attr('name', 'data[PASTA][' + counter + '][pasta]').attr('id', 'teste').prop('required', true).addClass('form-control tb_nova').val(counter);
                     cols.push(
                             $('<td>').append(
                             $('<div>').addClass('form-group').append(input)
