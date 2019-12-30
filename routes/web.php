@@ -7,13 +7,17 @@ Route::get('/disciplinas/logs', 'Logs\LogController@showdisciplinas');
 
 //Moldel e controler dos Alunos
 Route::resource('/alunos', 'Alunos\AlunoController');
+Route::get('/alunos/cursando/{id}', 'Alunos\AlunoController@cursando')->name('cursando');
 Route::post('/alunos/update/bloco', 'Alunos\AlunoController@updatebloco');
 Route::post('/alunos/update/agora', 'Alunos\AlunoController@updateagora');
+Route::get('/aluno/deletar/{id}/{botao}', 'Alunos\AlunoController@destroy')->name('aluno/deletar');
 Route::get('/{id}/aluno/mostrar/{id_turma}', 'Alunos\AlunoController@show')->name('visualizar');
 Route::get('/{id}/aluno/turma', 'Alunos\AlunoController@showturma')->name('edição/turma');
 Route::get('/{id}/aluno/{id_turma}', 'Alunos\AlunoController@editar')->name('edição/aluno');
 Route::get('/{id}/transferência/{id_turma}', 'Alunos\AlunoController@historico')->name('transferência');
 Route::post('/alunos/update/turma', 'Alunos\AlunoController@update_turma');
+Route::get('/alunos/montar/relatório', 'Alunos\AlunoController@relatorio');
+Route::post('/alunos/gerar/relatório', 'Alunos\AlunoController@relatorio_gerar');
 //
 //Aluno/históricos
 Route::resource('/historicos', 'AlunosHistoricos\HistoricoController');
@@ -36,6 +40,8 @@ Route::get('alunos/solicitações/transferência/deletar/{id}/', 'Alunos\Solicit
 Route::get('alunos/solicitações/transferência/declaração/{aluno_id}/{id_turma}', 'Alunos\SolicitacaoController@declaracao')->name('declaração/transferência');
 Route::post('alunos/solicitações/transferência/declaração/impressao', 'Alunos\SolicitacaoController@declaracao_impressao');
 
+Route::get('alunos/solicitações/transferência/arquivo/{aluno_id}/{id_turma}', 'Arquivos\ArquivoController@edit')->name('arquivo');
+
 //
 //Disciplinas
 Route::resource('/disciplinas', 'Disciplinas\DisciplinaController');
@@ -57,13 +63,14 @@ Route::post('/turmas/update/bloco', 'Turmas\TurmaController@update_bloco');
 //
 //
 Route::resource('/arquivos', 'Arquivos\ArquivoController');
+Route::get('/arquivado', 'Arquivos\ArquivoController@arquivado')->name('arquivado');
+Route::post('/arquivado/aluno', 'Arquivos\ArquivoController@arquivado_create');
+Route::get('/deletar/{id}', 'Arquivos\ArquivoController@destroy')->name('arquivos/deletar');
+
+
 
 //
 //Route::get('/export', 'ExportController@export')->name('invoices');
-
-
-
-
 
 
 Route::get('/', function () {
@@ -76,4 +83,3 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/roles', 'HomeController@rolesPermissions')->name('home/roles');
 
-//Route::get('/home/alunos/historicos', 'AlunosHistoricos\HistoricoController@store');

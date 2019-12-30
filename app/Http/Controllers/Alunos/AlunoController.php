@@ -46,7 +46,9 @@ class AlunoController extends Controller {
 //
     public function index() {
         $title = "Todos os Alunos";
-        $alunos = Aluno::with(['turmas', 'classificacaos'])->get();
+        $alunos = Aluno::with(['classificacaos', 'turmas' => function($q) {
+                        $q->orderBy('turma_id');
+                    }])->get();
 
 //        $alunoTeste = (Aluno::with(['turmas' => function($query) use($id_turma) {
 //                                $query->where('turma_id', $id_turma);
@@ -55,19 +57,39 @@ class AlunoController extends Controller {
 //                                $query2->where('aluno_classificacao_id', $id_status);
 //                            }])
 //                        ->where('id', $id_aluno)->get());
-//        $alunoTeste = DB::table('aluno_solicitacaos')
-//                        ->join('alunos', 'aluno_solicitacaos.aluno_id', '=', 'alunos.id')->where('alunos.id', $id_aluno)
-//                        ->join('turmas', 'aluno_solicitacaos.turma_id', '=', 'turmas.id')->where('turmas.id', $id_turma)
-//                        ->join('aluno_classificacaos', 'aluno_solicitacaos.aluno_classificacao_id', '=', 'aluno_classificacaos.id')
-//                        ->select('alunos.NOME', 'turmas.TURMA', 'aluno_classificacaos.STATUS', 'aluno_solicitacaos.SOLICITANTE')
-//                        ->get()->first();
-//
-//        foreach ($alunoTeste as $key => $dados) {
-//            // echo "$key :" . " $dados" . "<br>";
-//            $html[$key] = $dados;
-//        } 
-        // dd($alunos);
+//       
         return view('Alunos.listar', compact('title', 'alunos'));
+    }
+
+    //
+    public function cursando() {
+        $title = "Alunos Cursando";
+        // DB::enableQueryLog();
+        $alunos = DB::table('aluno_turmas')
+                ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')->where('alunos.EXCLUIDO', 'NAO')
+                ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')->where('turmas.ANO', 'LIKE', '%' . date('Y') . '%')
+                ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')
+                ->where('aluno_turmas.aluno_classificacao_id', '4')->orwhere('aluno_turmas.aluno_classificacao_id', '2')
+                ->select('aluno_id', 'alunos.*', 'turma_id', 'turmas.*', 'aluno_classificacaos.STATUS')
+                ->orderBy('turmas.ANO', 'DESC')->orderBy('turma_id', 'ASC')->orderBy('alunos.NOME', 'ASC')
+                ->get();
+//        foreach ($alunos as $dados) {//            
+//            foreach ($dados as $key => $value) {
+//                if ($key == "NOME") {
+//                    echo "$value - ";
+//                } elseif ($key == "aluno_id") {
+//                    echo "$value" . " : ";
+//                } elseif ($key == "turma_id") {
+//                    echo "$value" . " : ";             
+//            }
+//            echo "<br>";
+//            echo "<br>";
+//        }
+//        // dd(\DB::getQueryLog());
+        $alunoId = '';
+        $alunoNome = '';
+
+        return view('Alunos.listar_cursando', compact('title', 'alunos', 'alunoId', 'alunoNome'));
     }
 
     //
@@ -83,6 +105,14 @@ class AlunoController extends Controller {
 //
 //  Esse método Recupera o que veio de Create Para Cadastrar Novatos
     public function store(AlunoFormRequest $request) {
+        //Teste de Duplicidade
+        $duplicidade = Aluno::with(['turmas', 'classificacaos'])->get();
+        foreach ($duplicidade as $aluno) {
+            if ($request->NOME == "$aluno->NOME") {
+                return redirect()->back()->with('msg_3', 'Esse nome já consta no banco de dados!');
+            }
+        }
+        //
         $form = $request->except(['_token', '_method', 'TURMA', 'STATUS', 'OUVINTE', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'TURMA_ATUAL', 'DATA_CENSO']);
 //      Insere os dados
         $insert = $this->aluno->create($form);
@@ -206,7 +236,7 @@ class AlunoController extends Controller {
     // Esse método envia para a View Create para atualizar os dados Exsitentes - Esse método envia para a Create para atualizar os dados Exsitentes.
     //
     public function editar($id, $id_turma) {
-      
+
         include 'selects.php';
         $aluno = $this->aluno->find(Crypt::decrypt($id));
 //        //$this->authorize('editar',$aluno);        
@@ -217,10 +247,10 @@ class AlunoController extends Controller {
 
         $turma_atual = "";
         foreach ($turmas_atuais->turmas as $turma) {
-            $turma_atual .= $turma->TURMA . " " . $turma->UNICO . " - ".\Carbon\Carbon::parse($turma->ANO)->format('Y') . ", ";
+            $turma_atual .= $turma->TURMA . " " . $turma->UNICO . " - " . \Carbon\Carbon::parse($turma->ANO)->format('Y') . ", ";
         }
 
-        $turma = $this->turma->find($id_turma);     
+        $turma = $this->turma->find($id_turma);
         $turmas = $this->turma->all();
         $status = AlunoClassificacao::all()->where('ORDEM_I', 'S');
         $title = "Editar o Cadastro de: {$aluno->NOME} ";
@@ -390,8 +420,32 @@ class AlunoController extends Controller {
         }
     }
 
-    public function destroy($id) {
-        //
+    public function destroy($id, $botao) {
+
+        $aluno = $this->aluno->find(Crypt::decrypt($id));
+        $aluno->NOME;
+        $aluno_del = DB::table('alunos')->where('id', Crypt::decrypt($id))->delete();
+//        $aluno_del = true;
+//        echo "$botao";
+//        dd($id);
+        if ($aluno_del) {
+            //Traz o usuário
+            $usuario = \Auth::user()->name;
+//          Faz o Log
+            $insert = $this->log->create([
+                'USUARIO' => $usuario,
+                'TABELA' => 'ALUNOS',
+                'ACAO' => 'DELETAR',
+                'DETALHES_ACAO' => "DELETOU $aluno->NOME DO SISTEMA",
+            ]);
+            if ($botao == "cursando") {
+                return redirect()->action('Alunos\AlunoController@cursando', ['id' => '0'])->with('msg', 'Alterações Salvas com Sucesso!');
+            } else {
+                return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+            }
+        } else {
+            return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+        }
     }
 
     // public function buscarItens($id)
@@ -591,9 +645,59 @@ class AlunoController extends Controller {
 
 //
     public function arquivo($id) {
-        //
-        $up = \DB::table('alunos')->where('id', Crypt::decrypt($id))->update(['EXCLUIDO' => "SIM"]);
+        $up = DB::table('alunos')->where('id', Crypt::decrypt($id))->update(['EXCLUIDO' => "SIM"]);
     }
 
+    //
+    //
+    public function relatorio() {
+        include 'selects.php';
+        $status = AlunoClassificacao::all()->where('id', '<>', '1')->where('id', '<>', '6');
+        $turmas = Db::table('turmas')->orderBy('ANO', 'DESC')->get();
+        //dd($turmas);
+
+        return view('Alunos.montar_relatorio', compact('status', 'turmas', 'ouvintes'));
+    }
+
+    //
+    //
+    public function relatorio_gerar(Request $request) {
+//       
+        $arrayAlunos [] = "";
+        foreach ($request->turma_id as $key => $turma_id) {
+            $alunos = DB::table('aluno_turmas')->where('OUVINTE', 'LIKE', "%$request->OUVINTE%")
+                    ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')->where('alunos.EXCLUIDO', 'NAO')->where('alunos.NECESSIDADES_ESPECIAIS', 'LIKE', "%$request->NECESSIDADES_ESPECIAIS%")
+                    ->where('alunos.TRANSPORTE', 'LIKE', "%$request->TRANSPORTE%")
+                    ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')->where('turmas.id', $turma_id)
+                    ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')->whereIn('aluno_classificacao_id', $request->STATUS)
+                    ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'turma_id', 'turmas.TURMA', 'aluno_classificacaos.STATUS', 'aluno_turmas.OUVINTE', 'alunos.NECESSIDADES_ESPECIAIS','alunos.TRANSPORTE')
+                    ->get();
+//         
+            foreach ($alunos as $dados) {
+                foreach ($dados as $key => $value) {
+                    echo " $key : " . " $value / ";
+                    if ($key == "id") {
+                        array_push($arrayAlunos, $value);
+                    }
+                }
+                echo "<br>";
+            }
+            echo "<br>";
+        }
+        array_shift($arrayAlunos);
+        $alunos_02 = DB::table('aluno_turmas')->whereIn('aluno_turmas.id', $arrayAlunos)
+                ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')
+                ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')
+                ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')
+                ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'turma_id', 'turmas.TURMA', 'aluno_classificacaos.STATUS', 'aluno_turmas.OUVINTE', 'alunos.NECESSIDADES_ESPECIAIS')
+                ->get();
+
+        dd($alunos_02);
+
+
+//        
+    }
+
+//
 //
 }

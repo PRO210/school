@@ -65,7 +65,7 @@
 
                         {!!Form::open(['url' => 'alunos/solicitações/transferência/update','name' => 'form1'])!!}                        
                         {{-- {!! Form::open(['route' => 'alunos.store','class' => 'form-control','name' => 'form1'])!!} --}}      
-                        <input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}"> 
+                        <!--<input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}">--> 
                         <div class = "row" style = "margin-bottom:12px">
                             <div class="col-sm-4" >
                                 <!--<a href="" target="_self"><button type="submit" value="" class="btn btn-warning btn-block botoes"><span class='glyphicon glyphicon-print text-success' aria-hidden='true' style="margin-right: 12px;color: white"></span>Capa da Transferência</button></a>-->      
@@ -115,16 +115,25 @@
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>
                                                 @can('EDITAR_ALUNOS')
                                                 <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
-                                               
+
                                                 @if($aluno->status[$key]->STATUS =="TRANSFERIDO")
                                                 <li><a href='{{route('declaração/transferência',['aluno_id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Transferência</a></li>
                                                 @else
-                                                <li><a href="#"><span  class='glyphicon glyphicon-minus '  aria-hidden='true'>&nbsp;</span>Aluno não Tranferido Ainda;</a></li>
+                                                <li><a href="#"><span  class='glyphicon glyphicon-minus '  aria-hidden='true'>&nbsp;</span>Aluno não Tranferido Ainda<br>Impossível Declaração de Transferência</a></li>
                                                 @endif
-                                                
+
                                                 <li><a href="{{route('edição/aluno',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
                                                 <li><a href="{{route('pedido/deletar',['id' => Crypt::encrypt($turma->pivot->id)])}}" target='_self' title='Deletar'><span class='glyphicon glyphicon-trash text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Pedido de Transferência</a></li>
                                                 <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Histórico/Transferência/Solicitações'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
+
+                                                @if($aluno->status[$key]->STATUS =="TRANSFERIDO")
+                                                <li><a href="{{route('arquivo',['aluno_id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Arquivar Aluno'><span class='glyphicon glyphicon-folder-open' aria-hidden='true' >&nbsp;</span>Mover Aluno(a) para o Arquivo</a></li>
+                                                @else
+                                                <li><a href="#" target='_self' title=''><span class='glyphicon glyphicon-minus' aria-hidden='true' >&nbsp;</span>Aluno Não Tranferido Ainda<br>Impossível Mover para o Arquivo</a></li>
+                                                @endif
+
+
+
                                                 @endcan
                                                 <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-warning' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                             </ul>                              

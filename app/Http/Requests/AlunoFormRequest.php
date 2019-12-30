@@ -23,7 +23,8 @@ class AlunoFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'NOME' => 'required|min:3|max:255',
+            'NOME' => 'required',
+            'NOME' => 'min:3',
             'TURMA' => 'required',
 
         ];
@@ -32,6 +33,7 @@ class AlunoFormRequest extends FormRequest
     {
         return [
             'NOME.required' => 'O Campo Nome Precisa ser Preenchido!',
+            'NOME.min' => 'O Campo Nome Precisa 3 caracateres no minímo!',
             'TURMA.required' => 'O Campo Turma Precisa ser Preenchido!'
         ];
     }

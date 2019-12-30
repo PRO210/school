@@ -104,6 +104,8 @@ class HistoricoController extends Controller {
                 'ANO' => $request->ANO, 'SEMESTRE' => $request->SEMESTRE, 'aluno_classificacao_id' => $request->aluno_classificacao_id, 'turma_id' => $request->turma_id, 'ESCOLA' => $request->ESCOLA,
                 'CIDADE' => $request->CIDADE, 'ESTADO' => $request->ESTADO, 'ESCOLA_DIAS' => $request->ESCOLA_DIAS, 'ESCOLA_HORAS' => $request->ESCOLA_HORAS, 'ALUNO_DIAS' => $request->ALUNO_DIAS,
                 'ALUNO_FREQUENCIA' => $request->ALUNO_FREQUENCIA, 'TURMA' => $request->TURMA, 'TURNO' => $request->TURNO, 'UNICO' => $request->UNICO, 'created_at' => NOW()]);
+        } else {
+            return back()->with('msg_2', 'Falha em Salvar os Dados!');
         }
         //
         if ($historico_dados) {
@@ -186,10 +188,10 @@ class HistoricoController extends Controller {
         $T7 = $historico_dados->T7;
         $T8 = $historico_dados->T8;
         $curso_id = $historico_dados->curso_id;
-        $aluno_classificacao_id = $historico_dados->aluno_classificacao_id;      
-        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $historico_dados->turma_id)->get()->first();      
+        $aluno_classificacao_id = $historico_dados->aluno_classificacao_id;
+        $aluno_turma = $this->alunoturma->where('aluno_id', Crypt::decrypt($id))->where('turma_id', $historico_dados->turma_id)->get()->first();
         $turma_historico = $this->turma->find($historico_dados->turma_id);
-        
+
 //        foreach ($bimestres as $bimestre) {
 //            echo " Bimestre: " . $bimestre . " <br> ";
 //            foreach ($aluno->historicos_alunos as $disciplina) {
@@ -233,7 +235,7 @@ class HistoricoController extends Controller {
         // dd($historicos_alunos_group);
         return view('Alunos.editar_historico', compact('title', 'aluno', 'SEMESTRE', 'ALUNO_DIAS', 'ALUNO_FREQUENCIA', 'ANO', 'TURMA', 'TURNO', 'UNICO', 'CIDADE', 'ESTADO', 'ESCOLA',
                         'ESCOLA_DIAS', 'ESCOLA_HORAS', 'bimestres', 'CODIGO', 'curso_id', 'cursos', 'aluno_classificacao_id', 'status', 'RECUPERACAO', 'curso_disciplinas', 'aluno_turma',
-                        'historicos_alunos_group', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8','turma_historico'));
+                        'historicos_alunos_group', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'turma_historico'));
     }
 
     /**

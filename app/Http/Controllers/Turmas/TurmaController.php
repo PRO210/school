@@ -23,6 +23,7 @@ class TurmaController extends Controller {
 
         $title = "Turmas";
         $turmas = $this->turma->all();
+        
         $obs = "";
         if (empty($turmas->TURMAS)) {
             $obs = "disabled";

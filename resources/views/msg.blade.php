@@ -86,7 +86,6 @@
 
     $("input:text:eq(0):visible").css("border", "1px solid red ");
     $('#exemplomodal_3').modal('show');
-    });
     var intervalo = window.setInterval(fechar, 4000);
     function fechar() {
     $('.modal').modal('hide');
@@ -97,6 +96,7 @@
     function borda() {
     $("input:text:eq(0):visible").css("border", "1px solid #ddd");
     }
+    });
     @endif
 </script>
 

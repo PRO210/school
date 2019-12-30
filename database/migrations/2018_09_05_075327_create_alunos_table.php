@@ -56,7 +56,7 @@ class CreateAlunosTable extends Migration {
             $table->date('TRANSFERENCIA_DATA')->nullable();
             $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();
             $table->string('OBSERVACOES')->nullable();
-            $table->string('EXCLUIDO')->nullable();
+            $table->string('EXCLUIDO')->default('NAO');
             $table->string('EXCLUIDO_PASTA')->nullable();
             $table->timestamps();
         });

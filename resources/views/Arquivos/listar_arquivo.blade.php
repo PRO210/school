@@ -7,9 +7,7 @@
             .glyphicon-print{font-size: 16px !important;}
             .dropdown-menu > li > a {padding-bottom: 4px;}
             .checkbox{display: inline-block !important;} 
-            @media (max-width: 720px) {#nome{white-space: normal};
-
-                                      
+            @media (max-width: 720px) {#nome{white-space: normal};                                      
             </style> 
         </head>
         <body>
@@ -18,8 +16,8 @@
             @include('msg')
             @if($teste == 1)     
             {!! Form::model($arquivado,['route' => ['arquivos.update',$arquivado->id],'class' => 'form-horizontal','name' => 'form1', 'method'=> 'put'])!!} 
-<!--            @else
-            {!! Form::open(['route' => 'arquivos.store','class' => 'form-horizontal','name' => 'form1'])!!}         -->
+            @else
+            <!--{!! Form::open(['route' => 'arquivos.store','class' => 'form-horizontal','name' => 'form1'])!!}-->         
             @endif
             <div class="container-fluid"> 
                 <h3 style="text-align:center; ">Arquivo Passivo </h3>
@@ -32,6 +30,9 @@
                 </div>
                 <div class="col-sm-4" style="margin-bottom: 12px">                    
                     <a href='arquivos/create' target='_self' id = 'esconder_bt' class=" btn btn-warning btn-block ">Editar o Aquivo</a>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 12px">                    
+                    <a href='{{route('arquivado')}}' target='_self' id = 'esconder_bt' class=" btn btn-primary btn-block ">Colocar no Arquivo</a>
                 </div>
                 <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
                     <thead>
@@ -54,7 +55,7 @@
                         </tr>
                     </thead>
                     <tbody>            
-                        @if($teste == 1)                       
+                        @if($teste == 1)    
                         @foreach($arquivados as $aluno)  
                         @foreach($aluno->turmas as $key=> $turma) 
                         @endforeach  
@@ -71,6 +72,7 @@
                                         <!--<li><a href="{{route('edição/turma',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>-->
                                         <!--<li><a href='{{route('transferência',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Transferência/Solicitações'><span class='glyphicon glyphicon-sort text-warning' aria-hidden='true'>&nbsp;</span>Transferências</a></li>--> 
                                         <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id)])}}' target='_self' title='Históricos'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
+                                        <li><a href="{{route('arquivos/deletar',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Deletar'onclick="return deletar()"><span class='glyphicon glyphicon-trash text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Aluno Do Sistema</a></li>
                                         @endcan
                                         <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-info' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                     </ul>                              
@@ -104,7 +106,18 @@
 
                 @include('Arquivos.tabela_listar_arquivo')
             </div>
-            {!! Form:: close()!!}        
-
+            {!! Form:: close()!!} 
+            <script type="text/javascript">
+         //Confirmar deletar
+                function deletar() {
+                    var u = $('#usuario').val();
+                    var r = confirm("Já Posso Deletar " + u + "? ");
+                    if (r == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            </script>
         </body>
     </html>

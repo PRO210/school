@@ -21,9 +21,8 @@
                     $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
                 });
             </script>            
-            <h3 style="text-align:center; margin-top: 36px ">Todos os Alunos </h3>
+            <h3 style="text-align:center; margin-top: 36px ">Alunos Cursando ou Admitidos Depois</h3>
             @include('msg')
-
             <div class="container-fluid">     
                 {{-- {{$impressao}}imprimir do php --}}
                 {{-- {!!$xss!!} imprimir do java --}}          
@@ -47,24 +46,65 @@
                             <th>INEP</th>                           
                             <th>NASCIMENTO</th>
                             <th>MÃE</th>
-                            <th>PAI</th>     
+                            <!--<th>PAI</th>-->     
                             <th>MATRICULA DA CERTIDÃO</th>  
                             <th>NIS</th>
-                            <th>BOLSA FAMÍLIA</th>
-                            <th>ENDEREÇO</th>             
-                            <th>CIDADE</th>  
+                            <!--<th>BOLSA FAMÍLIA</th>-->
+<!--                            <th>ENDEREÇO</th>             
+                            <th>CIDADE</th>  -->
                             <th>TRANSPORTE</th>  
                             <th>FONE(S)</th> 
-                            <th>DECLARAÇÃO</th> 
-                            <th>TRANSFERÊNCIA</th> 
+<!--                            <th>DECLARAÇÃO</th> 
+                            <th>TRANSFERÊNCIA</th> -->
                             <th>NECESSIDADES</th> 
                             <th>OBSERVAÇÕES</th> 
-                            <th>STATUS</th> 
+                            <th>STATUS</th>
+
                         </tr>
                     </thead>
-                    <tbody>                                   
-                        @foreach($alunos as $aluno)                     
-                        @foreach($aluno->turmas as $key=> $turma)                        
+                    <tbody>  
+
+                        @foreach($alunos as $aluno)                       
+                        @foreach($aluno as $key=> $dados)                   
+                        @if($key == 'NOME')
+                        <?php $alunoNome = $dados ?>
+                        @elseif($key == 'aluno_id')
+                        <?php $alunoId = $dados ?>
+                        @elseif($key == 'turma_id')
+                        <?php $turmaId = $dados ?>
+                        @elseif($key == 'TURMA')
+                        <?php $turma = $dados ?>
+                        @elseif($key == 'UNICO')
+                        <?php $turmaUnico = $dados ?>
+                        @elseif($key == 'TURNO')
+                        <?php $turmaTurno = $dados ?>
+                        @elseif($key == 'ANO')
+                        <?php $turmaAno = $dados ?>
+                        @elseif($key == 'INEP')
+                        <?php $alunoInep = $dados ?>
+                        @elseif($key == 'MAE')
+                        <?php $alunoMae = $dados ?>
+                        @elseif($key == 'MATRICULA_CERTIDAO')
+                        <?php $alunoMatCert = $dados ?>
+                        @elseif($key == 'NIS')
+                        <?php $alunoNis = $dados ?>
+                        @elseif($key == 'ENDERECO')
+                        <?php $alunoEndereco = $dados ?>
+                        @elseif($key == 'CIDADE')
+                        <?php $alunoCidade = $dados ?>
+                        @elseif($key == 'FONE')
+                        <?php $alunoFone = $dados ?>
+                        @elseif($key == 'FONE_II')
+                        <?php $alunoFone_II = $dados ?>
+                        @elseif($key == 'NECESSIDADES_ESPECIAIS')
+                        <?php $alunoNecEsp = $dados ?>
+                        @elseif($key == 'OBSERVACOES')
+                        <?php $alunoObs = $dados ?>
+                        @elseif($key == 'STATUS')
+                        <?php $alunoStus = $dados ?>
+                        @endif
+
+                        @endforeach   
                         <tr>     
                             <td></td>       
                             <td>
@@ -74,38 +114,36 @@
                                         @can('EDITAR_ALUNOS')
                                         <li><a href='impressao.php?id={{''}}' target='_blank' title='Imprimir Folha de Matricula'><span class='glyphicon glyphicon-print text-success' aria-hidden='true'>&nbsp;</span>Imprimir Folha de Matricula</a></li>
                                         <li><a href='declaracoes_bolsa_familia.php?id={{''}}' target='_blank' title='Declaração de Frequência Escolar'><span class='glyphicon glyphicon-print text-success ' aria-hidden='true'>&nbsp;</span>Declaração de Frequência Escolar</a></li>
-                                        <li><a href="{{route('edição/aluno',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
-                                        <li><a href="{{route('edição/turma',['id' => Crypt::encrypt($aluno->id)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>
-                                        <li><a href='{{route('transferência',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Transferência/Solicitações'><span class='glyphicon glyphicon-sort text-warning' aria-hidden='true'>&nbsp;</span>Transferências</a></li> 
-                                        <li><a href='{{route('histórico',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Históricos'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
-                                        <li><a href="{{route('aluno/deletar',['id' => Crypt::encrypt($aluno->id),'botao'=>'todos'])}}" target='_self' title='Deletar'onclick="return deletar()"><span class='glyphicon glyphicon-trash text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Aluno Do Sistema</a></li>
+                                        <li><a href="{{route('edição/aluno',['id' => Crypt::encrypt($alunoId),'id_turma' => $turmaId])}}" target='_self' title='Alterar'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Alterar os Dados Cadastrais</a></li>
+                                        <li><a href="{{route('edição/turma',['id' => Crypt::encrypt($alunoId)])}}" target='_self' title='Incluir/Retirar da Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true' >&nbsp;</span>Incluir/Retirar da Turma</a></li>
+                                        <li><a href='{{route('transferência',['id' => Crypt::encrypt($alunoId),'id_turma' => $turmaId])}}' target='_self' title='Transferência/Solicitações'><span class='glyphicon glyphicon-sort text-warning' aria-hidden='true'>&nbsp;</span>Transferências</a></li> 
+                                        <li><a href='{{route('histórico',['id' => Crypt::encrypt($alunoId),'id_turma' => $turmaId])}}' target='_self' title='Históricos'><span class='glyphicon glyphicon-book text-primary' aria-hidden='true'>&nbsp;</span>Históricos</a></li>
+                                        <li><a href="{{route('aluno/deletar',['id' => Crypt::encrypt($alunoId),'botao'=>'cursando'])}}" target='_self' title='Deletar'onclick="return deletar()"><span class='glyphicon glyphicon-trash text-danger ' aria-hidden='true' >&nbsp;</span>Deletar Aluno Do Sistema</a></li>
 
                                         @endcan
-                                        <li><a href='{{route('visualizar',['id' => Crypt::encrypt($aluno->id),'id_turma' => $turma->id])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-info' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
+                                        <li><a href='{{route('visualizar',['id' => Crypt::encrypt($alunoId),'id_turma' => ''])}}' target='_self' title='Mostrar'><span class='glyphicon glyphicon-user text-info' aria-hidden='true'>&nbsp;</span>Mostrar os Dados Cadastrais</a></li>
                                     </ul>                              
-                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$aluno->id}}/{{$turma->id}}'></span>
-                                    &nbsp;<span id = "nome">{{$aluno->NOME}}</span>
-                                </div>                           
-                            </td>  
-                            <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}}) - {{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-                            <td>{{$aluno->INEP}}</td>                  
+                                    &nbsp;&nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class = 'checkbox' value='{{$alunoId}}/{{$turmaId}}'></span>
+                                    &nbsp;<span id = "nome">{{$alunoNome}}</span>
+                                </div>  
+                            <td>{{$turma}} {{$turmaUnico}} ({{$turmaTurno}}) - {{\Carbon\Carbon::parse($turmaAno)->format('Y')}}</td>
+                            <td>{{$alunoInep}}</td>                  
                             <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
-                            <td>{{$aluno->MAE}}</td>
-                            <td>{{$aluno->PAI}}</td>
-                            <td>{{$aluno->MATRICULA_CERTIDAO}}</td>
-                            <td>{{$aluno->NIS}}</td>
-                            <td>{{$aluno->BOLSA_FAMILIA}}</td>
-                            <td>{{$aluno->ENDERECO}}</td>
-                            <td>{{$aluno->CIDADE}}</td>
+                            <td>{{$alunoMae}}</td>
+                            <!--<td>{{$aluno->PAI}}</td>-->
+                            <td>{{$alunoMatCert}}</td>
+                            <td>{{$alunoNis}}</td>
+                            <!--<td>{{$aluno->BOLSA_FAMILIA}}</td>-->
+<!--                            <td>{{$alunoEndereco}}</td>
+                            <td>{{$alunoCidade}}</td>-->
                             <td>{{$aluno->TRANSPORTE}}</td>
-                            <td>{{$aluno->FONE}} / {{ $aluno->FONE_II}}</td>
-                            <td>{{$aluno->DECLARACAO}}</td>
-                            <td>{{$aluno->TRANSFERENCIA}}</td>
-                            <td>{{$aluno->NECESSIDADES_ESPECIAIS}}</td>
-                            <td>{{$aluno->OBSERVACOES}}</td>
-                            <td>{{$aluno->classificacaos[$key]->STATUS}}</td>                        
+                            <td>{{$alunoFone}} / {{$alunoFone_II}}</td>
+<!--                            <td>{{$aluno->DECLARACAO}}</td>
+                            <td>{{$aluno->TRANSFERENCIA}}</td>-->
+                            <td>{{$alunoNecEsp}}</td>
+                            <td>{{$alunoObs}}</td>
+                            <td>{{$alunoStus}}</td> 
                         </tr>
-                        @endforeach                     
                         @endforeach                     
                     </tbody>
                     <tfoot>
@@ -116,19 +154,19 @@
                             <th>INEP</th>                         
                             <th>NASCIMENTO</th>
                             <th>MÃE</th>
-                            <th>PAI</th> 
+                            <!--<th>PAI</th>--> 
                             <th>MATRICULA DA CERTIDÃO</th>  
                             <th>NIS</th>
-                            <th>BOLSA FAMÍLIA</th>             
-                            <th>ENDEREÇO</th>             
-                            <th>CIDADE</th>
+                            <!--<th>BOLSA FAMÍLIA</th>-->             
+<!--                            <th>ENDEREÇO</th>             
+                            <th>CIDADE</th>-->
                             <th>TRANSPORTE</th>  
                             <th>FONE(S)</th> 
-                            <th>DECLARAÇÃO</th> 
-                            <th>TRANSFERÊNCIA</th> 
+<!--                            <th>DECLARAÇÃO</th> 
+                            <th>TRANSFERÊNCIA</th> -->
                             <th>NECESSIDADES</th> 
                             <th>OBSERVAÇÕES</th> 
-                            <th>STATUS</th> 
+                            <th>STATUS</th>
                         </tr>
                     </tfoot>        
                 </table> 
@@ -152,11 +190,11 @@
                         "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
                         "language": {
                             "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
-echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
+                        echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
- . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
-;
-?>@endcan",
+                        . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
+                        ;
+                        ?>@endcan",
                             "zeroRecords": "Nenhum aluno encontrado",
                             "info": "Mostrando pagina _PAGE_ de _PAGES_",
                             "infoEmpty": "Sem registros",

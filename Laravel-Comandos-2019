@@ -80,3 +80,12 @@ php artisan make:model Models\\Arquivos\\Arquivo -m
 php artisan make:controller Arquivos\\ArquivoController --resource
 php artisan make:migration create_arquivos_table
 php artisan migrate:refresh --step=1
+//
+//
+ route:      route:      route:
+  
+    php artisan route:cache : cria um arquivo de rota cache de registro rápido;
+    php artisan route:clear : remove o arquivo de rota do cache;
+    php artisan route:list : apresenta todas as rotas registradas na aplicação;
+//
+//

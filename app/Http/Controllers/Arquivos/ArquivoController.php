@@ -9,19 +9,26 @@ use App\Models\Alunos\Aluno;
 use Illuminate\Support\Facades\DB;
 use App\Models\Logs\Log;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\Turmas\Turma;
+use App\Models\Escola\Escola;
+use App\Http\Requests\AlunoFormRequest;
 
 class ArquivoController extends Controller {
 
     private $arquivo;
     private $aluno;
     private $log;
+    private $turma;
+    private $escola;
 
     //
-    public function __construct(Arquivo $arquivo, Aluno $aluno, Log $log) {
+    public function __construct(Arquivo $arquivo, Aluno $aluno, Log $log, Turma $turma, Escola $escola) {
         //
         $this->arquivo = $arquivo;
         $this->aluno = $aluno;
         $this->log = $log;
+        $this->turma = $turma;
+        $this->escola = $escola;
     }
 
     public function index() {
@@ -30,19 +37,18 @@ class ArquivoController extends Controller {
         $arquivado = Aluno::with('grupos')->where('EXCLUIDO', 'SIM')->get()->first();
         $arquivados = Aluno::with('grupos')->where('EXCLUIDO', 'SIM')->get();
 
-        $string = "olá à mim! ñ";
-
-        function tirarAcentos($string) {
-            return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $string);
-        }
-
+//        $string = "olá à mim! ñ";
+//
+//        function tirarAcentos($string) {
+//            return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $string);
+//        }
         if ($arquivado == null) {
             $teste = 0;
         } else {
             $teste = 1;
         }
         $pastas = $this->arquivo->all();
-        $arrayPasta = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        //$arrayPasta = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         //       
         return view('Arquivos.listar_arquivo', compact('pastas', 'arquivados', 'arquivado', 'teste'));
     }
@@ -55,8 +61,6 @@ class ArquivoController extends Controller {
     public function create() {
         //  $pastas = $this->arquivo->all();
         $pastas = Arquivo::orderBy('PASTA')->get();
-        // dd($pastas);
-
         return view('Arquivos.editar_arquivo', compact('pastas'));
     }
 
@@ -169,7 +173,7 @@ class ArquivoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        dd('show');
     }
 
     /**
@@ -178,8 +182,18 @@ class ArquivoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        //
+    public function edit($aluno_id, $turma_id) {
+//        
+        $aluno = (Aluno::with(['turmas' => function($query) use($turma_id) {
+                        $query->where('turma_id', $turma_id);
+                    }])->where('id', Crypt::decrypt($aluno_id))->get()->first());
+        $nome = substr($aluno->NOME, 0, 1);
+        // DB::enableQueryLog();
+        $pastas = Arquivo::where('PASTA', 'LIKE', "%$nome%")->orderBy('PASTA')->get();
+        // dd(\DB::getQueryLog());
+        // dd($pastas);
+
+        return view('Arquivos.inserir_no_arquivo', compact('aluno', 'pastas'));
     }
 
     /**
@@ -204,6 +218,28 @@ class ArquivoController extends Controller {
             } else {
                 return redirect()->back()->with('erro', 'As Alterações Não Foram Salvas !');
             }
+            //
+            //Inserir o aluno no arquivo 
+        } elseif ($request->botao == "inserir") {
+            //Recupera o nome do aluno
+            $aluno = $this->aluno->find(Crypt::decrypt($id));
+            //REaliza o update no banco
+            $update = \DB::table('alunos')->where('id', Crypt::decrypt($id))->update(['EXCLUIDO' => 'SIM', 'EXCLUIDO_PASTA' => $request->PASTA]);
+//              
+            if ($update) {
+                //Traz o usuario
+                $usuario = \Auth::user()->name;
+//                Faz o Log
+                $insert = $this->log->create([
+                    'USUARIO' => $usuario,
+                    'TABELA' => 'ALUNOS',
+                    'ACAO' => 'ALTERAR',
+                    'DETALHES_ACAO' => " Moveu o aluno(a) $aluno->NOME para a Pasta: $request->PASTA do Arquivo Passivo",
+                ]);
+                return redirect()->route('arquivos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+            } else {
+                return redirect()->back()->with('erro', 'As Alterações Não Foram Salvas !');
+            }
         }
 //
         //
@@ -216,7 +252,75 @@ class ArquivoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        
+        $aluno = $this->aluno->find(Crypt::decrypt($id));
+        $aluno->NOME;
+        $aluno_del = DB::table('alunos')->where('id', Crypt::decrypt($id))->delete();       
+        //
+        if ($aluno_del) {
+            //Traz o usuário
+            $usuario = \Auth::user()->name;
+//          Faz o Log
+            $insert = $this->log->create([
+                'USUARIO' => $usuario,
+                'TABELA' => 'ALUNOS',
+                'ACAO' => 'DELETAR',
+                'DETALHES_ACAO' => "DELETOU $aluno->NOME DO SISTEMA",
+            ]);
+            return redirect()->route('arquivos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+        } else {
+            return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+        }
+       
     }
 
+    //
+    public function arquivado() {
+        $pastas = Arquivo::orderBy('PASTA')->get();
+        return view('Arquivos.inserir_no_arquivo_unitario', compact('pastas'));
+    }
+
+//
+    public function arquivado_create(AlunoFormRequest $request) {
+//        DB::enableQueryLog();
+//        dd(DB::getQuerylog());
+        $duplicidade = Aluno::with(['turmas', 'classificacaos'])->get();
+        foreach ($duplicidade as $aluno) {
+            if ($request->NOME == "$aluno->NOME") {
+                return redirect()->back()->with('msg_3', 'Esse nome já consta no banco de dados!');
+            }
+        }
+        $form = $request->except(['_token', '_method', 'TURMA']);
+//      Insere os dados
+        $insert = $this->aluno->create($form);
+//      Recuperando a Data do Censo       
+        $data = date('Y-m-d');
+        $escola = $this->escola->find(1);
+        if ($data <= $escola->DATA_CENSO) {
+            $status = "2";
+        } else {
+            $status = "4";
+        }
+
+//        Inserindo da Tabela Pivot//      
+        $turma_nova = Turma::findOrfail($request->TURMA);
+
+        $turma_nova->alunos()->attach($insert->id, array('TURMA_ANO' => $turma_nova->ANO, 'aluno_classificacao_id' => "$status", 'OUVINTE' => "NAO", 'updated_at' => NOW()));
+//      Redireciona
+        if ($insert && $turma_nova) {
+            //Traz o usuário
+            $usuario = \Auth::user()->name;
+//          Faz o Log
+            $insert = $this->log->create([
+                'USUARIO' => $usuario,
+                'TABELA' => 'ALUNOS',
+                'ACAO' => 'CADASTRAR',
+                'DETALHES_ACAO' => "INSERIU $request->NOME NO ARQUIVO PASSIVO $request->EXCLUIDO_PASTA ",
+            ]);
+            return redirect()->route('arquivos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+        } else {
+            return redirect()->back()->with('msg_2', 'Falha em Salvar os Dados!');
+        }
+    }
+
+    //
 }

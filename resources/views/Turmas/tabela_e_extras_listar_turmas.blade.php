@@ -12,7 +12,7 @@
                     "targets": 0,
                     "orderable": false
                 }],
-            "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
+            "lengthMenu": [[10, 15,20, 30, 40, 50, 70, 100, -1], [10,15, 20, 30, 40, 50, 70, 100, "All"]],
             "language": {
                 "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
 echo "&nbsp;<a href='turmas/create' target='_self' class = 'btn btn-success'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
