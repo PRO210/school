@@ -28,7 +28,7 @@
 
             <div class="col-md-12">
                 <div class ="row">
-                    
+
                     <div class="col-md-3">
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -43,7 +43,7 @@
                             @endforeach   
                         </table>
                     </div>
-                    
+
                     <div class="col-md-2">
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -81,7 +81,7 @@
                             </tbody>
                         </table>                         
                     </div>
-                    
+
                     <div class="col-md-2">
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -100,7 +100,7 @@
                             </tbody>
                         </table>   
                     </div>
-                    
+
                     <div class="col-md-2">
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -130,133 +130,178 @@
 
 
 
-            <div class="row">
-                <div class="col-sm-offset-2 col-sm-4" style=" margin-bottom: 12px; ">                    
-                    <button type="submit" value="inputNome" class="btn btn-success btn-block" id="inputNome" onclick="return validaCheckbox()">Gerar Relatório</button>  
-                </div>
-                <div class="col-sm-4" >                        
-                    <button type="reset" class="btn btn-danger btn-block">Limpar os Campos</button>
-                </div>
-            </div> 
-            <div class ="row">
-                <div class="col-md-12">
-                    <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
-                        <thead>
-                            <tr>  
-                                <th> 
-                                    <div class='dropdown'>                                  
-                                        &nbsp;&nbsp;<span class='glyphicon glyphicon-cog text-success' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'></span>
-                                    </div>
-                                </th>                    
-                                <th>TURMA</th>
-                                <th>TURMA_EXTRA</th>                        
-                                <th>TURNO</th>
-                                <th>UNICO</th>
-                                <th>ANO</th>
-                                <th>CATEGORIA</th>                         
-                            </tr>
-                        </thead>
-                        <tbody>                                   
-                            @foreach($turmas as $turma) 
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <div class="dropdown">
-                                        &nbsp;&nbsp;<span><input type='checkbox' name='turma_id[]' class = 'checkbox' value='{{$turma->id}}' ></span>
-                                        &nbsp;<span id = "nome">{{$turma->TURMA}}</span>
-                                    </div>
-                                </td>
-                                <td>{{$turma->TURMA_EXTRA}}</td>                          
+                <div class="row">
+                    <div class="col-sm-offset-2 col-sm-4" style=" margin-bottom: 12px; ">                    
+                        <button type="submit" value="inputNome" class="btn btn-success btn-block" id="gerar_relatorio" disabled="" onclick="return confirmar()">Gerar Relatório</button>  
+                    </div>
+                    <div class="col-sm-4" >                        
+                        <button type="reset" class="btn btn-danger btn-block">Limpar os Campos</button>
+                    </div>
+                </div> 
+                <div class ="row">
+                    <div class="col-md-12">
+                        <table  id = "example" class="nowrap table table-striped table-bordered" style="width:100%" cellspacing="0">
+                            <thead>
+                                <tr>  
+                                    <th>&nbsp;&nbsp;<input type="checkbox" class="selecionar_turmas" > </th>                    
+                                    <th>TURMA</th>
+                                    <th>TURMA_EXTRA</th>                        
+                                    <th>TURNO</th>
+                                    <!--<th>UNICO</th>-->
+                                    <th>ANO</th>
+                                    <th>CATEGORIA</th>                         
+                                </tr>
+                            </thead>
+                            <tbody>                                   
+                                @foreach($turmas as $turma) 
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            &nbsp;&nbsp;<span><input type='checkbox' name='turma_id[]' class = 'checkbox_turmas' value='{{$turma->id}}' ></span>
+                                            &nbsp;<span id = "nome">{{$turma->TURMA}} {{$turma->UNICO}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{$turma->TURMA_EXTRA}}</td>                          
 
-                                <td>{{$turma->TURNO}}</td>
-                                <td>{{$turma->UNICO}}</td>
-                                <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-                                <td>{{$turma->CATEGORIA}}</td>                          
-                            </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>  
-                                <th></th>                    
-                                <th>TURMA</th>
-                                <th>TURMA_EXTRA</th>                        
-                                <th>TURNO</th>
-                                <th>UNICO</th>
-                                <th>ANO</th>
-                                <th>CATEGORIA</th>                         
-                            </tr>
-                        </tfoot>
-                    </table>    
+                                    <td>{{$turma->TURNO}}</td>
+                                    <!--<td>{{$turma->UNICO}}</td>-->
+                                    <td>{{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
+                                    <td>{{$turma->CATEGORIA}}</td>                          
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>  
+                                    <th></th>                    
+                                    <th>TURMA</th>
+                                    <th>TURMA_EXTRA</th>                        
+                                    <th>TURNO</th>
+                                    <!--<th>UNICO</th>-->
+                                    <th>ANO</th>
+                                    <th>CATEGORIA</th>                         
+                                </tr>
+                            </tfoot>
+                        </table>    
+                    </div>
                 </div>
             </div>
-        </div>
-        {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}
-        {!! Form:: close()!!}  
-        <script>
-            //Marcar ou Desmarcar todos os checkbox do Status
-            $(document).ready(function () {
-                $('.selecionar_status').click(function () {
-                    if (this.checked) {
-                        $('.checkbox_status').each(function () {
-                            this.checked = true;
-                        });
-                    } else {
-                        $('.checkbox_status').each(function () {
-                            this.checked = false;
-                        });
-                    }
-                });
-
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
-                // Setup - add a text input to each footer cell
-                $('#example tfoot th').each(function () {
-                    var title = $(this).text();
-                    $(this).html('<input type="text" placeholder="' + title + '" />');
-                });
-                //Data Table
-                var table = $('#example').DataTable({
-                    //
-                    "columnDefs": [{
-                            "targets": 0,
-                            "orderable": false
-                        }],
-                    "lengthMenu": [[5, 10, 20, 30, 40, 50, 70, 100, -1], [5, 10, 20, 30, 40, 50, 70, 100, "All"]],
-                    "language": {
-                        "lengthMenu": " _MENU_",
-                        "zeroRecords": "Nenhum aluno encontrado",
-                        "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                        "infoEmpty": "Sem registros",
-                        "search": "Busca:",
-                        "infoFiltered": "(filtrado de _MAX_ total de Turmas)",
-                        "paginate": {
-                            "first": "Primeira",
-                            "last": "Ultima",
-                            "next": "Proxima",
-                            "previous": "Anterior"
-                        },
-                        "aria": {
-                            "sortAscending": ": ative a ordenação cressente",
-                            "sortDescending": ": ative a ordenação decressente"
-                        }
-
-                    },
-                    responsive: true
-                });
-                // Apply the search
-                table.columns().every(function () {
-                    var that = this;
-                    $('input', this.footer()).on('keyup change', function () {
-                        if (that.search() !== this.value) {
-                            that
-                                    .search(this.value)
-                                    .draw();
+            {{-- <input type="hidden" name="_token" value="{{csrf_token()}}">--}}
+            {!! Form:: close()!!}  
+            <script>
+                //Marcar ou Desmarcar todos os checkbox do Status
+                $(document).ready(function () {
+                    $('.selecionar_status').click(function () {
+                        if (this.checked) {
+                            $('.checkbox_status').each(function () {
+                                this.checked = true;
+                            });
+                        } else {
+                            $('.checkbox_status').each(function () {
+                                this.checked = false;
+                            });
                         }
                     });
+
                 });
-            });
-        </script>
-    </body>
-</html>
+            </script>
+            <script>
+                //Marcar ou Desmarcar todos os checkbox das Turmas
+                $(document).ready(function () {
+                    $('.selecionar_turmas').click(function () {
+                        if (this.checked) {
+                            $('.checkbox_turmas').each(function () {
+                                this.checked = true;
+                            });
+                        } else {
+                            $('.checkbox_turmas').each(function () {
+                                this.checked = false;
+                            });
+                        }
+                    });
+
+                });
+            </script>
+            <!--Valida os botão Gerar através dos chebox das turmas--> 
+            <script type="text/javascript">
+                $('input[type="checkbox"][name="turma_id[]"]').on('change', function () {
+                    var total = $('input[type="checkbox"][name="turma_id[]"]:checked').length;
+                    if (total > 0) {
+                        $('#gerar_relatorio').removeAttr('disabled');
+                    } else {
+                        $('#gerar_relatorio').attr('disabled', 'disabled');
+                    }
+                });
+                //
+                $('input[type="checkbox"][class="selecionar_turmas"]').on('change', function () {
+                    var total = $('input[type="checkbox"][name="turma_id[]"]:checked').length;
+                    if (total > 0) {
+                        $('#gerar_relatorio').removeAttr('disabled');
+                    } else {
+                        $('#gerar_relatorio').attr('disabled', 'disabled');
+                    }
+                });                 
+            </script>
+            <!--Confimar se pode Salvar-->
+            <script type="text/javascript">
+                function confirmar() {
+                    var u = $('#usuario').val();
+                    var r = confirm("Já Posso Gerar o Relatório " + u + "? ");
+                    if (r == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            </script>
+            <script>
+                $(document).ready(function () {
+                    // Setup - add a text input to each footer cell
+                    $('#example tfoot th').each(function () {
+                        var title = $(this).text();
+                        $(this).html('<input type="text" placeholder="' + title + '" />');
+                    });
+                    //Data Table
+                    var table = $('#example').DataTable({
+                        //
+                        "columnDefs": [{
+                                "targets": 0,
+                                "orderable": false
+                            }],
+                        "lengthMenu": [[7, 10, 20, 30, 40, 50, 70, 100, -1], [7, 10, 20, 30, 40, 50, 70, 100, "All"]],
+                        "language": {
+                            "lengthMenu": " _MENU_",
+                            "zeroRecords": "Nenhum aluno encontrado",
+                            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                            "infoEmpty": "Sem registros",
+                            "search": "Busca:",
+                            "infoFiltered": "(filtrado de _MAX_ total de Turmas)",
+                            "paginate": {
+                                "first": "Primeira",
+                                "last": "Ultima",
+                                "next": "Proxima",
+                                "previous": "Anterior"
+                            },
+                            "aria": {
+                                "sortAscending": ": ative a ordenação cressente",
+                                "sortDescending": ": ative a ordenação decressente"
+                            }
+
+                        },
+                        responsive: true
+                    });
+                    // Apply the search
+                    table.columns().every(function () {
+                        var that = this;
+                        $('input', this.footer()).on('keyup change', function () {
+                            if (that.search() !== this.value) {
+                                that
+                                        .search(this.value)
+                                        .draw();
+                            }
+                        });
+                    });
+                });
+            </script>
+        </body>
+    </html>

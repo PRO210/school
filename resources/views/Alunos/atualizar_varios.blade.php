@@ -37,7 +37,7 @@
                                 <div class="col-sm-4" >
                                     <select class="form-control" name="inputTurma" id="inputTurma" >                                                             
                                         @foreach($Turmas as $turma)  
-                                        <option value="{{$turma->id}}">{{$turma->TURMA }} {{$turma->UNICO }} ({{$turma->TURNO }})</option>
+                                        <option value="{{$turma->id}}">{{$turma->TURMA }} {{$turma->UNICO }} ({{$turma->TURNO }}) - {{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</option>
                                         @endforeach                                                                        
                                     </select>
                                 </div>

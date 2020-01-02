@@ -86,24 +86,23 @@
 
                             <div class="form-row">
                                 <div class="form-group col-sm-12"> 
-                                    {!!Form::label('Status ', 'Status Atual do Aluno',['class' => ''])!!}                                   
-                                    <select name="STATUS" class="form-control" >                             
+                                    {!!Form::label('Status ', 'Status Atual do Aluno',['class' => ''])!!}                                  
+                                    <select name="STATUS" class="form-control" >                                         
+
                                         @foreach($status as $status_unico)
-                                        @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")
-                                        
+                                        @if($aluno_turma->aluno_classificacao_id == "$status_unico->id")                                        
                                         <option value="{{$status_unico->id}}" selected="">{{$status_unico->STATUS}}</option> 
                                         @else                               
                                         <option value="{{$status_unico->id}}" >{{$status_unico->STATUS}}</option>   
-                                        @endif
-                                        @endforeach                                                                                      
+                                        @endif     
+                                        @endforeach 
+
+                                       
                                     </select>                      
+
                                 </div>
                             </div>
                         </div>                        
-                    
-
-
-
                     </div>
                 </div> 
             </div> 
@@ -111,7 +110,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-body"> 
                         <h4 class="text-on-pannel">
-                            <strong class="text-uppercase"> Dados da Escola </strong>
+                            <strong class="text-uppercase">Dados da Escola</strong>
                         </h4> 
                         <div class="form-row">
                             <div class="form-group col-sm-9">                                

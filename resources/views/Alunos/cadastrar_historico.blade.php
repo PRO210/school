@@ -11,7 +11,7 @@
     <body>
         @include('Alunos.alunos_css');
         @include('Menu.menu')
-
+        @include('msg')
         <div class="container-fluid"> 
             <form name="cadastrar" action="{{url('aluno/históricos')}}" method="post" class="form-horizontal btn-block" > 
                 <input type="hidden" name="_token" value="{{csrf_token()}}">                
@@ -48,7 +48,7 @@
                             <tr>
                                 <td colspan="2"><input id = 'input_escola' type = 'text' name = 'ESTADO' placeholder = 'Estado' onkeyup='maiuscula(this)'></td>                            
                             </tr>
-                             <tr>                             
+                            <tr>                             
                                 <td colspan="2">                                    
                                     <select class='form-control' name='turma_id' style="width: 100% !important" id="turma">  
                                         <option selected="Escolha uma Turma Formal">Escolha uma Turma Formal</option>
@@ -71,8 +71,8 @@
                             </tr>
                             <tr>                             
                                 <td colspan="2">                                    
-                                    <select class='form-control' name='curso_id' style="width: 100% !important" id="">  
-                                        <option disabled="" selected=""> Curso</option>
+                                    <select class='form-control' name='curso_id' style="width: 100% !important" id="curso">  
+                                        <option selected="" value="Curso">Curso</option>
                                         @forelse ($cursos as $curso)
                                         <option value="{{$curso->id}}">{{$curso->NOME}}</option>
                                         @empty
@@ -83,8 +83,8 @@
                             </tr>
                             <tr>                             
                                 <td colspan="2">                                    
-                                    <select class='form-control' name='SEMESTRE' style="width: 100% !important" id="">  
-                                        <option disabled="" selected="">Semestre</option>
+                                    <select class='form-control' name='SEMESTRE' style="width: 100% !important" id="semestre">  
+                                        <option selected="ANO">Semestre</option>
                                         <option value="PRIMEIRO">PRIMEIRO</option>
                                         <option value="SEGUNDO">SEGUNDO</option>
                                         <option value="ANO">ANO</option>
@@ -95,12 +95,12 @@
                             <tr>                                
                                 <?php
                                 echo "<th>"
-                                . "&nbsp;&nbsp;<button disabled = '' title = 'O Campo Ano e Turma Formal não Devem serem Enviados em Branco!' id = 'criar_historico' type='submit' value='criar' name = 'botao' class='btn btn-success  btn-block' onclick = 'return confirmarExclusao2()' >CRIAR NOVO HISTÓRICO</button>"
+                                . "&nbsp;&nbsp;<button disabled = '' title = 'O Campo Ano, Turma Formal e Cursos não Devem serem Enviados em Branco!' id = 'criar_historico' type='submit' value='criar' name = 'botao' class='btn btn-success  btn-block' onclick = 'return gerar()' >CRIAR NOVO HISTÓRICO</button>"
                                 . "</th>";
                                 ?>                       
                                 <?php
                                 echo "<th>"
-                                . "&nbsp;&nbsp;<button type='reset' value='' name ='botao' class='btn btn-danger  btn-block'>&nbsp;&nbsp;LIMPAR OS CAMPOS DIGITADOS</button>"
+                                . "&nbsp;&nbsp;<button type='reset' value='' name ='botao' class='btn btn-warning  btn-block'>&nbsp;&nbsp;LIMPAR OS CAMPOS DIGITADOS</button>"
                                 . "</th>";
                                 ?>
                             </tr>
@@ -143,10 +143,12 @@
                             </tr>
                             @endforelse
                             <tr>                                        
-                                <td colspan="4">&nbsp;&nbsp;
-                                    <button type="submit" name="botao" value="pesquisar" class="btn btn-success btn-block" onclick="return confirmarAtualizacao()">Pesquisar</button>
-                                    </a>
+                                <td colspan="2">&nbsp;&nbsp;
+                                    <button type="submit" name="botao" value="pesquisar"  id="pesquisar" disabled="" class="btn btn-success btn-block" >Pesquisar</button>
 
+                                </td>                                
+                                <td colspan="2">&nbsp;&nbsp;
+                                    <button type="submit" name="botao" value="excluir"  id="excluir" disabled="" class="btn btn-danger btn-block" onclick="return excluir()">Excluir</button>
                                 </td>                                
                             </tr>
                         </tbody>

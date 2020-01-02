@@ -13,7 +13,7 @@
             @media (max-width: 720px) {#nome{white-space: normal};
             </style>            
         </head>
-        <body>
+        <body>           
             @include('bootstrap4')
             @include('Menu.menu')
             <script>
@@ -21,7 +21,7 @@
                     $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
                 });
             </script>            
-            <h3 style="text-align:center; margin-top: 36px ">Alunos Cursando ou Admitidos Depois</h3>
+            <h3 style="text-align:center; margin-top: 36px ">Resultado da Pesquisa</h3>
             @include('msg')
             <div class="container-fluid">     
                 {{-- {{$impressao}}imprimir do php --}}
@@ -44,27 +44,26 @@
                             <th>NOME</th>
                             <th>TURMA</th>
                             <th>INEP</th>                           
-                            <th>NASCIMENTO</th>
-                            <th>MÃE</th>
-                            <!--<th>PAI</th>-->     
+                            <th>NASCIMENTO</th>                         
+                            <th>MÃE</th>                          
                             <th>MATRICULA DA CERTIDÃO</th>  
                             <th>NIS</th>
-                            <!--<th>BOLSA FAMÍLIA</th>-->
+                            <th>BOLSA FAMÍLIA</th>
                             <th>ENDEREÇO</th>             
                             <th>CIDADE</th>  
                             <th>TRANSPORTE</th>  
-                            <th>FONE(S)</th> 
-                            <th>DECLARAÇÃO</th> 
-                            <th>TRANSFERÊNCIA</th> 
+                            <th>FONE(S)</th>                            
                             <th>NECESSIDADES</th> 
                             <th>OBSERVAÇÕES</th> 
                             <th>STATUS</th> 
                         </tr>
                     </thead>
-                    <tbody>  
-                        @foreach($alunoTeste as $aluno)                       
-                        @foreach($aluno->turmas as $key=> $turma)    
-                        @endforeach    
+                    <tbody>                                   
+                        @foreach($alunoTeste as $aluno) 
+                        @foreach($aluno->turmas as $key=> $turma)
+                        @php
+                        $now = new \Carbon\Carbon($aluno->NASCIMENTO)
+                        @endphp
                         <tr>     
                             <td></td>       
                             <td>
@@ -88,25 +87,22 @@
                                 </div>                           
                             </td>  
                             <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}}) - {{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-                            <td>{{$aluno->INEP}}</td>                  
-                            <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
-                            <td>{{$aluno->MAE}}</td>
-                            <!--<td>{{$aluno->PAI}}</td>-->
+                            <td>{{$aluno->INEP}}</td>                           
+                            <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}} - {{$now->age}} Anos</td>
+                            <td>{{$aluno->MAE}}</td>                           
                             <td>{{$aluno->MATRICULA_CERTIDAO}}</td>
                             <td>{{$aluno->NIS}}</td>
-                            <!--<td>{{$aluno->BOLSA_FAMILIA}}</td>-->
+                            <td>{{$aluno->BOLSA_FAMILIA}}</td>
                             <td>{{$aluno->ENDERECO}}</td>
                             <td>{{$aluno->CIDADE}}</td>
                             <td>{{$aluno->TRANSPORTE}}</td>
-                            <td>{{$aluno->FONE}} / {{ $aluno->FONE_II}}</td>
-                            <td>{{$aluno->DECLARACAO}}</td>
-                            <td>{{$aluno->TRANSFERENCIA}}</td>
+                            <td>{{$aluno->FONE}} / {{ $aluno->FONE_II}}</td>                          
                             <td>{{$aluno->NECESSIDADES_ESPECIAIS}}</td>
                             <td>{{$aluno->OBSERVACOES}}</td>
                             <td>{{$aluno->classificacaos[$key]->STATUS}}</td>                        
                         </tr>
-
-                        @endforeach                 
+                        @endforeach                     
+                        @endforeach                     
                     </tbody>
                     <tfoot>
                         <tr>      
@@ -114,18 +110,15 @@
                             <th>NOME</th>
                             <th>TURMA</th>
                             <th>INEP</th>                         
-                            <th>NASCIMENTO</th>
-                            <th>MÃE</th>
-                            <!--<th>PAI</th>--> 
+                            <th>NASCIMENTO</th>                          
+                            <th>MÃE</th>                             
                             <th>MATRICULA DA CERTIDÃO</th>  
                             <th>NIS</th>
-                            <!--<th>BOLSA FAMÍLIA</th>-->             
+                            <th>BOLSA FAMÍLIA</th>             
                             <th>ENDEREÇO</th>             
                             <th>CIDADE</th>
                             <th>TRANSPORTE</th>  
-                            <th>FONE(S)</th> 
-                            <th>DECLARAÇÃO</th> 
-                            <th>TRANSFERÊNCIA</th> 
+                            <th>FONE(S)</th>                           
                             <th>NECESSIDADES</th> 
                             <th>OBSERVAÇÕES</th> 
                             <th>STATUS</th> 
@@ -152,11 +145,11 @@
                         "lengthMenu": [[8, 20, 30, 40, 50, 70, 100, -1], [8, 20, 30, 40, 50, 70, 100, "All"]],
                         "language": {
                             "lengthMenu": "_MENU_ @can('EDITAR_ALUNOS')<?php
-echo"&nbsp;<a href='/laravel/school/public/alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
+                            echo"&nbsp;<a href='alunos/create' target='_self' class = 'btn btn-success' id = 'esconder_bt'><span class = 'glyphicon glyphicon-plus'>&nbsp;Cadastrar</span></a>"
 // . "<button type='button' class='btn btn-link btn-lg verde glyphicon glyphicon-cog ' data-toggle='modal' data-target='#myModal_Turmas' id = 'esconder_list'></button>"
- . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
-;
-?>@endcan",
+                            . "&nbsp;<input type='submit' title = 'Selecione ao menos um aluno(a)' name = 'botao' value='Editar em Bloco' class = 'btn btn-primary' id = 'btEditBloc' onclick= 'return validaCheckbox()' disabled>"
+                            ;
+                            ?>@endcan",
                             "zeroRecords": "Nenhum aluno encontrado",
                             "info": "Mostrando pagina _PAGE_ de _PAGES_",
                             "infoEmpty": "Sem registros",

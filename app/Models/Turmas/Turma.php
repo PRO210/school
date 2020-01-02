@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Turma extends Model {
 
-//  Essa função traz todos os alunos com vinculo em alguma turma 
+//  Essa função traz todos os alunos com vinculo em alguma turma/Inseri os alunos pelo que vem do create para o store
     public function alunos() {
         return $this->belongsToMany(Aluno::class, 'aluno_turmas');
     }

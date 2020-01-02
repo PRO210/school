@@ -20,6 +20,8 @@ use Maatwebsite\Excel\Exporter;
 use Maatwebsite\Excel\Facades\Excel;
 //
 use Illuminate\Support\Facades\Crypt;
+//
+use Carbon\Carbon;
 
 //
 class AlunoController extends Controller {
@@ -47,7 +49,7 @@ class AlunoController extends Controller {
     public function index() {
         $title = "Todos os Alunos";
         $alunos = Aluno::with(['classificacaos', 'turmas' => function($q) {
-                        $q->orderBy('turma_id');
+                        $q->orderByDesc('ANO');
                     }])->get();
 
 //        $alunoTeste = (Aluno::with(['turmas' => function($query) use($id_turma) {
@@ -58,38 +60,73 @@ class AlunoController extends Controller {
 //                            }])
 //                        ->where('id', $id_aluno)->get());
 //       
+        //dd($alunos);
         return view('Alunos.listar', compact('title', 'alunos'));
     }
 
-    //
+//
     public function cursando() {
         $title = "Alunos Cursando";
-        // DB::enableQueryLog();
-        $alunos = DB::table('aluno_turmas')
-                ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')->where('alunos.EXCLUIDO', 'NAO')
-                ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')->where('turmas.ANO', 'LIKE', '%' . date('Y') . '%')
-                ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')
-                ->where('aluno_turmas.aluno_classificacao_id', '4')->orwhere('aluno_turmas.aluno_classificacao_id', '2')
-                ->select('aluno_id', 'alunos.*', 'turma_id', 'turmas.*', 'aluno_classificacaos.STATUS')
-                ->orderBy('turmas.ANO', 'DESC')->orderBy('turma_id', 'ASC')->orderBy('alunos.NOME', 'ASC')
-                ->get();
-//        foreach ($alunos as $dados) {//            
-//            foreach ($dados as $key => $value) {
-//                if ($key == "NOME") {
-//                    echo "$value - ";
-//                } elseif ($key == "aluno_id") {
-//                    echo "$value" . " : ";
-//                } elseif ($key == "turma_id") {
-//                    echo "$value" . " : ";             
-//            }
-//            echo "<br>";
-//            echo "<br>";
-//        }
-//        // dd(\DB::getQueryLog());
-        $alunoId = '';
-        $alunoNome = '';
-
-        return view('Alunos.listar_cursando', compact('title', 'alunos', 'alunoId', 'alunoNome'));
+// DB::enableQueryLog();
+// dd(\DB::getQueryLog());
+//Recupera todas as turmas do ano corrente pelo ID
+        $turmas_id [] = "";
+        $arrayturmas = Db::table('turmas')->where('ANO', 'LIKE', '%' . date('Y') . '%')->get();
+        foreach ($arrayturmas as $turmas) {
+            foreach ($turmas as $key => $value) {
+                if ($key == "id") {
+                    array_push($turmas_id, $value);
+                }
+            }
+        }
+        array_shift($turmas_id);
+//
+//      Recupera todos os alunos através das duas tumas
+        $alunos_id[] = "";
+        $turmas02_id[] = "";
+        $aluno_classificacao_id[] = "";
+        foreach ($turmas_id as $turma_id) {
+            $alunos = DB::table('aluno_turmas')
+                    ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')->where('alunos.EXCLUIDO', 'NAO')
+                    ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')->where('turmas.id', $turma_id)
+                    ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')->whereIn('aluno_classificacao_id', [2, 4])
+                    ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'turma_id', 'turmas.TURMA','aluno_classificacao_id')
+                    ->orderBy('turmas.TURMA','ASC')->orderBy('alunos.NOME', 'ASC')
+                    ->get();
+//         
+            foreach ($alunos as $dados) {
+                foreach ($dados as $key => $value) {
+//  echo " $key : " . " $value / ";
+                    if ($key == "aluno_id") {
+                        array_push($alunos_id, $value);
+                    }
+                    if ($key == "aluno_classificacao_id") {
+                        array_push($aluno_classificacao_id, $value);
+                    }
+                    if ($key == "turma_id") {
+                        array_push($turmas02_id, $value);
+                    }
+                }
+// echo "<br>";
+            }
+// echo "<br>";
+        }
+        array_shift($alunos_id);
+        array_shift($turmas02_id);
+        array_shift($aluno_classificacao_id);
+//    
+//Montar os dados para a Views
+        $alunoTeste = collect([]);
+        foreach ($alunos_id as $posicao => $Idalunoatual) {
+//  echo '<br>' . $posicao . " - " . $Idalunoatual . "<br>";
+            $alunoTeste = $alunoTeste->concat(Aluno::with(['classificacaos' => function ($query02) use($aluno_classificacao_id, $posicao) {
+                            $query02->where('aluno_classificacao_id', $aluno_classificacao_id[$posicao]);
+                        }, 'turmas' => function($query) use($turmas02_id, $posicao) {
+                            $query->where('turma_id', $turmas02_id[$posicao]);
+                        }])->where('id', $Idalunoatual)->get());
+        }
+//        
+        return view('Alunos.listar_cursando', compact('title', 'alunoTeste'));
     }
 
     //
@@ -141,7 +178,8 @@ class AlunoController extends Controller {
                 'ACAO' => 'CADASTRAR',
                 'DETALHES_ACAO' => "$campo_final",
             ]);
-            return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+//            return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+            return redirect()->action('Alunos\AlunoController@cursando', ['id' => '0'])->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
             return redirect()->route('alunos.create')->with('msg_2', 'Falha em Salvar os Dados!');
         }
@@ -150,6 +188,7 @@ class AlunoController extends Controller {
 //
 //Esse método Recupera o que veio do Create, mas diferente do anterior  Atualiza os dados existentes
     public function update(AlunoFormRequest $request, $id) {
+
 //      Recuperar o Nome do Status Atual
         $status_antigo_id = $this->alunoClassificacao->find($request->STATUS_ATUAL);
         $status_antigo_nome = $status_antigo_id->STATUS;
@@ -162,8 +201,9 @@ class AlunoController extends Controller {
 ////      Backup da Tabel da Pivot
 //        $aluno_turma_backup = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA_ATUAL)->get()->first();
 //        //  Atualizando a Tabela Pivot
-//        $user = Aluno::find($id);
-//        $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('turma_id' => "$request->TURMA", 'aluno_classificacao_id' => "$request->STATUS", 'OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
+        $user = Aluno::find($id);
+        $user->turmas()->updateExistingPivot($request->TURMA_ATUAL, array('OUVINTE' => "$request->OUVINTE", 'updated_at' => NOW()));
+
 ////      Update da Tabel da Pivot
 //        $aluno_turma_update = $this->alunoturma->where('aluno_id', $id)->where('turma_id', $request->TURMA)->get()->first();
 //        //
@@ -211,7 +251,7 @@ class AlunoController extends Controller {
             }
             $campo .= "$nome_campo = De $backup[$nome_campo] para $valor / ";
         }
-        $campo_final = "Alterou o(s) Campo(s) de " . $backup['NOME'] . " em :  $campo ";
+        $campo_final = "Alterou o(s) Campo(s) de " . $backup['NOME'] . " em : $campo ";
 //        $campo_final = "Alterou o(s) Campo(s) de " . $backup['NOME'] . " em : $pivot $campo ";
         /* dd(DB::getQueryLog()); */
         //Redireciona
@@ -225,7 +265,8 @@ class AlunoController extends Controller {
                 'ACAO' => 'ALTETAR',
                 'DETALHES_ACAO' => "$campo_final",
             ]);
-            return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+//            return redirect()->route('alunos.index')->with('msg', 'Alterações Salvas com Sucesso!');
+            return redirect()->action('Alunos\AlunoController@cursando', ['id' => '0'])->with('msg', 'Alterações Salvas com Sucesso!');
         } else {
             return redirect()->route('alunos.create');
         }
@@ -305,7 +346,7 @@ class AlunoController extends Controller {
 //                            }])->where('id', $listaIdAluno[$posicao])->get());
 //            }
             include 'selects.php';
-            $Turmas = Turma::all();
+            $Turmas = Turma::orderByDesc('ANO')->orderBy('TURMA', 'ASC')->get();
             $status = AlunoClassificacao::all()->where('ORDEM_I', 'S');
             $marcar = "";
             return view('Alunos.atualizar_varios', compact('title', 'alunoTeste', 'marcar', 'Turmas', 'status', 'transportes', 'urbanos'));
@@ -403,7 +444,7 @@ class AlunoController extends Controller {
                     $todos .= $aluno['NOME'] . ',';
                     $todos_nomes = substr($todos, 0, -1);
                 }
-                $campo_final = "Alterou o Transporte do(as) aluno(as) $todos_nomes para: TRANSPORTE => $request->TRANSPORTE , MOTORISTA(S) => $request->MOTORISTA , $request->MOTORISTA_II E URBANO => $request->URBANO .";
+                $campo_final = "Alterou o Transporte do(as) aluno(as) $todos_nomes para: TRANSPORTE => $request->TRANSPORTE, MOTORISTA(S) => $request->MOTORISTA, $request->MOTORISTA_II E URBANO => $request->URBANO .";
                 //Traz o usuario
                 $usuario = \Auth::user()->name;
 //                Faz o Log
@@ -644,6 +685,7 @@ class AlunoController extends Controller {
     }
 
 //
+//
     public function arquivo($id) {
         $up = DB::table('alunos')->where('id', Crypt::decrypt($id))->update(['EXCLUIDO' => "SIM"]);
     }
@@ -655,46 +697,78 @@ class AlunoController extends Controller {
         $status = AlunoClassificacao::all()->where('id', '<>', '1')->where('id', '<>', '6');
         $turmas = Db::table('turmas')->orderBy('ANO', 'DESC')->get();
         //dd($turmas);
-
         return view('Alunos.montar_relatorio', compact('status', 'turmas', 'ouvintes'));
     }
 
     //
     //
     public function relatorio_gerar(Request $request) {
-//       
+        //Tratamento dos dados do Status
+        if (!empty($request->STATUS)) {
+            $status = $request->STATUS;
+        } else {
+            $status = ['2', '3', '4', '5'];
+        }
         $arrayAlunos [] = "";
+        $alunos_id [] = "";
+        $turmas_id [] = "";
         foreach ($request->turma_id as $key => $turma_id) {
             $alunos = DB::table('aluno_turmas')->where('OUVINTE', 'LIKE', "%$request->OUVINTE%")
                     ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')->where('alunos.EXCLUIDO', 'NAO')->where('alunos.NECESSIDADES_ESPECIAIS', 'LIKE', "%$request->NECESSIDADES_ESPECIAIS%")
-                    ->where('alunos.TRANSPORTE', 'LIKE', "%$request->TRANSPORTE%")
+                    ->where('alunos.TRANSPORTE', 'LIKE', "%$request->TRANSPORTE%")->where('alunos.URBANO', 'LIKE', "%$request->URBANO%")
                     ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')->where('turmas.id', $turma_id)
-                    ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')->whereIn('aluno_classificacao_id', $request->STATUS)
-                    ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'turma_id', 'turmas.TURMA', 'aluno_classificacaos.STATUS', 'aluno_turmas.OUVINTE', 'alunos.NECESSIDADES_ESPECIAIS','alunos.TRANSPORTE')
+                    ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')->whereIn('aluno_classificacao_id', $status)
+                    ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'turma_id', 'aluno_classificacaos.STATUS', 'aluno_turmas.OUVINTE', 'alunos.NECESSIDADES_ESPECIAIS', 'alunos.TRANSPORTE', 'alunos.URBANO')
+                    ->orderBy('turmas.ANO', 'ASC')->orderBy('alunos.NOME', 'ASC')
                     ->get();
 //         
             foreach ($alunos as $dados) {
                 foreach ($dados as $key => $value) {
-                    echo " $key : " . " $value / ";
+//                    echo " $key : " . " $value / ";
                     if ($key == "id") {
                         array_push($arrayAlunos, $value);
                     }
+                    if ($key == "aluno_id") {
+                        array_push($alunos_id, $value);
+                    }
+                    if ($key == "turma_id") {
+                        array_push($turmas_id, $value);
+                    }
                 }
-                echo "<br>";
+//                echo "<br>";
             }
-            echo "<br>";
+//            echo "<br>";
         }
         array_shift($arrayAlunos);
-        $alunos_02 = DB::table('aluno_turmas')->whereIn('aluno_turmas.id', $arrayAlunos)
-                ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')
-                ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')
-                ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')
-                ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'turma_id', 'turmas.TURMA', 'aluno_classificacaos.STATUS', 'aluno_turmas.OUVINTE', 'alunos.NECESSIDADES_ESPECIAIS')
-                ->get();
-
-        dd($alunos_02);
-
-
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+//        $alunos_02 = DB::table('aluno_turmas')->whereIn('aluno_turmas.id', $arrayAlunos)
+//                ->join('alunos', 'aluno_turmas.aluno_id', '=', 'alunos.id')
+//                ->join('turmas', 'aluno_turmas.turma_id', '=', 'turmas.id')
+//                ->join('aluno_classificacaos', 'aluno_turmas.aluno_classificacao_id', '=', 'aluno_classificacaos.id')
+//                ->select('aluno_turmas.id', 'aluno_id', 'alunos.NOME', 'aluno_classificacaos.STATUS', 'aluno_turmas.OUVINTE', 'alunos.NECESSIDADES_ESPECIAIS',
+//                        'turma_id', 'turmas.TURMA', 'turmas.TURNO', 'turmas.ANO', 'turmas.UNICO')
+//                ->get();
+//        foreach ($alunos_02 as $value) {
+//            foreach ($value as $key_02 => $value_02) {
+//                $html[$key_02] = $value_02;
+//            }////          
+//           // echo $html['NOME'];
+//          //  echo "<br>";
+//        }
+        //NO CASO DE VIR UM COLEÇÃO JÁ PRONTA
+//            $listaIdAluno = [1, 2, 3, 1];
+//            $listaIdTurmas = [4, 2, 3, 1];
+        $alunoTeste = collect([]);
+        foreach ($alunos_id as $posicao => $Idalunoatual) {
+            //  echo '<br>' . $posicao . " - " . $Idalunoatual . "<br>";
+            $alunoTeste = $alunoTeste->concat(Aluno::with(['turmas' => function($query) use($turmas_id, $posicao) {
+                            $query->where('turma_id', $turmas_id[$posicao]);
+                        }])->where('id', $alunos_id[$posicao])->get());
+        }
+//        dd($alunoTeste);
+        $title = "Resultado da Pesquisa";
+        return view('Alunos.montar_relatorio_server', compact('alunoTeste', 'title'));
 //        
     }
 

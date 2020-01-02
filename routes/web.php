@@ -8,6 +8,7 @@ Route::get('/disciplinas/logs', 'Logs\LogController@showdisciplinas');
 //Moldel e controler dos Alunos
 Route::resource('/alunos', 'Alunos\AlunoController');
 Route::get('/alunos/cursando/{id}', 'Alunos\AlunoController@cursando')->name('cursando');
+Route::get('/alunos/cursando/create', 'Alunos\AlunoController@create');
 Route::post('/alunos/update/bloco', 'Alunos\AlunoController@updatebloco');
 Route::post('/alunos/update/agora', 'Alunos\AlunoController@updateagora');
 Route::get('/aluno/deletar/{id}/{botao}', 'Alunos\AlunoController@destroy')->name('aluno/deletar');

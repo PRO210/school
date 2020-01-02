@@ -22,13 +22,11 @@ class TurmaController extends Controller {
     public function index() {
 
         $title = "Turmas";
-        $turmas = $this->turma->all();
-        
+        $turmas = Turma::orderByDesc('ANO')->orderBy('TURMA','ASC')->get();
         $obs = "";
         if (empty($turmas->TURMAS)) {
             $obs = "disabled";
         }
-
         return view('Turmas.listar_turmas', compact('turmas', 'title', 'obs'));
     }
 
