@@ -1,11 +1,23 @@
 https://www.hostinger.com.br/tutoriais/instalar-node-js-ubuntu/#Instalar-Node-js-e-NPM-do-Repositorio-Oficial-do-Ubuntu
 sudo apt-get purge --auto-remove nodejs
 //
-cd /opt/lampp/htdocs/school
+cd /opt/lampp/htdocs/laravel/school
 
 composer create-project --prefer-dist laravel/laravel school
 sudo chmod -R 755 storage ou
 sudo chmod -R 777 storage ou
+//
+//
+git branch
+git branch -a (Diz qual branch estou)
+git branch upgrade-to-6x   (cria a branch upgrade-to-6x)
+
+git checkout upgrade-to-6x  (nós move para a branch upgrade-to-6x)
+git checkout master
+
+git merge upgrade-to-6x     (traz as alterações da branch upgrade-to-6x)
+git merge upgrade-to-7x     (traz as alterações da branch upgrade-to-6x)
+git merge maste
 
 //
 php artisan key:generate (Chave de segurança)
@@ -89,4 +101,6 @@ php artisan migrate:refresh --step=1
     php artisan route:list : apresenta todas as rotas registradas na aplicação;
 //
 //
-https://translate.googleusercontent.com/translate_c?depth=1&hl=pt-BR&prev=search&rurl=translate.google.com&sl=en&sp=nmt4&u=https://stackoverflow.com/questions/58141723/laravel-upgrade-from-5-6-to-laravel-6&usg=ALkJrhjtLEY5xQnRx5z6hRjf6i-prMYiLw
+<link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
+
+https://adminlte.io/docs/2.4/installation

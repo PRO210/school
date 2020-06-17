@@ -12,7 +12,7 @@ return [
       |
      */
 
-    'name' => env('APP_NAME', 'Laravel school'),
+    'name' => env('APP_NAME', 'Laravel School'),
     /*
       |--------------------------------------------------------------------------
       | Application Environment
@@ -101,7 +101,6 @@ return [
       | this array to grant expanded functionality to your applications.
       |
      */
-   
     'providers' => [
         /*
          * Laravel Framework Service Providers...
@@ -143,10 +142,10 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Anouar\Fpdf\FpdfServiceProvider::class,
-       
+        JeroenNoten\LaravelAdminLte\ServiceProvider::class,
+
     ],
     //
-    
     //
     /*
       |--------------------------------------------------------------------------
@@ -196,6 +195,5 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Fpdf' => Anouar\Fpdf\Facades\Fpdf::class,
-        
     ],
 ];

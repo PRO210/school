@@ -65,3 +65,8 @@ arkham495
 git clone https://github.com/PRO210/Escola.git
 proandre21@hotmail.com
 asdfg197346
+
+git branch -a
+git branch upgrade-to-6x    (cria a branch feature-api)
+git checkout upgrade-to-6x
+git merge upgrade-to-6x     (traz as alterações da branch feature-api)
