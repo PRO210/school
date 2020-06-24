@@ -66,6 +66,7 @@ class AlunoController extends Controller {
 
 //
     public function cursando() {
+      
         $title = "Alunos Cursando";
 // DB::enableQueryLog();
 // dd(\DB::getQueryLog());

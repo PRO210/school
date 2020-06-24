@@ -1,3 +1,24 @@
+
+<script src="{{url('assets/js/jquery-3.1.1.min.js')}}" type="text/javascript"></script>
+
+@if ($errors->any())
+
+    <div class="alert alert-warning" id="errors">
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+
+    <script type='text/javascript'>      
+        var intervalo = window.setInterval(fechar, 4000);
+            function fechar() {
+                $('#errors').hide(8000);
+            }
+    </script>    
+
+@endif
+ 
+
 @if(session('msg'))
 <!--Modal-->                <!--Modal-->            <!--Modal-->        
 <div class="modal fade" id="exemplomodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -20,11 +41,11 @@
 </div> 
 <script type='text/javascript'>
     $(document).ready(function () {
-    $('#exemplomodal').modal('show');
+        $('#exemplomodal').modal('show');
     });
     var intervalo = window.setInterval(fechar, 4000);
-    function fechar() {
-    $('.modal').modal('hide');
+        function fechar() {
+            $('.modal').modal('hide');
     }
     @endif
 </script>  

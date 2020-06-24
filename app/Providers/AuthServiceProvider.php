@@ -30,6 +30,9 @@ class AuthServiceProvider extends ServiceProvider {
 
         $this->registerPolicies($gate);
 
+        if($this->app->runningInConsole()) return;
+
+
 //        $gate->define('editar', function (User $user) {
 //            if ($user->tipo == "admin" || $user->tipo == "secretaria" ) {
 //                return $user;

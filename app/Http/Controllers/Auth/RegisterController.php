@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Services\TenantService;
+use App\Tenant\Events\TenantCreated;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller {
     /*
@@ -44,16 +47,16 @@ use RegistersUsers;
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data) {
-        
-       
-        return Validator::make($data, []);
-//                    'name' => 'required|string|max:255',
-//                    'email' => 'required|string|email|max:255|unique:users',
-//                    'password' => 'required|string|min:6|confirmed',
-//                    'cnpj' => 'required|unique:tenants',
-//                    'empresa' => 'required|unique:tenants,name',
-        
+    protected function validator(array $data) { 
+                      
+            return Validator::make($data, [
+
+            'name' => ['required', 'string', 'min:8', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'empresa' => ['required', 'string', 'min:8', 'unique:tenants,name'],
+            'cnpj' => ['required', 'numeric', 'digits:14', 'unique:tenants'],
+        ]);
     }
     
     /**
@@ -63,30 +66,18 @@ use RegistersUsers;
      * @return \App\User
      */
     protected function create(array $data) {
-         dd($data);
-//        return User::create([
-//            'name' => $data['name'],
-//            'email' => $data['email'],
-//            'password' => Hash::make($data['password']),
-//        ]);
+       
+
         if (!$plan = session('plan')) {
             return redirect()->route('site.home');
         }
-        $tenant = $plan->tenants()->create([
-            'cnpj' => $data['cnpj'],
-            'name' => $data['empresa'],
-            'url' => Str::kebab($data['empresa']),
-            'email' => $data['email'],
-            'subscription' => now(),
-            'expires_at' => now()->addDay(7),
-        ]);
 
+        $tenantService = app(TenantService::class);
 
-        $user = $tenant->users()->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $user = $tenantService->make($plan, $data);
+
+        event(new TenantCreated($user));
+
         return $user;
     }
 

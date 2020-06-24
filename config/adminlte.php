@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Escola',
+    'title' => 'Escola Moderna',
 
     'title_prefix' => '',
 
@@ -32,7 +32,9 @@ return [
 
     'logo' => '<b>Escola </b> Moderna',
 
-    'logo_mini' => '<b>Esc</b>Mod',
+    'logo_mini' => '<b>Esc.</b>Mod',
+
+    'logo_img' => 'imgs/transparent-favicons-school.png',
 
     /*
     |--------------------------------------------------------------------------
@@ -128,41 +130,37 @@ return [
     */
 
     'menu' => [
+        // [
+        //     'text' => 'search',
+        //     'search' => true,
+        // ],
+      
+       
+        // [
+        //     'text'        => 'pages',
+        //     'url'         => 'admin/pages',
+        //     'icon'        => 'far fa-file',
+        //     'label'       => 4,
+        //     'label_color' => 'success',
+        // ],
+        // ['header' => 'account_settings'],
+        // // [
+        // //     'text' => 'profile',
+        // //     'url'  => 'admin/settings',
+        // //     'icon' => 'fas fa-fw fa-user',
+        // // ],       
+    
         [
-            'text' => 'search',
-            'search' => true,
-        ],
-        ['header' => 'main_navigation'],
-        [
-            'text' => 'Alunos',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
-        [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
+            'text'    => 'Alunos',
+            'icon'    => '',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Cursando',
+                    'url'  => 'alunos/cursando/{id}',
+                ],
+                [
+                    'text' => 'Todos os Alunos',
+                    'url'  => 'alunos',
                 ],
                 [
                     'text'    => 'level_one',
@@ -188,25 +186,51 @@ return [
                         ],
                     ],
                 ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
+               
             ],
         ],
-        ['header' => 'labels'],
         [
-            'text'       => 'important',
-            'icon_color' => 'red',
+            'text' => 'Planos',
+            'url'  => 'admin/plans',
+            'icon'  => 'fas fa-list-alt',
+      //      'can'  =>  'plans',
+//
         ],
         [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
+            'text' => 'Perfis',
+            'url'  => 'admin/profiles',
+            'icon'  => 'fas fa-list-alt',
+            //'can'  =>  'plans',
+//
         ],
         [
-            'text'       => 'information',
-            'icon_color' => 'aqua',
+            'text' => 'Empresas',
+            'url'  => 'admin/tenants',
+            'icon' => 'fas fa-building',
+          //  'can'  =>  'tenants',
         ],
+        [
+            'text' => 'Permissões',
+            'url'  => 'admin/permissions',
+            'icon'  => 'fas fa-lock',
+            // 'can'  =>  'permissions',
+        ], 
+        [
+            'text' => 'Cargos',
+            'url'  => 'admin/roles',
+            'icon'  => 'fas fa-address-card',
+            // 'can'  =>  'cargos',
+        ], 
+        [
+            'text' => 'Usuários',
+            'url'  => 'admin/users',
+            'icon'  => 'fas fa-users',
+          // 'can'  =>  'users',
+        ],
+               
+       
+
+       
     ],
 
     /*

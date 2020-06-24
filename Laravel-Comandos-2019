@@ -16,8 +16,8 @@ git checkout upgrade-to-6x  (nós move para a branch upgrade-to-6x)
 git checkout master
 
 git merge upgrade-to-6x     (traz as alterações da branch upgrade-to-6x)
-git merge upgrade-to-7x     (traz as alterações da branch upgrade-to-6x)
-git merge maste
+git merge master
+https://github.com/PRO210/school.git
 
 //
 php artisan key:generate (Chave de segurança)
@@ -27,9 +27,17 @@ php artisan make:controller Alunos\\SolicitacaoController --resource
 php artisan make:controller Logs\\LogController
 php artisan make:controller Turmas\\TurmaController --resource
 //
-composer dump-autoload (Atualizar o Laravel caso vc troque o nome de algum arquivo)
+// No caso de alterar algum arquivos
+composer dumpautoload
+composer update
+ll public
+php artisan key:generate
+php artisan storage:link
+//
+//
 //
 //Criar a Tabela do mysql NO PROJETO
+php artisan migrate
 php artisan migrate:reset
 php artisan make:migration create_aluno_status_table
 php artisan migrate (Criar a Tabela do mysql NO SERVIDOR)
@@ -41,6 +49,7 @@ Models  Models  Models  Models
 //Cria a Model:
 php artisan make:model Models\\Turmas\\Turma
 php artisan make:model Models\\Alunos\\AlunoClassificacao -m
+//
 //Cria a Model mais a migration:
 php artisan make:model Models\\Turmas\\Turma -m
 php artisan make:model Models\\Logs\\Log -m
@@ -59,15 +68,33 @@ php artisan make:controller Disciplinas\\DisciplinaController --resource
 //
 //Disciplinas_Professor
 php artisan make:model Models\\DisciplinasTurmas\\DisciplinaTurma -m
-
 //
 //Criação de Login
 php artisan make:auth
 //
+php artisan make:model Models\\Tenant -m
+php artisan make:controller Admin\\TenantController
+php artisan make:request StoreUpdateTenant
+//
+php artisan make:controller Admin\\UserController
+php artisan make:request StoreUpdateUser
+php artisan make:seeder UsersTableSeeder
+php artisan db:seed
+php artisan migrate:refresh --seed
+
+
+//
+//
 php artisan make:model Role -m
+php artisan make:controller Admin\\ACL\\RoleController --resource
+php artisan make:request StoreUpdateRole
+
+
 php artisan make:model Permission -m
 php artisan make:migration create_permissions_table
 php artisan make:policy AlunoPolicy
+php artisan make:controller Admin\\ACL\\PermissionController --resource
+
 //
 //
 //Criação dos Cursos
@@ -104,3 +131,14 @@ php artisan migrate:refresh --step=1
 <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
 
 https://adminlte.io/docs/2.4/installation
+https://fontawesome.com/icons
+//
+//
+//Seed      Seed        Seed
+php artisan make:seeder UsersTableSeeder
+php artisan db:seed
+php artisan migrate:refresh --seed
+
+https://github.com/ColorlibHQ/AdminLTE/issues/1794
+
+php artisan make:migration create_permission_role_table
